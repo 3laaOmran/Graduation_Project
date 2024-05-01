@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
-import 'package:two_way_dael/features/home/ui/Modules/customer_home_screen.dart';
 
 import '../../../../../core/helpers/spacing.dart';
 import '../../../../../core/routing/routes.dart';
@@ -19,7 +18,7 @@ class SignUpScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          decoration: BoxDecoration(
+          decoration:const BoxDecoration(
             image: DecorationImage(
               image: AssetImage('assets/images/main_background.png'),
               fit: BoxFit.fill,

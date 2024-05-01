@@ -4,7 +4,6 @@ import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_cubit.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
 
-
 class CustomerLayoutScreen extends StatelessWidget {
   const CustomerLayoutScreen({super.key});
 
@@ -16,67 +15,6 @@ class CustomerLayoutScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(
-            title: Row(
-              children: [
-                const CircleAvatar(
-                  radius: 30.0,
-                  backgroundImage: NetworkImage(
-                      'https://img.freepik.com/free-vector/isolated-young-handsome-man-different-poses-white-background-illustration_632498-859.jpg?t=st=1708891814~exp=1708895414~hmac=672f93fdf519149c27314725f0c651ac53217b93675603b63ec99134b35b8392&w=740'),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Hello, Mona',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineSmall
-                          ?.copyWith(
-                              fontWeight: FontWeight.bold, fontSize: 12.0),
-                    ),
-                    Text(
-                      'Hungry?',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineSmall
-                          ?.copyWith(
-                              fontWeight: FontWeight.w100, fontSize: 8.0),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            actions: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.shopping_cart_outlined,
-                  color: ColorManager.mainOrange,
-                  size: 30.0,
-                ),
-              ),
-              Stack(alignment: AlignmentDirectional.topEnd, children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.notifications,
-                    size: 30.0,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsetsDirectional.only(
-                    top: 11.0,
-                    end: 14.0,
-                  ),
-                  child: const CircleAvatar(
-                    radius: 3.5,
-                    backgroundColor: ColorManager.mainOrange,
-                  ),
-                ),
-              ]),
-            ],
-          ),
           body: cubit.bottomScreens[cubit.currentIndex],
           bottomNavigationBar: Padding(
             padding: const EdgeInsetsDirectional.only(

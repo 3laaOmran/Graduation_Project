@@ -5,11 +5,10 @@ import 'package:two_way_dael/core/widgets/components.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_cubit.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
 
-
 class FoodDetails extends StatelessWidget {
   FoodDetails({super.key});
 
-  var bottomSheetKey = GlobalKey<ScaffoldState>();
+  final bottomSheetKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +34,7 @@ class FoodDetails extends StatelessWidget {
                     },
                     icon: const Icon(
                       Icons.arrow_back,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                   ),
                 ),
@@ -51,7 +50,7 @@ class FoodDetails extends StatelessWidget {
                     ),
                     child: Icon(
                       Icons.more_vert,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                   ),
                 ),
@@ -79,7 +78,7 @@ class FoodDetails extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.w900,
                         fontSize: 23.0,
-                        color: Colors.white),
+                        color: Colors.black),
                   ),
                 ),
               ]),
@@ -277,6 +276,8 @@ class FoodDetails extends StatelessWidget {
     );
   }
 
+  //------------------------------------------------------------------------------
+
   Widget buildOtherItems(context) => Card(
         clipBehavior: Clip.antiAliasWithSaveLayer,
         color: Colors.white,
@@ -417,6 +418,8 @@ class FoodDetails extends StatelessWidget {
           ),
         ),
       );
+
+  //-----------------------------------------------------------------------------------------
 
   Widget itemBottomSheet(context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,

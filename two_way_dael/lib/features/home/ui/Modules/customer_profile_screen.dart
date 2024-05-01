@@ -11,7 +11,9 @@ class CustomerProfileScreen extends StatelessWidget {
     return BlocConsumer<CustomerCubit, CustomerStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        return const Center(child:  Text('profile'));
+        return Center(
+          child: Text('profile'),
+        );
       },
     );
   }

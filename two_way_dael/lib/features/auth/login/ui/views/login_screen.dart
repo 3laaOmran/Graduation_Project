@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
+import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
 
 import '../../../../../core/helpers/spacing.dart';
@@ -25,7 +26,7 @@ class LoginScreen extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             image: DecorationImage(
                 image: AssetImage('assets/images/main_background.png'),
                 fit: BoxFit.fill)),
@@ -81,15 +82,12 @@ class LoginScreen extends StatelessWidget {
                     verticalSpace(10),
                     AppTextButton(
                       buttonText: "Log in",
+                      verticalPadding: 10,
                       buttonWidth: width,
-                      textStyle: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                      ),
+                      textStyle: TextStyles.font18White,
                       onPressed: () {
                         // validateThenLogin(context);
                       },
-                     
                     ),
                     SizedBox(
                       height: height * 0.04,
