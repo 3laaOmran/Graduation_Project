@@ -4,8 +4,8 @@ import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
 import 'package:two_way_dael/features/home/ui/Modules/customer_home_screen.dart';
 import 'package:two_way_dael/features/home/ui/Modules/customer_profile_screen.dart';
 
-import '../../../../core/networking/remote/dio_helper.dart';
-import '../../../../core/networking/remote/end_points.dart';
+import '../../../../core/networking/dio_helper.dart';
+import '../../../../core/networking/end_points.dart';
 import '../../data/models/products_model.dart';
 
 class CustomerCubit extends Cubit<CustomerStates> {

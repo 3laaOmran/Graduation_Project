@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
 
 ThemeData lightTheme = ThemeData(
+  
   visualDensity: VisualDensity.adaptivePlatformDensity,
   appBarTheme: const AppBarTheme(
     titleSpacing: 20.0,

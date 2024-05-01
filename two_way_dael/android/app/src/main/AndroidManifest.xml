@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="two_way_dael"
+        android:label="2 Way Deal"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
