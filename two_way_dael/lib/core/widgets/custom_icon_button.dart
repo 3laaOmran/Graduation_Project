@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 Widget customIconButton({
   required Function() onPressed,
-  required IconData icon,
-   Color? color,
+  IconData? icon,
+  Color? color,
   double? size,
 }) =>
     IconButton(

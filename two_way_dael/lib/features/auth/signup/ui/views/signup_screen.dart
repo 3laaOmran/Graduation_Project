@@ -18,7 +18,7 @@ class SignUpScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          decoration:const BoxDecoration(
+          decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage('assets/images/main_background.png'),
               fit: BoxFit.fill,
@@ -73,7 +73,7 @@ class SignUpScreen extends StatelessWidget {
                         buttonText: "Sign Up",
                         buttonWidth: width,
                         onPressed: () {
-                          context.pushNamedAndRemoveUntil(Routes.homeScreen,
+                          context.pushNamedAndRemoveUntil(Routes.otpScreen,
                               predicate: (route) => false);
                           // Navigator.pushNamedAndRemoveUntil(
                           //     context, Routes.homeScreen, (route) => false);
@@ -81,7 +81,7 @@ class SignUpScreen extends StatelessWidget {
                           // validateThenDoSignup(context);
                         },
                       ),
-                      verticalSpace(40),
+                      verticalSpace(20),
                     ],
                   ),
                 ),

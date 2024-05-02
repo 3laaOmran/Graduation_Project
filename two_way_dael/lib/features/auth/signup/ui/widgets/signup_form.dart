@@ -56,6 +56,7 @@ class _SignupFormState extends State<SignupForm> {
             fontsize: 17.sp,
           ),
           CustomTextFormField(
+            keyboardType: TextInputType.name,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter a valid name';
@@ -73,6 +74,7 @@ class _SignupFormState extends State<SignupForm> {
           ),
           CustomTextFormField(
             hintText: "Email Address",
+            keyboardType: TextInputType.emailAddress,
             validator: (value) {
               if (value == null ||
                   value.isEmpty ||
@@ -83,7 +85,6 @@ class _SignupFormState extends State<SignupForm> {
             // controller: context.read<SignupCubit>().emailController,
             isObsecureText: false,
             prefixIcon: const Icon(Icons.email),
-            
           ),
           verticalSpace(15),
           resuableText(text: "Phone", fontsize: 17.sp),
@@ -100,13 +101,13 @@ class _SignupFormState extends State<SignupForm> {
             // controller: context.read<SignupCubit>().phoneController,
             isObsecureText: false,
             prefixIcon: const Icon(Icons.phone),
-            
           ),
           verticalSpace(15),
           resuableText(text: "Password", fontsize: 17.sp),
           CustomTextFormField(
             // controller: context.read<SignupCubit>().passwordController,
             hintText: 'Password',
+            keyboardType: TextInputType.visiblePassword,
             prefixIcon: const Icon(Icons.lock),
             isObsecureText: isPasswordObscureText,
             sufixIcon: GestureDetector(
@@ -125,9 +126,21 @@ class _SignupFormState extends State<SignupForm> {
               }
             },
           ),
+          verticalSpace(15),
+          resuableText(text: "Address", fontsize: 17.sp),
+          CustomTextFormField(
+            hintText: 'Address',
+            keyboardType: TextInputType.streetAddress,
+            prefixIcon: const Icon(Icons.label_important),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your address';
+              }
+            },
+          ),
           // verticalSpace(15),
-          
-          verticalSpace(20),
+
+          verticalSpace(10),
           // PasswordValidation(
           //   hasLowerCase: hasLowercase,
           //   hasUpperCase: hasUppercase,

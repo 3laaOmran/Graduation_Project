@@ -11,6 +11,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextStyle? inputTextStyle;
   final TextStyle? hintStyle;
   final String hintText;
+  final String? labelText;
   final Widget? prefixIcon;
   final bool? isObsecureText;
   final Widget? sufixIcon;
@@ -33,7 +34,7 @@ class CustomTextFormField extends StatelessWidget {
       this.controller,
       required this.validator,
       this.prefixIcon,
-      this.keyboardType, this.borderRadius});
+      this.keyboardType, this.borderRadius, this.labelText});
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +83,7 @@ class CustomTextFormField extends StatelessWidget {
         ),
         hintStyle: hintStyle ?? TextStyles.font15GrayRegular,
         hintText: hintText,
+        labelText: labelText,
         suffixIcon: sufixIcon, suffixIconColor: ColorManager.mainOrange,
         prefixIcon: prefixIcon, prefixIconColor: ColorManager.mainOrange,
         fillColor: backgroundColor ?? Colors.white,

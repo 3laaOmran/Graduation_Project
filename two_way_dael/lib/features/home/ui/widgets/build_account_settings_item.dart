@@ -1,0 +1,19 @@
+import 'package:flutter/material.dart';
+import 'package:two_way_dael/core/helpers/spacing.dart';
+import 'package:two_way_dael/core/theming/styles.dart';
+
+
+Widget buildAccountSettingsItem({required String image, required String text}) {
+  return Row(
+    children: [
+      Image(
+        image: AssetImage(image),
+      ),
+      horizontalSpace(10),
+      Text(
+        text,
+        style: TextStyles.font15BlackRegular,
+      ),
+    ],
+  );
+}
