@@ -73,7 +73,7 @@ class CustomerHomeScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Spacer(),
+                      const Spacer(),
                       customIconButton(
                         onPressed: () {},
                         icon: Icons.shopping_cart_outlined,
@@ -251,7 +251,7 @@ class CustomerHomeScreen extends StatelessWidget {
                   crossAxisCount: 2,
                   crossAxisSpacing: 5,
                   mainAxisSpacing: 1,
-                  childAspectRatio: 1 / 1.15, //width / height
+                  childAspectRatio: 1 / 1.35, //width / height
 
                   children: List.generate(20, (index) => buildItem(context)),
                 ),

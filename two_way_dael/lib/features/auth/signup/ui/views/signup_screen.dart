@@ -36,7 +36,7 @@ class SignUpScreen extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          // context.pushNamed(Routes.chooseAccounttypeScreen);
+                          context.pushNamed(Routes.loginScreen);
                         },
                         child: Image.asset(
                           'assets/images/arrow.png',

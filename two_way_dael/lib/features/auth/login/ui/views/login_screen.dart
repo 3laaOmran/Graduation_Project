@@ -39,17 +39,17 @@ class LoginScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    verticalSpace(50),
-                    GestureDetector(
-                      onTap: () {
-                        // context.pushNamed(Routes.chooseAccounttypeScreen);
-                      },
-                      child: Image.asset(
-                        'assets/images/arrow.png',
-                        width: 60.w,
-                      ),
-                    ),
-                    verticalSpace(30),
+                    verticalSpace(170),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     // context.pushNamed(Routes.chooseAccounttypeScreen);
+                    //   },
+                    //   child: Image.asset(
+                    //     'assets/images/arrow.png',
+                    //     width: 60.w,
+                    //   ),
+                    // ),
+                    // verticalSpace(30),
                     resuableText(
                         text: "Login Now  ",
                         fontsize: 30.sp,

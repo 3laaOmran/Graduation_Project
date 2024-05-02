@@ -44,7 +44,7 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
                   verticalSpace(20),
                   GestureDetector(
                     onTap: () {
-                      context.pushNamed(Routes.homeScreen);
+                      context.pushNamed(Routes.signupScreen);
                     },
                     child: Image.asset(
                       'assets/images/arrow.png',
