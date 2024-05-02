@@ -1,6 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:two_way_dael/core/helpers/extensions.dart';
+import 'package:two_way_dael/core/routing/routes.dart';
 import 'package:two_way_dael/core/widgets/custom_text_form_field.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_cubit.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
@@ -74,17 +78,31 @@ class CustomerHomeScreen extends StatelessWidget {
                         ],
                       ),
                       const Spacer(),
-                      customIconButton(
-                        onPressed: () {},
-                        icon: Icons.shopping_cart_outlined,
-                        color: ColorManager.mainOrange,
-                        size: 30,
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          right: 10,
+                        ),
+                        child: InkWell(
+                          onTap: () {},
+                          child: const Image(
+                            image: AssetImage('assets/images/cart.png'),
+                            width: 35,
+                          ),
+                        ),
                       ),
+                      // customIconButton(
+                      //   onPressed: () {},
+                      //   icon: Icons.shopping_cart_outlined,
+                      //   color: ColorManager.mainOrange,
+                      //   size: 30,
+                      // ),
                       Stack(
                         alignment: AlignmentDirectional.topEnd,
                         children: [
                           customIconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              context.pushNamed(Routes.notificationsScreen);
+                            },
                             icon: Icons.notifications,
                             size: 30.0,
                           ),

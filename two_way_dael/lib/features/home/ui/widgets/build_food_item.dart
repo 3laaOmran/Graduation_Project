@@ -79,33 +79,30 @@ Widget buildItem(context) => InkWell(
                           CircleAvatar(
                             radius: 13.0,
                             backgroundColor: ColorManager.mainOrange,
-                            child: IconButton(
-                              padding: const EdgeInsetsDirectional.only(
-                                  end: 2.0, start: 4.0),
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.shopping_cart_outlined,
-                                size: 17.0,
-                                color: Colors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                right: 4,
+                                left: 4,
                               ),
-                            ),
-                          ),
-                          horizontalSpace(5),
-                          CircleAvatar(
-                            radius: 13.0,
-                            backgroundColor: ColorManager.mainOrange,
-                            child: Center(
-                              child: IconButton(
-                                padding: const EdgeInsetsDirectional.only(
-                                    end: 4.0, start: 4.0),
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.favorite_border_outlined,
-                                  size: 17.0,
-                                  color: Colors.white,
+                              child: InkWell(
+                                onTap: () {},
+                                child: const Image(
+                                  image: AssetImage(
+                                      'assets/images/white_cart.png'),
+                                  width: 30,
                                 ),
                               ),
                             ),
+                            // IconButton(
+                            //   padding: const EdgeInsetsDirectional.only(
+                            //       end: 2.0, start: 4.0),
+                            //   onPressed: () {},
+                            //   icon: const Icon(
+                            //     Icons.shopping_cart_outlined,
+                            //     size: 17.0,
+                            //     color: Colors.white,
+                            //   ),
+                            // ),
                           ),
                         ],
                       ),

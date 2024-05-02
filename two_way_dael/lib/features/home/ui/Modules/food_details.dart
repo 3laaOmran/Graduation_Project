@@ -34,7 +34,7 @@ class FoodDetails extends StatelessWidget {
                     },
                     icon: const Icon(
                       Icons.arrow_back,
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -50,7 +50,7 @@ class FoodDetails extends StatelessWidget {
                     ),
                     child: Icon(
                       Icons.more_vert,
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -78,7 +78,7 @@ class FoodDetails extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.w900,
                         fontSize: 23.0,
-                        color: Colors.black),
+                        color: Colors.white),
                   ),
                 ),
               ]),

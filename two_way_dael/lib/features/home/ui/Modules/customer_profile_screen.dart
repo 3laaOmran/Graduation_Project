@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/helpers/spacing.dart';
+import 'package:two_way_dael/core/routing/routes.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_cubit.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
 import 'package:two_way_dael/features/home/ui/widgets/account_settings.dart';
@@ -19,7 +21,7 @@ class CustomerProfileScreen extends StatefulWidget {
 
 class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
   Widget currentWidget = accountSettings();
-  IconData? icon ;
+  IconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +131,9 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                       alignment: AlignmentDirectional.topEnd,
                       children: [
                         customIconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            context.pushNamed(Routes.notificationsScreen);
+                          },
                           icon: Icons.notifications,
                           color: Colors.white,
                           size: 30.0,

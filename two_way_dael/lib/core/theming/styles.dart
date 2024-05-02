@@ -38,8 +38,18 @@ class TextStyles {
     fontWeight: FontWeightHelper.regular,
     color: ColorManager.gray,
   );
+  static TextStyle font13GreyBold = TextStyle(
+    fontSize: 13.sp,
+    fontWeight: FontWeightHelper.bold,
+    color: ColorManager.gray,
+  );
   static TextStyle font18White = TextStyle(
     fontSize: 18.sp,
     color: Colors.white,
+  );
+  static TextStyle font17BlackBold = TextStyle(
+    fontSize: 17.sp,
+    color: Colors.black,
+    fontWeight: FontWeightHelper.bold,
   );
 }
