@@ -13,8 +13,10 @@ class CustomTextFormField extends StatelessWidget {
   final String hintText;
   final String? labelText;
   final Widget? prefixIcon;
-  final bool? isObsecureText;
-  final Widget? sufixIcon;
+  final bool isObsecureText;
+  final IconData? sufixIcon;
+  final Function(String)? onFieldSubmitted;
+  final Function()? suffixOnPressed;
   final Color? backgroundColor;
   final BorderRadius? borderRadius;
   final TextInputType? keyboardType;
@@ -28,17 +30,21 @@ class CustomTextFormField extends StatelessWidget {
       this.inputTextStyle,
       this.hintStyle,
       required this.hintText,
-      this.isObsecureText,
+      required this.isObsecureText,
       this.sufixIcon,
       this.backgroundColor,
       this.controller,
       required this.validator,
       this.prefixIcon,
-      this.keyboardType, this.borderRadius, this.labelText});
+      this.keyboardType,
+      this.borderRadius,
+      this.labelText,
+      this.suffixOnPressed, this.onFieldSubmitted});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onFieldSubmitted: onFieldSubmitted,
       keyboardType: keyboardType,
       cursorColor: ColorManager.mainOrange,
       controller: controller,
@@ -57,7 +63,7 @@ class CustomTextFormField extends StatelessWidget {
                 color: ColorManager.mainOrange,
                 width: 1.3,
               ),
-              borderRadius:borderRadius ?? BorderRadius.circular(50.0),
+              borderRadius: borderRadius ?? BorderRadius.circular(50.0),
             ),
         enabledBorder: enabledBorder ??
             OutlineInputBorder(
@@ -65,31 +71,36 @@ class CustomTextFormField extends StatelessWidget {
                 color: ColorManager.gray,
                 width: 1.3,
               ),
-              borderRadius:borderRadius ?? BorderRadius.circular(50.0),
+              borderRadius: borderRadius ?? BorderRadius.circular(50.0),
             ),
         errorBorder: OutlineInputBorder(
           borderSide: const BorderSide(
             color: Colors.red,
             width: 1.3,
           ),
-          borderRadius:borderRadius ?? BorderRadius.circular(50.0),
+          borderRadius: borderRadius ?? BorderRadius.circular(50.0),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderSide: const BorderSide(
             color: Colors.red,
             width: 1.3,
           ),
-          borderRadius:borderRadius ?? BorderRadius.circular(50.0),
+          borderRadius: borderRadius ?? BorderRadius.circular(50.0),
         ),
         hintStyle: hintStyle ?? TextStyles.font15GrayRegular,
         hintText: hintText,
         labelText: labelText,
-        suffixIcon: sufixIcon, suffixIconColor: ColorManager.mainOrange,
+        suffixIcon: IconButton(
+            onPressed: suffixOnPressed,
+            icon: Icon(
+              sufixIcon,
+              color: ColorManager.mainOrange,
+            )),
         prefixIcon: prefixIcon, prefixIconColor: ColorManager.mainOrange,
         fillColor: backgroundColor ?? Colors.white,
         filled: true,
       ),
-      obscureText: isObsecureText ?? false,
+      obscureText: isObsecureText,
       style: inputTextStyle ?? TextStyles.font15BlackRegular,
       validator: (value) {
         return validator(value);

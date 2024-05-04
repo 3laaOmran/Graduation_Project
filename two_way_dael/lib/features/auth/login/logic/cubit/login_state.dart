@@ -8,9 +8,9 @@ final class LoginInitialState extends LoginStates {}
 final class LoginLoadingState extends LoginStates {}
 
 final class LoginSuccessState extends LoginStates {
-  // final LoginModel loginModel;
+  final LoginModel loginModel;
 
-  // LoginSuccessState(this.loginModel);
+  LoginSuccessState(this.loginModel);
 }
 
 final class LoginErrorState extends LoginStates {
@@ -18,5 +18,4 @@ final class LoginErrorState extends LoginStates {
 
   LoginErrorState(this.error);
 }
-
 final class LoginChangePasswordVisibilityState extends LoginStates {}

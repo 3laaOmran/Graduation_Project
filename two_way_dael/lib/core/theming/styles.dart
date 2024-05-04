@@ -47,6 +47,10 @@ class TextStyles {
     fontSize: 18.sp,
     color: Colors.white,
   );
+  static TextStyle font12White = TextStyle(
+    fontSize: 12.sp,
+    color: Colors.white,
+  );
   static TextStyle font17BlackBold = TextStyle(
     fontSize: 17.sp,
     color: Colors.black,

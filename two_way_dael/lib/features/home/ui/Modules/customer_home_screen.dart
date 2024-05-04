@@ -1,7 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/routing/routes.dart';
@@ -25,6 +23,7 @@ class CustomerHomeScreen extends StatelessWidget {
     return BlocConsumer<CustomerCubit, CustomerStates>(
       listener: (context, state) {},
       builder: (context, state) {
+        // var model = CustomerCubit.get(context).userModel;
         var cubit = CustomerCubit.get(context);
         return Padding(
           padding: const EdgeInsetsDirectional.only(
@@ -59,7 +58,7 @@ class CustomerHomeScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Hello, Mona',
+                            'Hello, ${CustomerCubit.get(context).nameController.text}',
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineSmall
@@ -130,13 +129,11 @@ class CustomerHomeScreen extends StatelessWidget {
                     width: 344.0,
                     height: 49.0,
                     child: CustomTextFormField(
+                      isObsecureText: false,
                       borderRadius: BorderRadius.circular(15.0),
                       controller: controller,
                       keyboardType: TextInputType.text,
-                      sufixIcon: const Icon(
-                        Icons.search,
-                        size: 25,
-                      ),
+                      sufixIcon: Icons.search,
                       hintText: 'Search...',
                       validator: (String? value) {
                         if (value!.isEmpty) {

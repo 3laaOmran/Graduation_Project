@@ -20,7 +20,7 @@ class CustomerProfileScreen extends StatefulWidget {
 }
 
 class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
-  Widget currentWidget = accountSettings();
+  Widget currentWidget = AccountSettings();
   IconData? icon;
 
   @override
@@ -28,6 +28,8 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
     return BlocConsumer<CustomerCubit, CustomerStates>(
       listener: (context, state) {},
       builder: (context, state) {
+        // var model = CustomerCubit.get(context).userModel;
+
         return SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,7 +83,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              currentWidget = editInfo();
+                              currentWidget = EditInfo();
                               icon = Icons.arrow_back;
                             });
                           },
@@ -92,7 +94,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'Hello, Name',
+                                    'Hello,${CustomerCubit.get(context).nameController.text}',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineSmall
@@ -161,7 +163,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                     child: customIconButton(
                       onPressed: () {
                         setState(() {
-                          currentWidget = accountSettings();
+                          currentWidget = AccountSettings();
                           icon = null;
                         });
                       },

@@ -38,6 +38,7 @@ dependencies:
   flutter_floating_bottom_bar: ^1.2.0
   flutter_native_splash: ^2.4.0
   flutter_screenutil: ^5.9.0
+  fluttertoast: ^8.2.5
   image_picker: ^1.1.1
   shared_preferences: ^2.2.3
   smooth_page_indicator: ^1.1.0

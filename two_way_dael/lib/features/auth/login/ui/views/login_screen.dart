@@ -1,122 +1,156 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:two_way_dael/core/constants/constants.dart';
+import 'package:two_way_dael/core/helpers/cash_helper.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
+import 'package:two_way_dael/core/widgets/show_toast.dart';
+import 'package:two_way_dael/core/widgets/signup_and_login_footer.dart';
+import 'package:two_way_dael/features/auth/login/logic/cubit/login_cubit.dart';
 
 import '../../../../../core/helpers/spacing.dart';
 import '../../../../../core/routing/routes.dart';
 import '../../../../../core/theming/colors.dart';
-import '../../../../../core/widgets/custom_floating_action_button.dart';
 import '../../../../../core/widgets/resuable_text.dart';
-import '../../../../../core/widgets/signup_and_login_footer.dart';
 import '../widgets/email_and_password.dart';
 
 // ignore: must_be_immutable
 class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
-
-  TextEditingController emailController = TextEditingController();
-
-  TextEditingController passwordController = TextEditingController();
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height; //height of screen
     final width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/images/main_background.png'),
-                fit: BoxFit.fill)),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
+    return BlocProvider(
+      create: (context) => LoginCubit(),
+      child: BlocConsumer<LoginCubit, LoginStates>(
+        listener: (context, state) {
+          if (state is LoginSuccessState) {
+            if (state.loginModel.status!) {
+              CashHelper.saveData(
+                      key: 'token', value: state.loginModel.data!.token)
+                  .then((value) {
+                token = state.loginModel.data!.token;
+                context.pushNamedAndRemoveUntil(Routes.homeScreen,
+                    predicate: (route) => false);
+              });
+            } else {
+              showToast(
+                  message: state.loginModel.message!, state: TostStates.ERROR);
+            }
+          }
+        },
+        builder: (context, state) {
+          var cubit = LoginCubit.get(context);
+          return Scaffold(
+            body: Container(
+              height: double.infinity,
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/images/main_background.png'),
+                      fit: BoxFit.fill)),
+              child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    verticalSpace(170),
-                    // GestureDetector(
-                    //   onTap: () {
-                    //     // context.pushNamed(Routes.chooseAccounttypeScreen);
-                    //   },
-                    //   child: Image.asset(
-                    //     'assets/images/arrow.png',
-                    //     width: 60.w,
-                    //   ),
-                    // ),
-                    // verticalSpace(30),
-                    resuableText(
-                        text: "Login Now  ",
-                        fontsize: 30.sp,
-                        letterspacing: 2,
-                        fontWeight: FontWeight.bold),
-                    resuableText(
-                        text: "Welcome Back",
-                        fontsize: 17.sp,
-                        fontWeight: FontWeight.w400),
-                    SizedBox(
-                      height: height * 0.06,
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          verticalSpace(170),
+                          resuableText(
+                              text: "Login Now  ",
+                              fontsize: 30.sp,
+                              letterspacing: 2,
+                              fontWeight: FontWeight.bold),
+                          resuableText(
+                              text: "Welcome Back",
+                              fontsize: 17.sp,
+                              fontWeight: FontWeight.w400),
+                          SizedBox(
+                            height: height * 0.06,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const EmailAndPassword(),
+                              SizedBox(
+                                height: height * 0.04,
+                              ),
+                              Align(
+                                alignment: AlignmentDirectional.bottomEnd,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    context
+                                        .pushNamed(Routes.forgetPasswordScreen);
+                                  },
+                                  child: resuableText(
+                                      text: "Forget Password?",
+                                      fontsize: 13.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorManager.mainOrange),
+                                ),
+                              ),
+                            ],
+                          ),
+                          verticalSpace(12),
+                          state is! LoginLoadingState
+                              ? AppTextButton(
+                                  buttonText: "Log in",
+                                  verticalPadding: 10,
+                                  buttonWidth: width,
+                                  textStyle: TextStyles.font18White,
+                                  onPressed: () {
+                                    if (cubit.formKey.currentState!
+                                        .validate()) {
+                                      cubit.userLogin(
+                                        email: cubit.emailController.text,
+                                        password: cubit.passwordController.text,
+                                      );
+                                    }
+                                  },
+                                )
+                              : const Center(
+                                  child: CircularProgressIndicator(
+                                    color: ColorManager.mainOrange,
+                                  ),
+                                ),
+                          // SizedBox(
+                          //   height: height * 0.04,
+                          // ),
+                          //   Center(
+                          //     child: floatingactionButton(
+                          //         width, height, "google_image", "logingoogle"),
+                          //   ),
+                          verticalSpace(20),
+                          SignupAndLoginFooter(
+                              firstText: "Don't have account ?? ",
+                              secondText: "SignUp",
+                              ontap: () {
+                                context.pushNamed(Routes.signupScreen);
+                              }),
+                        ],
+                      ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const EmailAndPassword(),
-                        SizedBox(
-                          height: height * 0.04,
-                        ),
-                        Align(
-                          alignment: AlignmentDirectional.bottomEnd,
-                          child: resuableText(
-                              text: "Forget The Password?",
-                              fontsize: 13.sp,
-                              fontWeight: FontWeight.bold,
-                              color: ColorManager.mainOrange),
-                        ),
-                      ],
-                    ),
-                    verticalSpace(10),
-                    AppTextButton(
-                      buttonText: "Log in",
-                      verticalPadding: 10,
-                      buttonWidth: width,
-                      textStyle: TextStyles.font18White,
-                      onPressed: () {
-                        // validateThenLogin(context);
-                      },
-                    ),
-                    SizedBox(
-                      height: height * 0.04,
-                    ),
-                    Center(
-                      child: floatingactionButton(
-                          width, height, "google_image", "logingoogle"),
-                    ),
-                    verticalSpace(80),
+
+                    // SignupAndLoginFooter(
+                    //     firstText: "Don't have account ?? ",
+                    //     secondText: "SignUp",
+                    //     ontap: () {
+                    //       context.pushNamed(Routes.signupScreen);
+                    //     }),
+                    // const LoginBlocListener(),
                   ],
                 ),
               ),
-              SignupAndLoginFooter(
-                  firstText: "Don't have account ?? ",
-                  secondText: "SignUp",
-                  ontap: () {
-                    context.pushNamed(Routes.signupScreen);
-                  }),
-              // const LoginBlocListener(),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
-
-  // void validateThenLogin(BuildContext context) {
-  //   if (context.read<LoginCubit>().formKey.currentState!.validate()) {
-  //     context.read<LoginCubit>().emitLoginStates();
-  //   }
-  // }
 }

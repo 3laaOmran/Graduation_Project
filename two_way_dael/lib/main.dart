@@ -19,11 +19,11 @@ void main() async {
   token = CashHelper.getData(key: 'token');
 
   if (onBoarding != null) {
-    // if (token != null) {
-    //   widget =  CustomerHomeScreen();
-    // } else {
+    if (token != null) {
+      widget =  Routes.homeScreen;
+    } else {
       widget = Routes.loginScreen;
-    // }
+    }
   } else {
     widget = Routes.onboardingScreen;
   }

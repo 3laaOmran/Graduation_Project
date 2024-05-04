@@ -5,8 +5,8 @@ class DioHelper {
   static init() {
     dio = Dio(
       BaseOptions(
-          baseUrl: 'https://student.valuxapps.com/api/',
-          receiveDataWhenStatusError: true,
+        baseUrl: 'https://student.valuxapps.com/api/',
+        receiveDataWhenStatusError: true,
       ),
     );
   }
@@ -20,7 +20,7 @@ class DioHelper {
     dio.options.headers = {
       'Content-Type': 'application/json',
       'lang': lang,
-      'Authorization': token?? '',
+      'Authorization': token ?? '',
     };
     return dio.get(
       url,
@@ -38,7 +38,7 @@ class DioHelper {
     dio.options.headers = {
       'Content-Type': 'application/json',
       'lang': lang,
-      'Authorization': token??'',
+      'Authorization': token ?? '',
     };
 
     return await dio.post(
@@ -47,4 +47,25 @@ class DioHelper {
       data: data,
     );
   }
+
+  static Future<Response> updateData({
+    required String url,
+    String lang = 'en',
+    String? token,
+    Map<String, dynamic>? qurey,
+    required Map<String, dynamic> data,
+  }) async {
+    dio.options.headers = {
+      'Content-Type': 'application/json',
+      'lang': lang,
+      'Authorization': token ?? '',
+    };
+
+    return await dio.put(
+      url,
+      queryParameters: qurey,
+      data: data,
+    );
+  }
+
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:two_way_dael/core/constants/constants.dart';
+import 'package:two_way_dael/features/auth/login/data/models/login_model.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
 import 'package:two_way_dael/features/home/ui/Modules/customer_home_screen.dart';
 import 'package:two_way_dael/features/home/ui/Modules/customer_profile_screen.dart';
@@ -57,5 +59,60 @@ class CustomerCubit extends Cubit<CustomerStates> {
       print(error.toString());
       emit(CustomerGetProductsErrorState());
     });
+  }
+
+  LoginModel? userModel;
+  void getUserData() {
+    emit(GetUserDataLoadingState());
+    DioHelper.getData(
+      url: PROFILE,
+      token: token,
+    ).then((value) {
+      userModel = LoginModel.fromJson(value.data);
+      debugPrint(userModel!.data!.email);
+      emit(GetUserDataSuccessState(userModel!));
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(GetUserDataErrorState(error));
+    });
+  }
+
+  void updateUserData({
+    required String name,
+    required String email,
+    String? phone,
+  }) {
+    emit(CustomerUpdateProfileLoadingState());
+    DioHelper.updateData(
+      url: UPDATE,
+      token: token,
+      data: {
+        'name': name,
+        'email': email,
+        'phone': phone,
+      },
+    ).then((value) {
+      userModel = LoginModel.fromJson(value.data);
+      debugPrint(userModel!.data!.email);
+      emit(CustomerUpdateProfileSuccessState(userModel!));
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(CustomerUpdateProfileErrorState());
+    });
+  }
+
+  final formKey = GlobalKey<FormState>();
+  var nameController = TextEditingController();
+  var emailController = TextEditingController();
+  var phoneController = TextEditingController();
+  var passwordController = TextEditingController();
+  var addressController = TextEditingController();
+
+  IconData suffixIcon = Icons.visibility;
+  bool isObsecure = true;
+  void changePasswordVisibility() {
+    isObsecure = !isObsecure;
+    suffixIcon = isObsecure ? Icons.visibility : Icons.visibility_off;
+    emit(GetUserDataChaneIconVisibilityState());
   }
 }

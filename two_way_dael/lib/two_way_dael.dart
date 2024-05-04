@@ -17,7 +17,7 @@ class TwoWayDealApp extends StatelessWidget {
       designSize: const Size(375, 812),
       minTextAdapt: true,
       child: BlocProvider(
-        create: (context) => CustomerCubit()..getProducts(),
+        create: (context) => CustomerCubit()..getProducts()..getUserData(),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           initialRoute: startWidget,

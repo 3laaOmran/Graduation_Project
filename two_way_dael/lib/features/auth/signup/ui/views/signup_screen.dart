@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:two_way_dael/core/constants/constants.dart';
+import 'package:two_way_dael/core/helpers/cash_helper.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
+import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
+import 'package:two_way_dael/core/widgets/show_toast.dart';
+import 'package:two_way_dael/features/auth/signup/logic/cubit/siginup_cubit.dart';
 
 import '../../../../../core/helpers/spacing.dart';
 import '../../../../../core/routing/routes.dart';
@@ -15,94 +21,129 @@ class SignUpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: SafeArea(
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/main_background.png'),
-              fit: BoxFit.fill,
-            ),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 30.h),
+    return BlocProvider(
+      create: (context) => SignupCubit(),
+      child: BlocConsumer<SignupCubit, SignupStates>(
+        listener: (context, state) {
+          if (state is SignupSuccessState) {
+            if (state.loginModel.status!) {
+              CashHelper.saveData(
+                      key: 'token', value: state.loginModel.data!.token)
+                  .then((value) {
+                token = state.loginModel.data!.token;
+                // CashHelper.getData(key: 'token');
+                context.pushNamedAndRemoveUntil(Routes.homeScreen,
+                    predicate: (route) => false);
+              });
+            } else {
+              showToast(
+                  message: state.loginModel.message!, state: TostStates.ERROR);
+            }
+          }
+        },
+        builder: (context, state) {
+          var cubit = SignupCubit.get(context);
+          return Scaffold(
+            body: SafeArea(
+              child: Container(
+                height: double.infinity,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/main_background.png'),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          context.pushNamed(Routes.loginScreen);
-                        },
-                        child: Image.asset(
-                          'assets/images/arrow.png',
-                          width: 60.w,
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20.w, vertical: 20.h),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            verticalSpace(20),
+                            GestureDetector(
+                              onTap: () {
+                                context.pushNamed(Routes.loginScreen);
+                              },
+                              child: Image.asset(
+                                'assets/images/arrow.png',
+                                width: 60.w,
+                              ),
+                            ),
+                            verticalSpace(20),
+                            Text(
+                              "Sign Up",
+                              style: TextStyle(
+                                fontSize: 30.sp,
+                                letterSpacing: 2,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Text(
+                              "Create a new account",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            verticalSpace(30),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SignupForm(),
+                                verticalSpace(30),
+                                // const SignupBlocListener(),
+                              ],
+                            ),
+                            state is! SignupLoadingState
+                                ? AppTextButton(
+                                    textStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                    ),
+                                    buttonText: "Sign Up",
+                                    buttonWidth: width,
+                                    onPressed: () {
+                                      if (cubit.formKey.currentState!
+                                          .validate()) {
+                                        cubit.userSignup(
+                                          email: cubit.emailController.text,
+                                          name: cubit.nameController.text,
+                                          phone: cubit.phoneController.text,
+                                          password:
+                                              cubit.passwordController.text,
+                                          
+                                        );
+                                        // context.pushNamedAndRemoveUntil(
+                                        //     Routes.otpScreen,
+                                        //     predicate: (route) => false);
+                                      }
+                                    },
+                                  )
+                                : const Center(
+                                    child: CircularProgressIndicator(
+                                      color: ColorManager.mainOrange,
+                                    ),
+                                  ),
+                            verticalSpace(15),
+                            SignupAndLoginFooter(
+                              firstText: 'Already have an account ? ',
+                              secondText: '  Login',
+                              ontap: () {
+                                context.pushNamed(Routes.photoAddressScreen);
+                              },
+                            ),
+                          ],
                         ),
                       ),
-                      verticalSpace(20),
-                      Text(
-                        "Sign Up",
-                        style: TextStyle(
-                          fontSize: 30.sp,
-                          letterSpacing: 2,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const Text(
-                        "Create a new account",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      verticalSpace(30),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SignupForm(),
-                          verticalSpace(30),
-                          // const SignupBlocListener(),
-                        ],
-                      ),
-                      AppTextButton(
-                        textStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                        ),
-                        buttonText: "Sign Up",
-                        buttonWidth: width,
-                        onPressed: () {
-                          context.pushNamedAndRemoveUntil(Routes.otpScreen,
-                              predicate: (route) => false);
-                          // Navigator.pushNamedAndRemoveUntil(
-                          //     context, Routes.homeScreen, (route) => false);
-                          // context.pushNamed(Routes.homeScreen);
-                          // validateThenDoSignup(context);
-                        },
-                      ),
-                      verticalSpace(20),
                     ],
                   ),
                 ),
-                SignupAndLoginFooter(
-                  firstText: 'Already have an account ? ',
-                  secondText: '  Login',
-                  ontap: () {
-                    context.pushNamed(Routes.loginScreen);
-                  },
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
-
-  // void validateThenDoSignup(BuildContext context) {
-  //   if (context.read<SignupCubit>().formKey.currentState!.validate()) {
-  //     context.read<SignupCubit>().emitSignupStates();
-  //   }
-  // }
 }

@@ -1,161 +1,98 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:two_way_dael/core/widgets/custom_text_form_field.dart';
 import 'package:two_way_dael/core/widgets/resuable_text.dart';
+import 'package:two_way_dael/features/auth/signup/logic/cubit/siginup_cubit.dart';
 
 import '../../../../../../core/helpers/spacing.dart';
-import '../../../../../core/helpers/app_regex.dart';
 
-class SignupForm extends StatefulWidget {
+class SignupForm extends StatelessWidget {
   const SignupForm({super.key});
 
   @override
-  State<SignupForm> createState() => _SignupFormState();
-}
-
-class _SignupFormState extends State<SignupForm> {
-  bool isPasswordObscureText = true;
-  bool isPasswordConfirmationObscureText = true;
-  bool hasLowercase = false;
-  bool hasUppercase = false;
-  bool hasSpecialCharacters = false;
-  bool hasNumber = false;
-  bool hasMinLength = false;
-
-  final TextEditingController passwordController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    // passwordController = context.read<SignupCubit>().passwordController;
-    setupPasswordControllerListener();
-  }
-
-  void setupPasswordControllerListener() {
-    passwordController.addListener(() {
-      setState(() {
-        hasLowercase = AppRegex.hasLowerCase(passwordController.text);
-        hasUppercase = AppRegex.hasUpperCase(passwordController.text);
-        hasSpecialCharacters =
-            AppRegex.hasSpecialCharacter(passwordController.text);
-        hasNumber = AppRegex.hasNumber(passwordController.text);
-        hasMinLength = AppRegex.hasMinLength(passwordController.text);
-      });
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Form(
-      // key: context.read<SignupCubit>().formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          resuableText(
-            text: "Name",
-            fontsize: 17.sp,
-          ),
-          CustomTextFormField(
-            keyboardType: TextInputType.name,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a valid name';
-              }
-            },
-            hintText: "Name",
-            // controller: context.read<SignupCubit>().nameController,
-            isObsecureText: false,
-            prefixIcon: const Icon(Icons.person),
-          ),
-          verticalSpace(15),
-          resuableText(
-            text: "Email Address",
-            fontsize: 17.sp,
-          ),
-          CustomTextFormField(
-            hintText: "Email Address",
-            keyboardType: TextInputType.emailAddress,
-            validator: (value) {
-              if (value == null ||
-                  value.isEmpty ||
-                  !AppRegex.isEmailValid(value)) {
-                return 'Please enter a valid email';
-              }
-            },
-            // controller: context.read<SignupCubit>().emailController,
-            isObsecureText: false,
-            prefixIcon: const Icon(Icons.email),
-          ),
-          verticalSpace(15),
-          resuableText(text: "Phone", fontsize: 17.sp),
-          CustomTextFormField(
-            keyboardType: TextInputType.phone,
-            hintText: "Phone",
-            validator: (value) {
-              if (value == null ||
-                  value.isEmpty ||
-                  !AppRegex.isPhoneNumberValid(value)) {
-                return 'Please enter a valid phone number';
-              }
-            },
-            // controller: context.read<SignupCubit>().phoneController,
-            isObsecureText: false,
-            prefixIcon: const Icon(Icons.phone),
-          ),
-          verticalSpace(15),
-          resuableText(text: "Password", fontsize: 17.sp),
-          CustomTextFormField(
-            // controller: context.read<SignupCubit>().passwordController,
-            hintText: 'Password',
-            keyboardType: TextInputType.visiblePassword,
-            prefixIcon: const Icon(Icons.lock),
-            isObsecureText: isPasswordObscureText,
-            sufixIcon: GestureDetector(
-              onTap: () {
-                setState(() {
-                  isPasswordObscureText = !isPasswordObscureText;
-                });
-              },
-              child: Icon(
-                isPasswordObscureText ? Icons.visibility_off : Icons.visibility,
+    return BlocBuilder<SignupCubit, SignupStates>(
+      builder: (context, state) {
+        var cubit = SignupCubit.get(context);
+        return Form(
+          key: cubit.formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              resuableText(
+                text: "Name",
+                fontsize: 17.sp,
               ),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a valid password';
-              }
-            },
+              CustomTextFormField(
+                keyboardType: TextInputType.name,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your name';
+                  }
+                },
+                hintText: "Name",
+                controller: cubit.nameController,
+                isObsecureText: false,
+                prefixIcon: const Icon(Icons.person),
+              ),
+              verticalSpace(15),
+              resuableText(
+                text: "Email Address",
+                fontsize: 17.sp,
+              ),
+              CustomTextFormField(
+                hintText: "Email Address",
+                keyboardType: TextInputType.emailAddress,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a valid email';
+                  }
+                },
+                controller: cubit.emailController,
+                isObsecureText: false,
+                prefixIcon: const Icon(Icons.email),
+              ),
+              verticalSpace(15),
+              resuableText(text: "Phone", fontsize: 17.sp),
+              CustomTextFormField(
+                keyboardType: TextInputType.phone,
+                hintText: "Phone",
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a valid phone number';
+                  }
+                },
+                controller: cubit.phoneController,
+                isObsecureText: false,
+                prefixIcon: const Icon(Icons.phone),
+              ),
+              verticalSpace(15),
+              resuableText(text: "Password", fontsize: 17.sp),
+              CustomTextFormField(
+                onFieldSubmitted: (value) {
+                  cubit.formKey.currentState!.validate();
+                },
+                prefixIcon: const Icon(Icons.lock),
+                keyboardType: TextInputType.visiblePassword,
+                hintText: "Password",
+                controller: cubit.passwordController,
+                isObsecureText: cubit.isObsecure,
+                sufixIcon: cubit.suffixIcon,
+                suffixOnPressed: () {
+                  cubit.changePasswordVisibility();
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your password';
+                  }
+                },
+              ),
+              verticalSpace(10),
+            ],
           ),
-          verticalSpace(15),
-          resuableText(text: "Address", fontsize: 17.sp),
-          CustomTextFormField(
-            hintText: 'Address',
-            keyboardType: TextInputType.streetAddress,
-            prefixIcon: const Icon(Icons.label_important),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your address';
-              }
-            },
-          ),
-          // verticalSpace(15),
-
-          verticalSpace(10),
-          // PasswordValidation(
-          //   hasLowerCase: hasLowercase,
-          //   hasUpperCase: hasUppercase,
-          //   hasSpecialCharacter: hasSpecialCharacters,
-          //   hasNumber: hasNumber,
-          //   hasMinLength: hasMinLength,
-          // ),
-        ],
-      ),
+        );
+      },
     );
-  }
-
-  @override
-  void dispose() {
-    passwordController.dispose();
-    super.dispose();
   }
 }
