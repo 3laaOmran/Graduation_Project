@@ -5,8 +5,8 @@ import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
 
-class AboutUsScreen extends StatelessWidget {
-  const AboutUsScreen({super.key});
+class AboutAppScreen extends StatelessWidget {
+  const AboutAppScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class AboutUsScreen extends StatelessWidget {
             )),
         backgroundColor: ColorManager.mainOrange,
         title: Text(
-          'About Us',
+          'About App',
           style: TextStyles.font18White,
         ),
       ),

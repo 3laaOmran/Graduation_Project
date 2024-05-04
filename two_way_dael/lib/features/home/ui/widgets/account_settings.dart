@@ -39,7 +39,7 @@ class AccountSettings extends StatelessWidget {
           verticalSpace(20),
           InkWell(
             onTap: () {
-              context.pushNamed(Routes.aboutUsScreen);
+              context.pushNamed(Routes.aboutAppScreen);
             },
             child: buildAccountSettingsItem(
               image: 'assets/images/about.png',
