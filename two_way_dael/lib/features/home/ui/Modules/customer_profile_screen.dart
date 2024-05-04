@@ -20,7 +20,7 @@ class CustomerProfileScreen extends StatefulWidget {
 }
 
 class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
-  Widget currentWidget = AccountSettings();
+  Widget currentWidget = const AccountSettings();
   IconData? icon;
 
   @override
@@ -28,8 +28,9 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
     return BlocConsumer<CustomerCubit, CustomerStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        // var model = CustomerCubit.get(context).userModel;
-
+        var cubit = CustomerCubit.get(context);
+        var model = cubit.userModel;
+        cubit.nameController.text = model!.data!.name!;
         return SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,7 +84,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              currentWidget = EditInfo();
+                              currentWidget = const EditInfo();
                               icon = Icons.arrow_back;
                             });
                           },
@@ -163,7 +164,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                     child: customIconButton(
                       onPressed: () {
                         setState(() {
-                          currentWidget = AccountSettings();
+                          currentWidget = const AccountSettings();
                           icon = null;
                         });
                       },

@@ -29,7 +29,7 @@ class AccountSettings extends StatelessWidget {
           verticalSpace(20),
           InkWell(
             onTap: () {
-              Navigator.of(context).pushNamed(Routes.donationScreen);
+              context.pushNamed(Routes.donationScreen);
             },
             child: buildAccountSettingsItem(
               image: 'assets/images/donate.png',
@@ -37,9 +37,14 @@ class AccountSettings extends StatelessWidget {
             ),
           ),
           verticalSpace(20),
-          buildAccountSettingsItem(
-            image: 'assets/images/about.png',
-            text: 'About App',
+          InkWell(
+            onTap: () {
+              context.pushNamed(Routes.aboutUsScreen);
+            },
+            child: buildAccountSettingsItem(
+              image: 'assets/images/about.png',
+              text: 'About Us',
+            ),
           ),
           verticalSpace(50),
           AppTextButton(

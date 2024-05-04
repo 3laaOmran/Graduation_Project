@@ -21,14 +21,14 @@ class EditInfo extends StatelessWidget {
         cubit.nameController.text = model!.data!.name!;
         cubit.emailController.text = model.data!.email!;
         return Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Form(
             key: cubit.formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 state is CustomerUpdateProfileLoadingState
-                    ? LinearProgressIndicator(
+                    ? const LinearProgressIndicator(
                         color: ColorManager.mainOrange,
                       )
                     : Text(

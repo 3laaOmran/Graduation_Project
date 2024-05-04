@@ -23,8 +23,9 @@ class CustomerHomeScreen extends StatelessWidget {
     return BlocConsumer<CustomerCubit, CustomerStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        // var model = CustomerCubit.get(context).userModel;
         var cubit = CustomerCubit.get(context);
+        // var model = cubit.userModel;
+        // cubit.nameController.text = model!.data!.name!;
         return Padding(
           padding: const EdgeInsetsDirectional.only(
             start: 20.0,
