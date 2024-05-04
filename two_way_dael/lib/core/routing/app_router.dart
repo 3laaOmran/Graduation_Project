@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:two_way_dael/core/routing/routes.dart';
+import 'package:two_way_dael/features/auth/login/ui/views/forget_password_otp_screen.dart';
 import 'package:two_way_dael/features/auth/login/ui/views/forget_password_view.dart';
+import 'package:two_way_dael/features/auth/login/ui/views/phone_for_forget_password.dart';
 import 'package:two_way_dael/features/auth/signup/ui/views/otp_screen.dart';
 import 'package:two_way_dael/features/auth/signup/ui/views/photo_and_address_screen.dart';
 import 'package:two_way_dael/features/home/ui/Modules/donation_module.dart';
@@ -36,6 +38,10 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const DonationScreen());
       case Routes.forgetPasswordScreen:
         return MaterialPageRoute(builder: (_) => const ForgetPasswordScreen());
+      case Routes.phoneForForgetPasswordScreen:
+        return MaterialPageRoute(builder: (_) => const PhoneForForgetPasswordScreen());
+      case Routes.forgetPasswordOtpScreen:
+        return MaterialPageRoute(builder: (_) => const ForgetPasswordOtpScreen());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

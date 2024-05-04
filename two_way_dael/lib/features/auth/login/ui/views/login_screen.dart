@@ -86,7 +86,7 @@ class LoginScreen extends StatelessWidget {
                                 child: GestureDetector(
                                   onTap: () {
                                     context
-                                        .pushNamed(Routes.forgetPasswordScreen);
+                                        .pushNamed(Routes.phoneForForgetPasswordScreen);
                                   },
                                   child: resuableText(
                                       text: "Forget Password?",
@@ -119,13 +119,6 @@ class LoginScreen extends StatelessWidget {
                                     color: ColorManager.mainOrange,
                                   ),
                                 ),
-                          // SizedBox(
-                          //   height: height * 0.04,
-                          // ),
-                          //   Center(
-                          //     child: floatingactionButton(
-                          //         width, height, "google_image", "logingoogle"),
-                          //   ),
                           verticalSpace(20),
                           SignupAndLoginFooter(
                               firstText: "Don't have account ?? ",
@@ -136,14 +129,6 @@ class LoginScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-
-                    // SignupAndLoginFooter(
-                    //     firstText: "Don't have account ?? ",
-                    //     secondText: "SignUp",
-                    //     ontap: () {
-                    //       context.pushNamed(Routes.signupScreen);
-                    //     }),
-                    // const LoginBlocListener(),
                   ],
                 ),
               ),

@@ -35,8 +35,11 @@ class LoginCubit extends Cubit<LoginStates> {
   }
 
   final formKey = GlobalKey<FormState>();
+  final otpFormKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
+  final phoneController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   IconData suffixIcon = Icons.visibility;
   bool isObsecure = true;
@@ -44,6 +47,14 @@ class LoginCubit extends Cubit<LoginStates> {
     isObsecure = !isObsecure;
     suffixIcon =
         isObsecure ? Icons.visibility : Icons.visibility_off;
+    emit(LoginChangePasswordVisibilityState());
+  }
+  IconData confirmSuffixIcon = Icons.visibility;
+  bool confirmIsObsecure = true;
+  void changeConfirmPasswordVisibility() {
+    confirmIsObsecure = !confirmIsObsecure;
+    confirmSuffixIcon =
+        confirmIsObsecure ? Icons.visibility : Icons.visibility_off;
     emit(LoginChangePasswordVisibilityState());
   }
 

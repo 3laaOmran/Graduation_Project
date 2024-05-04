@@ -10,8 +10,8 @@ import 'package:two_way_dael/core/widgets/custom_text_form_field.dart';
 import 'package:two_way_dael/core/widgets/resuable_text.dart';
 import 'package:two_way_dael/features/auth/login/logic/cubit/login_cubit.dart';
 
-class ForgetPasswordScreen extends StatelessWidget {
-  const ForgetPasswordScreen({super.key});
+class PhoneForForgetPasswordScreen extends StatelessWidget {
+  const PhoneForForgetPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -54,67 +54,38 @@ class ForgetPasswordScreen extends StatelessWidget {
                             ),
                             verticalSpace(40),
                             Text(
-                              "Forget Password",
+                              "Phone Number",
                               style: TextStyles.font30blackbold,
                             ),
                             Text(
-                              "Use a strong password for your safety",
+                              "Enter your phone number",
                               style: TextStyles.font15BlackBold,
                             ),
                             verticalSpace(30),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                resuableText(
-                                    text: "New Password", fontsize: 17.sp),
-                                CustomTextFormField(
-                                  prefixIcon: const Icon(Icons.lock),
-                                  keyboardType: TextInputType.visiblePassword,
-                                  hintText: "New Password",
-                                  controller: cubit.passwordController,
-                                  isObsecureText: cubit.isObsecure,
-                                  sufixIcon: cubit.suffixIcon,
-                                  suffixOnPressed: () {
-                                    cubit.changePasswordVisibility();
-                                  },
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter your new password';
-                                    }
-                                  },
-                                ),
-                                verticalSpace(30),
-                                resuableText(
-                                    text: "Confirm Password", fontsize: 17.sp),
-                                CustomTextFormField(
-                                  prefixIcon: const Icon(Icons.lock),
-                                  keyboardType: TextInputType.visiblePassword,
-                                  hintText: "Confirm Password",
-                                  controller: cubit.confirmPasswordController,
-                                  isObsecureText: cubit.confirmIsObsecure,
-                                  sufixIcon: cubit.confirmSuffixIcon,
-                                  suffixOnPressed: () {
-                                    cubit.changeConfirmPasswordVisibility();
-                                  },
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter your password confirmation';
-                                    }
-                                  },
-                                ),
-                                verticalSpace(60),
-                              ],
+                            resuableText(text: "Phone", fontsize: 17.sp),
+                            CustomTextFormField(
+                              keyboardType: TextInputType.phone,
+                              hintText: "Phone",
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your phone number';
+                                }
+                              },
+                              controller: cubit.phoneController,
+                              isObsecureText: false,
+                              prefixIcon: const Icon(Icons.phone),
                             ),
+                            verticalSpace(60),
                             AppTextButton(
                               textStyle: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
                               ),
-                              buttonText: "Confirm",
+                              buttonText: "Next",
                               buttonWidth: width,
                               onPressed: () {
                                 if (cubit.formKey.currentState!.validate()) {
-                                  context.pushNamed(Routes.loginScreen);
+                                  context.pushNamed(Routes.forgetPasswordOtpScreen);
                                 }
                               },
                             ),
