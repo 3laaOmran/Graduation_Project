@@ -22,9 +22,14 @@ class AccountSettings extends StatelessWidget {
             style: TextStyles.font20blackbold,
           ),
           verticalSpace(30),
-          buildAccountSettingsItem(
-            image: 'assets/images/orders_list.png',
-            text: 'Your Orders',
+          InkWell(
+            onTap: () {
+              context.pushNamed(Routes.yourOrdersScreen);
+            },
+            child: buildAccountSettingsItem(
+              image: 'assets/images/orders_list.png',
+              text: 'Your Orders',
+            ),
           ),
           verticalSpace(20),
           InkWell(
@@ -43,7 +48,7 @@ class AccountSettings extends StatelessWidget {
             },
             child: buildAccountSettingsItem(
               image: 'assets/images/about.png',
-              text: 'About Us',
+              text: 'About App',
             ),
           ),
           verticalSpace(50),

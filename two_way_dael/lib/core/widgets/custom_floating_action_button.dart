@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:two_way_dael/core/theming/styles.dart';
 
 import '../../../core/theming/colors.dart';
 
-Widget floatingactionButton(
-  double width,
-  double height,
-  String name,
-  String herotext,
-) {
-  return FloatingActionButton(
-    heroTag: herotext,
-    backgroundColor: Colors.white,
-    onPressed: () {},
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(50),
-      side: const BorderSide(color: ColorManager.mainOrange),
-    ),
-    child: CircleAvatar(
-      radius: 250,
+Widget floatingactionButton({
+  required Function()? onPressed,
+  required String text,
+}) {
+  return SizedBox(
+    width: 150.w,
+    child: FloatingActionButton(
       backgroundColor: ColorManager.mainOrange,
-      backgroundImage: AssetImage('assets/images/Google.png'),
+      onPressed: onPressed,
+      child: Text(
+        text,
+        style: TextStyles.font18White,
+      ),
     ),
   );
 }

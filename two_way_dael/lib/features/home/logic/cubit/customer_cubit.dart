@@ -5,6 +5,7 @@ import 'package:two_way_dael/features/auth/login/data/models/login_model.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
 import 'package:two_way_dael/features/home/ui/Modules/customer_home_screen.dart';
 import 'package:two_way_dael/features/home/ui/Modules/customer_profile_screen.dart';
+import 'package:two_way_dael/features/home/ui/widgets/build_charity_item.dart';
 
 import '../../../../core/networking/dio_helper.dart';
 import '../../../../core/networking/end_points.dart';
@@ -115,4 +116,84 @@ class CustomerCubit extends Cubit<CustomerStates> {
     suffixIcon = isObsecure ? Icons.visibility : Icons.visibility_off;
     emit(GetUserDataChaneIconVisibilityState());
   }
+
+  // bool? isSelected = false;
+  List<Widget> charities = [
+    BuilsCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/default_profile.png',
+        name: 'charity one',
+        value: 796,
+      ),
+    ),
+    BuilsCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/default_profile.png',
+        name: 'charity two',
+        value: 152,
+      ),
+    ),
+    BuilsCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/default_profile.png',
+        name: 'charity three',
+        value: 888,
+      ),
+    ),
+    BuilsCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/default_profile.png',
+        name: 'charity three',
+        value: 888,
+      ),
+    ),
+    BuilsCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/default_profile.png',
+        name: 'charity three',
+        value: 888,
+      ),
+    ),
+    BuilsCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/default_profile.png',
+        name: 'charity three',
+        value: 888,
+      ),
+    ),
+    BuilsCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/default_profile.png',
+        name: 'charity three',
+        value: 888,
+      ),
+    ),
+    BuilsCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/default_profile.png',
+        name: 'charity three',
+        value: 888,
+      ),
+    ),
+    BuilsCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/default_profile.png',
+        name: 'charity three',
+        value: 888,
+      ),
+    ),
+  ];
+  // void Function(bool?) changeCheckBox(context) {
+  //   return (bool? isSelected) {
+  //     CustomerCubit.get(context).isSelected = isSelected;
+  //     emit(SelectCharityState());
+  //   };
+  // }
+
+  // void itemOntap() {
+  //   isSelected = !isSelected!;
+  //   selectedIcon =
+  //       isSelected! ? Icons.check_box_outline_blank : Icons.check_box_rounded;
+  //   emit(SelectCharityState());
+  // }
 }

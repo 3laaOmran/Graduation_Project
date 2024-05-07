@@ -8,6 +8,7 @@ import 'package:two_way_dael/features/auth/signup/ui/views/photo_and_address_scr
 import 'package:two_way_dael/features/home/ui/Modules/about_app.dart';
 import 'package:two_way_dael/features/home/ui/Modules/donation_module.dart';
 import 'package:two_way_dael/features/home/ui/Modules/notifications_module.dart';
+import 'package:two_way_dael/features/home/ui/Modules/your_orders_screen.dart';
 
 import '../../features/auth/login/ui/views/login_screen.dart';
 import '../../features/auth/signup/ui/views/signup_screen.dart';
@@ -45,6 +46,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const ForgetPasswordOtpScreen());
       case Routes.aboutAppScreen:
         return MaterialPageRoute(builder: (_) => const AboutAppScreen());
+      case Routes.yourOrdersScreen:
+        return MaterialPageRoute(builder: (_) => const YourOrdersScreen());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(
