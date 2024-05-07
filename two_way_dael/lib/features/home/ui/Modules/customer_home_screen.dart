@@ -135,6 +135,7 @@ class CustomerHomeScreen extends StatelessWidget {
                       controller: controller,
                       keyboardType: TextInputType.text,
                       sufixIcon: Icons.search,
+                      suffixIconSize: 25,
                       hintText: 'Search...',
                       validator: (String? value) {
                         if (value!.isEmpty) {

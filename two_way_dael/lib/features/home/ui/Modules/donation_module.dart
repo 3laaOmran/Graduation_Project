@@ -80,7 +80,7 @@ void showBottomSheetMethod(context) {
       child: BlocBuilder<CustomerCubit, CustomerStates>(
         builder: (context, state) {
           return Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.symmetric(vertical: 20),
             child: ListView.separated(
               itemCount: CustomerCubit.get(context).charities.length,
               itemBuilder: (context, index) => ListTile(

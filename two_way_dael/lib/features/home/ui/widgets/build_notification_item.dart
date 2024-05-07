@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
+
 Widget buildNotificationItem() {
   return Container(
     color: ColorManager.notificationColor,
@@ -9,11 +10,10 @@ Widget buildNotificationItem() {
         const Padding(
           padding: EdgeInsets.all(10.0),
           child: CircleAvatar(
-            radius: 50,
+            radius: 40,
             backgroundImage: AssetImage('assets/images/default_profile.png'),
           ),
         ),
-        
         Expanded(
           child: SizedBox(
             height: 110,

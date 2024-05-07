@@ -5,6 +5,7 @@ import 'package:two_way_dael/features/auth/login/data/models/login_model.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
 import 'package:two_way_dael/features/home/ui/Modules/customer_home_screen.dart';
 import 'package:two_way_dael/features/home/ui/Modules/customer_profile_screen.dart';
+import 'package:two_way_dael/features/home/ui/Modules/favorite_sellers.dart';
 import 'package:two_way_dael/features/home/ui/widgets/build_charity_item.dart';
 
 import '../../../../core/networking/dio_helper.dart';
@@ -16,11 +17,12 @@ class CustomerCubit extends Cubit<CustomerStates> {
 
   static CustomerCubit get(context) => BlocProvider.of(context);
 
-  int currentIndex = 0;
+  int currentIndex = 1;
 
   List<Widget> bottomScreens = [
-    CustomerHomeScreen(),
     const CustomerProfileScreen(),
+    CustomerHomeScreen(),
+    FvaoriteSellers(),
   ];
 
   void changeBottomNav(int index) {

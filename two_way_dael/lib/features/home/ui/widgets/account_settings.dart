@@ -53,10 +53,10 @@ class AccountSettings extends StatelessWidget {
           ),
           verticalSpace(50),
           AppTextButton(
-            buttonText: 'LOGOUT',
+            buttonText: 'Logout',
             textStyle: const TextStyle(
               color: Colors.white,
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
             onPressed: () {

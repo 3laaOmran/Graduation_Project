@@ -21,13 +21,14 @@ class AppTextButton extends StatelessWidget {
     this.buttonWidth,
     this.buttonHeight,
     required this.buttonText,
-     this.textStyle,
+    this.textStyle,
     required this.onPressed,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
+      
       style: ButtonStyle(
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(

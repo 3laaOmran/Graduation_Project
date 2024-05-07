@@ -11,6 +11,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextStyle? inputTextStyle;
   final TextStyle? hintStyle;
   final String hintText;
+  final double? suffixIconSize;
   final String? labelText;
   final Widget? prefixIcon;
   final bool isObsecureText;
@@ -39,7 +40,7 @@ class CustomTextFormField extends StatelessWidget {
       this.keyboardType,
       this.borderRadius,
       this.labelText,
-      this.suffixOnPressed, this.onFieldSubmitted});
+      this.suffixOnPressed, this.onFieldSubmitted, this.suffixIconSize});
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +95,7 @@ class CustomTextFormField extends StatelessWidget {
             onPressed: suffixOnPressed,
             icon: Icon(
               sufixIcon,
+              size: suffixIconSize,
               color: ColorManager.mainOrange,
             )),
         prefixIcon: prefixIcon, prefixIconColor: ColorManager.mainOrange,

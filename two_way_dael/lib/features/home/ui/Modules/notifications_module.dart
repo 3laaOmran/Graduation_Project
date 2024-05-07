@@ -30,9 +30,15 @@ class NotificationsScreen extends StatelessWidget {
           itemCount: 15,
           itemBuilder: (context, index) => buildNotificationItem(),
           separatorBuilder: (context, index) => Container(
-            width: double.infinity,
-            height: 1,
-            color: Colors.black,
+            color: ColorManager.notificationColor,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+              child: Container(
+                width: double.infinity,
+                height: 1,
+                color: Colors.grey,
+              ),
+            ),
           ),
         ));
   }

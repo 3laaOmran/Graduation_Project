@@ -60,8 +60,8 @@ class _ChangeProfilePhotoState extends State<ChangeProfilePhoto> {
                         image: imagePick == null
                             ? const DecorationImage(
                                 image: AssetImage(
-                                    'assets/images/image_picker_background.png'),
-                                fit: BoxFit.none)
+                                    'assets/images/default_profile.png'),
+                                fit: BoxFit.contain)
                             : DecorationImage(image: FileImage(imagePick!)),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(25.0)),
