@@ -1,4 +1,6 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
@@ -48,9 +50,14 @@ class _AboutAppScreenState extends State<AboutAppScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 verticalSpace(70),
-                Text(
-                  'Two Way Deal ',
-                  style: TextStyles.font20blackbold,
+                AnimatedTextKit(
+                  repeatForever: true,
+                  animatedTexts: [
+                    WavyAnimatedText(
+                      'Two Way Deal ',
+                      textStyle: TextStyles.font30blackbold,
+                    ),
+                  ],
                 ),
                 verticalSpace(5),
                 Text(
@@ -95,32 +102,37 @@ class _AboutAppScreenState extends State<AboutAppScreen> {
                 verticalSpace(20),
                 aboutUs
                     ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            '2Way Deal Overview :-',
-                            style: TextStyles.font17BlackBold,
+                          BuildAnimatedTextItem(
+                            text: '2Way Deal Overview :-',
+                            textStyle: TextStyles.font17BlackBold,
                           ),
-                          Text(
-                            'Our application aims to reduce food waste by selling it at lower price than its original cost or donating it. We strive to minimize food loss and promote affordability, benefiting both consumers and the environment.',
-                            style: TextStyles.font15BlackBold,
+                          BuildAnimatedTextItem(
+                            text:
+                                'Our application aims to reduce food waste by selling it at lower price than its original cost or donating it. We strive to minimize food loss and promote affordability, benefiting both consumers and the environment.',
+                            textStyle: TextStyles.font15Black45Medium,
                           ),
                           verticalSpace(10),
-                          Text(
-                            'Our Goals :-',
-                            style: TextStyles.font17BlackBold,
+                          BuildAnimatedTextItem(
+                            text: 'Our Goals :-',
+                            textStyle: TextStyles.font17BlackBold,
                           ),
-                          Text(
-                            '1- Reduce food waste by 30% within the first year of implementation, as measured by the total weight of unsold food items.',
-                            style: TextStyles.font15BlackBold,
+                          BuildAnimatedTextItem(
+                            text:
+                                '1- Reduce food waste by 30% within the first year of implementation, as measured by the total weight of unsold food items.',
+                            textStyle: TextStyles.font15Black45Medium,
                           ),
-                          Text(
-                            '2- Increase the accessibility of affordable food options by offering discounted prices, leading to 20% increase in customer.',
-                            style: TextStyles.font15BlackBold,
+                          verticalSpace(5),
+                          BuildAnimatedTextItem(
+                            text:
+                                '2- Increase the accessibility of affordable food options by offering discounted prices, leading to 20% increase in customer.',
+                            textStyle: TextStyles.font15Black45Medium,
                           ),
-                          Text(
-                            '3- participation within six months. Collaborate with local food banks and charities to donate surplus food, aiming to distribute a minimum of 500 meals per month to those in need.',
-                            style: TextStyles.font15BlackBold,
+                          verticalSpace(5),
+                          BuildAnimatedTextItem(
+                            text:
+                                '3- participation within six months. Collaborate with local food banks and charities to donate surplus food, aiming to distribute a minimum of 500 meals per month to those in need.',
+                            textStyle: TextStyles.font15Black45Medium,
                           ),
                         ],
                       )
@@ -132,4 +144,28 @@ class _AboutAppScreenState extends State<AboutAppScreen> {
       ),
     );
   }
+}
+
+Widget BuildAnimatedTextItem(
+    {required String text,
+    required TextStyle textStyle,
+    }) {
+  return SizedBox(
+    width: double.infinity,
+    child: DefaultTextStyle(
+      style: const TextStyle(
+          // color: Colors.black,
+          // fontSize: 20.0,
+          ),
+      child: AnimatedTextKit(
+        totalRepeatCount: 1,
+        animatedTexts: [
+          TypewriterAnimatedText(text, textStyle: textStyle),
+        ],
+        // onTap: () {
+
+        // },
+      ),
+    ),
+  );
 }

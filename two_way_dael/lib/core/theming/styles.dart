@@ -9,6 +9,11 @@ class TextStyles {
     fontWeight: FontWeightHelper.bold,
     color: Colors.black,
   );
+  static TextStyle font50black54bold = TextStyle(
+    color: Colors.black54,
+    fontSize: 50.sp,
+    fontWeight: FontWeightHelper.bold,
+  );
   static TextStyle font30blackbold = TextStyle(
     fontSize: 30.sp,
     fontWeight: FontWeightHelper.bold,
@@ -18,6 +23,11 @@ class TextStyles {
     fontSize: 20.sp,
     fontWeight: FontWeightHelper.bold,
     color: Colors.black,
+  );
+  static TextStyle font18Grey800bold = TextStyle(
+    fontSize: 18.sp,
+    fontWeight: FontWeightHelper.bold,
+    color: Colors.grey[800],
   );
   static TextStyle font20Whitebold = TextStyle(
     fontSize: 20.sp,
@@ -75,5 +85,10 @@ class TextStyles {
     fontSize: 15.sp,
     color: Colors.black,
     fontWeight: FontWeightHelper.bold,
+  );
+  static TextStyle font15Black45Medium = TextStyle(
+    fontSize: 15.sp,
+    color: Colors.black45,
+    fontWeight: FontWeightHelper.medium,
   );
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_cubit.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
+import 'package:two_way_dael/features/home/ui/widgets/build_no_internet.dart';
 
 class CustomerLayoutScreen extends StatelessWidget {
   const CustomerLayoutScreen({super.key});
@@ -15,7 +17,25 @@ class CustomerLayoutScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
-          body: cubit.bottomScreens[cubit.currentIndex],
+          body: OfflineBuilder(
+            connectivityBuilder: (
+              BuildContext context,
+              ConnectivityResult connectivity,
+              Widget child,
+            ) {
+              final bool connected = connectivity != ConnectivityResult.none;
+              if (connected) {
+                return cubit.bottomScreens[cubit.currentIndex];
+              } else {
+                return buildNoInternetWidget();
+              }
+            },
+            child: const Center(
+              child: CircularProgressIndicator(
+                color: ColorManager.mainOrange,
+              ),
+            ),
+          ),
           bottomNavigationBar: Container(
             margin: const EdgeInsetsDirectional.only(
                 end: 20, start: 20, bottom: 20),
@@ -68,3 +88,5 @@ class CustomerLayoutScreen extends StatelessWidget {
     );
   }
 }
+
+

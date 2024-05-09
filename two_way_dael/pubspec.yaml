@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  animated_text_kit: ^4.2.2
   bloc: ^8.1.4
   carousel_slider: ^4.2.1
   cupertino_icons: ^1.0.6
@@ -37,6 +38,7 @@ dependencies:
   flutter_bloc: ^8.1.5
   flutter_floating_bottom_bar: ^1.2.0
   flutter_native_splash: ^2.4.0
+  flutter_offline: ^3.0.1
   flutter_screenutil: ^5.9.0
   fluttertoast: ^8.2.5
   image_picker: ^1.1.1

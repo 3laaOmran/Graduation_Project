@@ -54,6 +54,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const YourOrdersScreen());
       case Routes.favoriteSellers:
         return MaterialPageRoute(builder: (_) => const FvaoriteSellers());
+      case Routes.sellerDeatailsScreen:
+        return MaterialPageRoute(builder: (_) => const FvaoriteSellers());
       default:
         return MaterialPageRoute(
             builder: (context) => Scaffold(
