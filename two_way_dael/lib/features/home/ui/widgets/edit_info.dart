@@ -8,6 +8,7 @@ import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
 
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_form_field.dart';
+import '../../../auth/signup/ui/widgets/build_drop_down_list.dart';
 
 class EditInfo extends StatelessWidget {
   const EditInfo({super.key});
@@ -74,29 +75,35 @@ class EditInfo extends StatelessWidget {
                   },
                 ),
                 verticalSpace(20),
-                CustomTextFormField(
-                  prefixIcon: const Icon(Icons.lock),
-                  keyboardType: TextInputType.visiblePassword,
-                  isObsecureText: cubit.isObsecure,
-                  sufixIcon: cubit.suffixIcon,
-                  suffixOnPressed: () {
-                    cubit.changePasswordVisibility();
-                  },
-                  hintText: 'Password',
-                  validator: (value) {
-                    // if (value == null || value.isEmpty) {
-                    //   return 'Please enter a valid password';
-                    // }
-                  },
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    buildDropDownList(
+                      list: ['Cairo', 'Alex', 'Behira', 'Giza'],
+                      selectedItem: 'Cairo',
+                    ),
+                    verticalSpace(15),
+                    buildDropDownList(
+                      list: ['Abohommos', 'Damanhoor', 'Nobaria'],
+                      selectedItem: 'Abohommos',
+                    ),
+                  ],
                 ),
-                verticalSpace(20),
-                CustomTextFormField(
-                  isObsecureText: false,
-                  hintText: 'Address',
-                  validator: (value) {
-                    // if (value == null || value.isEmpty) {
-                    //   return 'Please enter your address';
-                    // }
+                verticalSpace(15),
+                AppTextButton(
+                  buttonText: 'Change Password',
+                  textStyle: const TextStyle(
+                    color: ColorManager.mainOrange,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  backgroundColor: Colors.white,
+                  borderSide: const BorderSide(
+                    width: 2,
+                    color: ColorManager.mainOrange,
+                  ),
+                  onPressed: () {
+                    // context.pushNamed(Routes.otpScreen);
                   },
                 ),
                 verticalSpace(20),

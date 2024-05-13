@@ -106,7 +106,7 @@ class _ChangeProfilePhotoState extends State<ChangeProfilePhoto> {
           verticalSpace(40),
           AppTextButton(
             buttonText: 'Save',
-            textStyle: TextStyle(
+            textStyle:const TextStyle(
               color: Colors.white,
               fontSize: 18,
               fontWeight: FontWeight.bold,

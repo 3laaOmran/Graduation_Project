@@ -10,6 +10,7 @@ class AppTextButton extends StatelessWidget {
   final double? buttonWidth;
   final double? buttonHeight;
   final String buttonText;
+  final BorderSide? borderSide;
   final TextStyle? textStyle;
   final VoidCallback onPressed;
   const AppTextButton({
@@ -23,15 +24,16 @@ class AppTextButton extends StatelessWidget {
     required this.buttonText,
     this.textStyle,
     required this.onPressed,
+    this.borderSide,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      
       style: ButtonStyle(
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
+            side: borderSide ?? BorderSide.none,
             borderRadius: BorderRadius.circular(borderRadius ?? 25.0),
           ),
         ),
