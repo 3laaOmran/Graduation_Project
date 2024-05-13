@@ -62,7 +62,10 @@ class _ChangeProfilePhotoState extends State<ChangeProfilePhoto> {
                                 image: AssetImage(
                                     'assets/images/default_profile.png'),
                                 fit: BoxFit.contain)
-                            : DecorationImage(image: FileImage(imagePick!)),
+                            : DecorationImage(
+                                image: FileImage(imagePick!),
+                                fit: BoxFit.cover,
+                              ),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(25.0)),
                         border: Border.all(

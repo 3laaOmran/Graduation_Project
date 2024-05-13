@@ -31,7 +31,7 @@ class FvaoriteSellers extends StatelessWidget {
               crossAxisCount: 2,
               crossAxisSpacing: 5,
               mainAxisSpacing: 1,
-              childAspectRatio: 1 / 1.4, //width / height
+              childAspectRatio: 1 / 1.5, //width / height
 
               children: List.generate(
                   20, (index) => buildFavoriteSellerItem(context)),
