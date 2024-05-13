@@ -73,7 +73,8 @@ class CustomerHomeScreen extends StatelessWidget {
                                 .textTheme
                                 .headlineSmall
                                 ?.copyWith(
-                                    fontWeight: FontWeight.w100, fontSize: 8.0),
+                                    fontWeight: FontWeight.w100,
+                                    fontSize: 10.0),
                           ),
                         ],
                       ),
@@ -280,37 +281,3 @@ class CustomerHomeScreen extends StatelessWidget {
     );
   }
 }
-
-// ListView.separated(
-// scrollDirection: Axis.horizontal,
-// physics: const BouncingScrollPhysics(),
-// itemBuilder: (context, index) => buildItem(context, CustomerCubit.get(context).productsModel?.message?[index]),
-// separatorBuilder: (context, index) => const SizedBox(width: 10.0,),
-// itemCount: CustomerCubit.get(context).productsModel!.message!.length,
-// ),
-
-//  ListView.separated(
-                  //   scrollDirection: Axis.horizontal,
-                  //   physics: const BouncingScrollPhysics(),
-                  //   itemBuilder: (context, index) {
-                  //     return buildItem(context);
-                  // final productsModel =
-                  //     CustomerCubit.get(context).productsModel;
-                  // if (productsModel != null &&
-                  //     productsModel.message != null &&
-                  //     index < productsModel.message!.length) {
-                  //   return buildItem(
-                  //       context, productsModel.message?[index]);
-                  // } else {
-                  //   return const CircularProgressIndicator(); // or any other fallback widget
-                  // }
-                  //   },
-                  //   separatorBuilder: (context, index) =>
-                  //       const SizedBox(width: 10.0),
-                  //   itemCount:
-                  //   // CustomerCubit.get(context)
-                  //   //         .productsModel
-                  //   // //        ?.message
-                  //   //   //      ?.length ??
-                  //       15,
-                  // ),
