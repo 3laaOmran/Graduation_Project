@@ -105,17 +105,33 @@ class CustomerCubit extends Cubit<CustomerStates> {
   }
 
   final formKey = GlobalKey<FormState>();
+  final changePasswordFormKey = GlobalKey<FormState>();
   var nameController = TextEditingController();
   var emailController = TextEditingController();
   var phoneController = TextEditingController();
-  var passwordController = TextEditingController();
-  var addressController = TextEditingController();
+  var newPasswordController = TextEditingController();
+  var oldPasswordController = TextEditingController();
+  var confirmPasswordController = TextEditingController();
 
-  IconData suffixIcon = Icons.visibility;
-  bool isObsecure = true;
-  void changePasswordVisibility() {
-    isObsecure = !isObsecure;
-    suffixIcon = isObsecure ? Icons.visibility : Icons.visibility_off;
+  IconData newSuffixIcon = Icons.visibility;
+  bool newIsObsecure = true;
+  void changeNewPasswordVisibility() {
+    newIsObsecure = !newIsObsecure;
+    newSuffixIcon = newIsObsecure ? Icons.visibility : Icons.visibility_off;
+    emit(GetUserDataChaneIconVisibilityState());
+  }
+  IconData oldSuffixIcon = Icons.visibility;
+  bool oldIsObsecure = true;
+  void changeOldPasswordVisibility() {
+    oldIsObsecure = !oldIsObsecure;
+    oldSuffixIcon = oldIsObsecure ? Icons.visibility : Icons.visibility_off;
+    emit(GetUserDataChaneIconVisibilityState());
+  }
+  IconData confirmSuffixIcon = Icons.visibility;
+  bool confirmIsObsecure = true;
+  void changeConfirmPasswordVisibility() {
+    confirmIsObsecure = !confirmIsObsecure;
+    confirmSuffixIcon = confirmIsObsecure ? Icons.visibility : Icons.visibility_off;
     emit(GetUserDataChaneIconVisibilityState());
   }
 

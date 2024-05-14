@@ -1,7 +1,9 @@
 import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/helpers/spacing.dart';
+import 'package:two_way_dael/core/routing/routes.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_drop_down_list.dart';
@@ -25,6 +27,34 @@ class EditInfo extends StatelessWidget {
         var model = cubit.userModel;
         cubit.nameController.text = model!.data!.name!;
         cubit.emailController.text = model.data!.email!;
+        List<SelectedListItem> governorates = [
+          SelectedListItem(name: 'Cairo'),
+          SelectedListItem(name: 'Behira'),
+          SelectedListItem(name: 'Giza'),
+          SelectedListItem(name: 'Alex'),
+          SelectedListItem(name: 'Dakahlia'),
+          SelectedListItem(name: 'Banhaa'),
+          SelectedListItem(name: 'Cairo'),
+          SelectedListItem(name: 'Behira'),
+          SelectedListItem(name: 'Giza'),
+          SelectedListItem(name: 'Alex'),
+          SelectedListItem(name: 'Dakahlia'),
+          SelectedListItem(name: 'Banhaa'),
+        ];
+        List<SelectedListItem> cities = [
+          SelectedListItem(name: 'Cairo'),
+          SelectedListItem(name: 'Behira'),
+          SelectedListItem(name: 'Giza'),
+          SelectedListItem(name: 'Alex'),
+          SelectedListItem(name: 'Dakahlia'),
+          SelectedListItem(name: 'Banhaa'),
+          SelectedListItem(name: 'Cairo'),
+          SelectedListItem(name: 'Behira'),
+          SelectedListItem(name: 'Giza'),
+          SelectedListItem(name: 'Alex'),
+          SelectedListItem(name: 'Dakahlia'),
+          SelectedListItem(name: 'Banhaa'),
+        ];
         return Padding(
           padding: const EdgeInsets.all(20),
           child: Form(
@@ -102,20 +132,7 @@ class EditInfo extends StatelessWidget {
                         Icons.location_city_outlined,
                         color: ColorManager.mainOrange,
                       ),
-                      dropedList: [
-                        SelectedListItem(name: 'Cairo'),
-                        SelectedListItem(name: 'Behira'),
-                        SelectedListItem(name: 'Giza'),
-                        SelectedListItem(name: 'Alex'),
-                        SelectedListItem(name: 'Dakahlia'),
-                        SelectedListItem(name: 'Banhaa'),
-                        SelectedListItem(name: 'Cairo'),
-                        SelectedListItem(name: 'Behira'),
-                        SelectedListItem(name: 'Giza'),
-                        SelectedListItem(name: 'Alex'),
-                        SelectedListItem(name: 'Dakahlia'),
-                        SelectedListItem(name: 'Banhaa'),
-                      ],
+                      dropedList: governorates,
                       textEditingController: governorateController,
                       title: 'Governorate',
                       hint: 'Governorate',
@@ -127,20 +144,7 @@ class EditInfo extends StatelessWidget {
                         Icons.location_on,
                         color: ColorManager.mainOrange,
                       ),
-                      dropedList: [
-                        SelectedListItem(name: 'Cairo'),
-                        SelectedListItem(name: 'Behira'),
-                        SelectedListItem(name: 'Giza'),
-                        SelectedListItem(name: 'Alex'),
-                        SelectedListItem(name: 'Dakahlia'),
-                        SelectedListItem(name: 'Banhaa'),
-                        SelectedListItem(name: 'Cairo'),
-                        SelectedListItem(name: 'Behira'),
-                        SelectedListItem(name: 'Giza'),
-                        SelectedListItem(name: 'Alex'),
-                        SelectedListItem(name: 'Dakahlia'),
-                        SelectedListItem(name: 'Banhaa'),
-                      ],
+                      dropedList: cities,
                       textEditingController: cityController,
                       title: 'City',
                       hint: 'City',
@@ -162,7 +166,7 @@ class EditInfo extends StatelessWidget {
                     color: ColorManager.mainOrange,
                   ),
                   onPressed: () {
-                    // context.pushNamed(Routes.otpScreen);
+                    context.pushNamed(Routes.changePasswordScreen);
                   },
                 ),
                 verticalSpace(20),

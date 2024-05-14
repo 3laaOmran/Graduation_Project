@@ -14,5 +14,6 @@ class Routes {
   static const String yourOrdersScreen = '/yourOrdersScreen';
   static const String favoriteSellers = '/favoriteSellers';
   static const String sellerDeatailsScreen = '/sellerDeatailsScreen';
+  static const String changePasswordScreen = '/changePasswordScreen';
 
 }

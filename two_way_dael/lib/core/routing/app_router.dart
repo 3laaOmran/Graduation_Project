@@ -13,6 +13,7 @@ import 'package:two_way_dael/features/home/ui/Modules/donation_module.dart';
 import 'package:two_way_dael/features/home/ui/Modules/favorite_sellers.dart';
 import 'package:two_way_dael/features/home/ui/Modules/notifications_module.dart';
 import 'package:two_way_dael/features/home/ui/Modules/your_orders_screen.dart';
+import 'package:two_way_dael/features/home/ui/widgets/change_password_screen.dart';
 
 import '../../features/auth/login/ui/views/login_screen.dart';
 import '../../features/auth/signup/ui/views/signup_screen.dart';
@@ -56,6 +57,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const FvaoriteSellers());
       case Routes.sellerDeatailsScreen:
         return MaterialPageRoute(builder: (_) => const FvaoriteSellers());
+      case Routes.changePasswordScreen:
+        return MaterialPageRoute(builder: (_) => const ChangePasswordScreen());
       default:
         return MaterialPageRoute(
             builder: (context) => Scaffold(

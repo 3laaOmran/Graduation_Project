@@ -9,7 +9,7 @@ class CustomDropDownList extends StatefulWidget {
   final String hint;
   final Widget? prefixIcon;
   final bool isCitySelected;
-  final String?Function(String?)? validation;
+  final String? Function(String?)? validation;
   final List<SelectedListItem>? dropedList;
 
   const CustomDropDownList({
@@ -19,7 +19,8 @@ class CustomDropDownList extends StatefulWidget {
     required this.isCitySelected,
     this.dropedList,
     super.key,
-    this.prefixIcon,  this.validation,
+    this.prefixIcon,
+    this.validation,
   });
 
   @override
@@ -89,7 +90,7 @@ class _CustomDropDownListState extends State<CustomDropDownList> {
             hintText: widget.textEditingController.text == ''
                 ? widget.hint
                 : widget.textEditingController.text,
-            border: const OutlineInputBorder(
+            enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(
                 color: ColorManager.gray,
                 width: 1.3,
