@@ -95,7 +95,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'Hello,${CustomerCubit.get(context).nameController.text}',
+                                    'Hello, ${CustomerCubit.get(context).nameController.text}',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineSmall

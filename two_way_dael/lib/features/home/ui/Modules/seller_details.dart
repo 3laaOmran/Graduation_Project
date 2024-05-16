@@ -1,48 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
-import 'package:two_way_dael/core/widgets/custom_icon_button.dart';
+import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/features/home/ui/widgets/build_food_item.dart';
+import 'package:two_way_dael/features/home/ui/widgets/build_sliver_appbar.dart';
 
 class SellerDetailsScreen extends StatelessWidget {
   const SellerDetailsScreen({super.key});
-
-  Widget buildSliverAppBar(context) {
-    return SliverAppBar(
-      leading: customIconButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        icon: Icons.arrow_back,
-        color: ColorManager.mainOrange,
-      ),
-      centerTitle: true,
-      expandedHeight: 450,
-      toolbarHeight: 60,
-      pinned: true,
-      stretch: true,
-      backgroundColor: Colors.white,
-      flexibleSpace: FlexibleSpaceBar(
-        // centerTitle: true,
-        title: const Text(
-          '\t Seller Name',
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            color: ColorManager.mainOrange,
-          ),
-        ),
-        background: Hero(
-          tag: 1,
-          child: Image.asset(
-            'assets/images/default_profile.png',
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +24,96 @@ class SellerDetailsScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
+                          children: [
+                            RatingBarIndicator(
+                              rating: 4,
+                              itemCount: 5,
+                              itemSize: 25.0,
+                              itemBuilder: (context, _) => const Icon(
+                                Icons.star,
+                                color: ColorManager.mainOrange,
+                              ),
+                            ),
+                            const Spacer(),
+                            AppTextButton(
+                              buttonWidth: 100,
+                              buttonHeight: 30,
+                              verticalPadding: 0,
+                              textStyle: TextStyles.font12White,
+                              buttonText: 'Rate us',
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      backgroundColor: Colors.white,
+                                      title: const Center(
+                                          child: Text(
+                                        'Rate Us',
+                                        style: TextStyle(
+                                          color: ColorManager.mainOrange,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )),
+                                      content: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 20),
+                                        child: Center(
+                                          heightFactor:
+                                              BorderSide.strokeAlignCenter,
+                                          child: RatingBarIndicator(
+                                            rating: 0,
+                                            itemCount: 5,
+                                            itemSize: 25.0,
+                                            itemBuilder: (context, _) =>
+                                                const Icon(
+                                              Icons.star,
+                                              color: ColorManager.mainOrange,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      actions: <Widget>[
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            AppTextButton(
+                                              buttonText: 'Cancel',
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              buttonWidth: 80,
+                                              verticalPadding: 0,
+                                              buttonHeight: 30,
+                                              textStyle: TextStyles.font12White,
+                                            ),
+                                            horizontalSpace(20),
+                                            AppTextButton(
+                                              buttonText: 'Send',
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              buttonWidth: 80,
+                                              verticalPadding: 0,
+                                              buttonHeight: 30,
+                                              textStyle: TextStyles.font12White,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      verticalSpace(20),
                       Row(
                         children: [
                           Text(
@@ -93,7 +149,7 @@ class SellerDetailsScreen extends StatelessWidget {
                                 text: 'Address: ',
                                 style: TextStyles.font17BlackBold),
                             TextSpan(
-                                text: ' ElBhira / Abohomos',
+                                text: ' ElBhira / Nobaria',
                                 style: TextStyles.font17BlackBold),
                           ],
                         ),

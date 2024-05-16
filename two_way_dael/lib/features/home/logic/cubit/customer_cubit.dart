@@ -120,6 +120,7 @@ class CustomerCubit extends Cubit<CustomerStates> {
     newSuffixIcon = newIsObsecure ? Icons.visibility : Icons.visibility_off;
     emit(GetUserDataChaneIconVisibilityState());
   }
+
   IconData oldSuffixIcon = Icons.visibility;
   bool oldIsObsecure = true;
   void changeOldPasswordVisibility() {
@@ -127,91 +128,87 @@ class CustomerCubit extends Cubit<CustomerStates> {
     oldSuffixIcon = oldIsObsecure ? Icons.visibility : Icons.visibility_off;
     emit(GetUserDataChaneIconVisibilityState());
   }
+
   IconData confirmSuffixIcon = Icons.visibility;
   bool confirmIsObsecure = true;
   void changeConfirmPasswordVisibility() {
     confirmIsObsecure = !confirmIsObsecure;
-    confirmSuffixIcon = confirmIsObsecure ? Icons.visibility : Icons.visibility_off;
+    confirmSuffixIcon =
+        confirmIsObsecure ? Icons.visibility : Icons.visibility_off;
     emit(GetUserDataChaneIconVisibilityState());
   }
 
-  // bool? isSelected = false;
   List<Widget> charities = [
-    BuilsCharityItem(
+    BuildCharityItem(
       charityItemModel: CharityItemModel(
-        image: 'assets/images/default_profile.png',
-        name: 'charity one',
+        image: 'assets/images/MisrElkhair.png',
+        name: 'Misr EL-Khair',
         value: 796,
       ),
     ),
-    BuilsCharityItem(
+    BuildCharityItem(
       charityItemModel: CharityItemModel(
-        image: 'assets/images/default_profile.png',
-        name: 'charity two',
+        image: 'assets/images/FoodBank.png',
+        name: 'Egyption Food Bank ',
         value: 152,
       ),
     ),
-    BuilsCharityItem(
+    BuildCharityItem(
       charityItemModel: CharityItemModel(
-        image: 'assets/images/default_profile.png',
-        name: 'charity three',
+        image: 'assets/images/AhlMasr.png',
+        name: 'Ahl Masr Foundation',
+        value: 150,
+      ),
+    ),
+    BuildCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/Orman.png',
+        name: 'Al Orman Association',
         value: 888,
       ),
     ),
-    BuilsCharityItem(
+    BuildCharityItem(
       charityItemModel: CharityItemModel(
-        image: 'assets/images/default_profile.png',
-        name: 'charity three',
+        image: 'assets/images/57357.png',
+        name: '57357',
         value: 888,
       ),
     ),
-    BuilsCharityItem(
+    BuildCharityItem(
       charityItemModel: CharityItemModel(
-        image: 'assets/images/default_profile.png',
-        name: 'charity three',
+        image: 'assets/images/MisrElkhair.png',
+        name: 'Misr EL-Khair',
+        value: 796,
+      ),
+    ),
+    BuildCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/FoodBank.png',
+        name: 'Egyption Food Bank',
+        value: 152,
+      ),
+    ),
+    BuildCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/AhlMasr.png',
+        name: 'Ahl Masr Foundation',
+        value: 150,
+      ),
+    ),
+    BuildCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/Orman.png',
+        name: 'Al Orman Association',
         value: 888,
       ),
     ),
-    BuilsCharityItem(
+    BuildCharityItem(
       charityItemModel: CharityItemModel(
-        image: 'assets/images/default_profile.png',
-        name: 'charity three',
-        value: 888,
-      ),
-    ),
-    BuilsCharityItem(
-      charityItemModel: CharityItemModel(
-        image: 'assets/images/default_profile.png',
-        name: 'charity three',
-        value: 888,
-      ),
-    ),
-    BuilsCharityItem(
-      charityItemModel: CharityItemModel(
-        image: 'assets/images/default_profile.png',
-        name: 'charity three',
-        value: 888,
-      ),
-    ),
-    BuilsCharityItem(
-      charityItemModel: CharityItemModel(
-        image: 'assets/images/default_profile.png',
-        name: 'charity three',
+        image: 'assets/images/MagdyYacuop.png',
+        name: 'Magdy Yacoub Heart ',
         value: 888,
       ),
     ),
   ];
-  // void Function(bool?) changeCheckBox(context) {
-  //   return (bool? isSelected) {
-  //     CustomerCubit.get(context).isSelected = isSelected;
-  //     emit(SelectCharityState());
-  //   };
-  // }
-
-  // void itemOntap() {
-  //   isSelected = !isSelected!;
-  //   selectedIcon =
-  //       isSelected! ? Icons.check_box_outline_blank : Icons.check_box_rounded;
-  //   emit(SelectCharityState());
-  // }
+  
 }

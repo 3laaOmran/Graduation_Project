@@ -90,6 +90,15 @@ class _CustomDropDownListState extends State<CustomDropDownList> {
             hintText: widget.textEditingController.text == ''
                 ? widget.hint
                 : widget.textEditingController.text,
+            border: const OutlineInputBorder(
+              borderSide: BorderSide(
+                color: ColorManager.gray,
+                width: 1.3,
+              ),
+              borderRadius: BorderRadius.all(
+                Radius.circular(40.0),
+              ),
+            ),
             enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(
                 color: ColorManager.gray,

@@ -130,7 +130,7 @@ class SignUpScreen extends StatelessWidget {
                               firstText: 'Already have an account ? ',
                               secondText: '  Login',
                               ontap: () {
-                                context.pushNamed(Routes.photoAddressScreen);
+                                context.pushNamed(Routes.otpScreen);
                               },
                             ),
                           ],

@@ -40,6 +40,7 @@ dependencies:
   flutter_floating_bottom_bar: ^1.2.0
   flutter_native_splash: ^2.4.0
   flutter_offline: ^3.0.1
+  flutter_rating_bar: ^4.0.1
   flutter_screenutil: ^5.9.0
   fluttertoast: ^8.2.5
   image_picker: ^1.1.1
