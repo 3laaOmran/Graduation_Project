@@ -50,7 +50,7 @@ class CustomerLayoutScreen extends StatelessWidget {
               ],
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(50),
               child: BottomNavigationBar(
                 currentIndex: cubit.currentIndex,
                 selectedItemColor: ColorManager.mainOrange,
@@ -77,7 +77,7 @@ class CustomerLayoutScreen extends StatelessWidget {
                       Icons.favorite,
                       size: 30,
                     ),
-                    label: 'Favorite',
+                    label: 'Favorites',
                   ),
                 ],
               ),
@@ -88,5 +88,3 @@ class CustomerLayoutScreen extends StatelessWidget {
     );
   }
 }
-
-
