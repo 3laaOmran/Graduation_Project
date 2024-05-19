@@ -134,6 +134,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                       alignment: AlignmentDirectional.topEnd,
                       children: [
                         customIconButton(
+                          toolTip: 'Notifications',
                           onPressed: () {
                             context.pushNamed(Routes.notificationsScreen);
                           },
@@ -162,6 +163,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                     bottom: 0,
                     left: 0,
                     child: customIconButton(
+                      toolTip: 'back',
                       onPressed: () {
                         setState(() {
                           currentWidget = const AccountSettings();

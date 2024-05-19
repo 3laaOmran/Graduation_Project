@@ -53,4 +53,6 @@ class CustomerUpdateProfileSuccessState extends CustomerStates {
 }
 
 class CustomerUpdateProfileErrorState extends CustomerStates {}
-class SelectCharityState extends CustomerStates {}
+
+class NotificationsState extends CustomerStates {}
+class DeleteNotificationsState extends CustomerStates {}

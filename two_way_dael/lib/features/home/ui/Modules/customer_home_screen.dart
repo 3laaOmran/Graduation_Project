@@ -49,34 +49,43 @@ class CustomerHomeScreen extends StatelessWidget {
                         },
                         child: const CircleAvatar(
                           radius: 30.0,
-                          backgroundImage: NetworkImage(
-                              'https://img.freepik.com/free-vector/isolated-young-handsome-man-different-poses-white-background-illustration_632498-859.jpg?t=st=1708891814~exp=1708895414~hmac=672f93fdf519149c27314725f0c651ac53217b93675603b63ec99134b35b8392&w=740'),
+                          backgroundImage: AssetImage(
+                            'assets/images/default_profile.png',
+                          ),
                         ),
                       ),
                       horizontalSpace(10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Hello, ${CustomerCubit.get(context).nameController.text}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall
-                                ?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12.0),
-                          ),
-                          Text(
-                            'Hungry?',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall
-                                ?.copyWith(
-                                    fontWeight: FontWeight.w100,
-                                    fontSize: 10.0),
-                          ),
-                        ],
+                      GestureDetector(
+                        onTap: () {
+                          cubit.changeBottomNav(cubit.currentIndex + 1);
+                          if (cubit.currentIndex != 1) {
+                            cubit.currentIndex = 0;
+                          }
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Hello, ${CustomerCubit.get(context).nameController.text}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall
+                                  ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12.0),
+                            ),
+                            Text(
+                              'Hungry?',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall
+                                  ?.copyWith(
+                                      fontWeight: FontWeight.w100,
+                                      fontSize: 10.0),
+                            ),
+                          ],
+                        ),
                       ),
                       const Spacer(),
                       Padding(
@@ -105,6 +114,7 @@ class CustomerHomeScreen extends StatelessWidget {
                               context.pushNamed(Routes.notificationsScreen);
                             },
                             icon: Icons.notifications,
+                            toolTip: 'Notifications',
                             size: 30.0,
                           ),
                           Container(

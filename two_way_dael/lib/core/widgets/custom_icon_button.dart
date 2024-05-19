@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 Widget customIconButton({
   required Function() onPressed,
-  IconData? icon,
+  required IconData? icon,
   Color? color,
   double? size,
+  required String toolTip,
 }) =>
     IconButton(
       onPressed: onPressed,
@@ -13,4 +14,5 @@ Widget customIconButton({
         color: color,
         size: size,
       ),
+      tooltip: toolTip,
     );

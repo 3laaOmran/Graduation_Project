@@ -1,11 +1,16 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:two_way_dael/core/constants/constants.dart';
+import 'package:two_way_dael/core/helpers/extensions.dart';
+import 'package:two_way_dael/core/theming/styles.dart';
+import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/features/auth/login/data/models/login_model.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
 import 'package:two_way_dael/features/home/ui/Modules/customer_home_screen.dart';
 import 'package:two_way_dael/features/home/ui/Modules/customer_profile_screen.dart';
 import 'package:two_way_dael/features/home/ui/Modules/favorite_sellers.dart';
+import 'package:two_way_dael/features/home/ui/Modules/notifications_module.dart';
 import 'package:two_way_dael/features/home/ui/widgets/build_charity_item.dart';
 
 import '../../../../core/networking/dio_helper.dart';
@@ -22,7 +27,7 @@ class CustomerCubit extends Cubit<CustomerStates> {
   List<Widget> bottomScreens = [
     const CustomerProfileScreen(),
     CustomerHomeScreen(),
-    FvaoriteSellers(),
+    const FvaoriteSellers(),
   ];
 
   void changeBottomNav(int index) {
@@ -210,5 +215,79 @@ class CustomerCubit extends Cubit<CustomerStates> {
       ),
     ),
   ];
-  
+
+  void markNotificationAsRead(int index) {
+    notifications[index].isNew = false;
+    sortNotifications();
+    emit(NotificationsState());
+  }
+
+  void deleteNotificatins(index) {
+    notifications.removeAt(index);
+    sortNotifications();
+    emit(DeleteNotificationsState());
+  }
+
+  void sortNotifications() {
+    notifications.sort((a, b) => (b.isNew ? 1 : 0).compareTo(a.isNew ? 1 : 0));
+  }
+
+  void showNotificationDetails(NotificationItem notification, context) {
+    markNotificationAsRead(notifications.indexOf(notification));
+    emit(NotificationsState());
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
+        title: Center(child: Text(notification.title)),
+        content: Text(notification.message),
+        actions: [
+          AppTextButton(
+            buttonText: 'Close',
+            textStyle: TextStyles.font12White,
+            onPressed: () {
+              context.pop();
+            },
+            buttonWidth: 80,
+            buttonHeight: 15,
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<NotificationItem> notifications = [
+    NotificationItem(
+      title: '3laa',
+      message: 'Alaa Meawd Omran',
+      image: 'assets/images/default_profile.png',
+    ),
+    NotificationItem(
+      title: '3laaOmran',
+      message:
+          'Alaa Meawd OmranAlaa Meawd OmranAlaa Meawd OmranAlaa Meawd OmranAlaa Meawd Omran',
+      image: 'assets/images/default_profile.png',
+    ),
+    NotificationItem(
+      title: 'Two',
+      message: 'Alaa Meawd Omran',
+      image: 'assets/images/default_profile.png',
+    ),
+    NotificationItem(
+      title: 'Way',
+      message: 'Alaa Meawd Omran',
+      image: 'assets/images/default_profile.png',
+    ),
+    NotificationItem(
+      title: 'Deal',
+      message: 'Alaa Meawd Omran',
+      image: 'assets/images/default_profile.png',
+    ),
+    NotificationItem(
+      title: 'twoWayDeal',
+      message:
+          ' Alaa Meawd OmranAlaa Meawd OmranAlaa Meawd OmranAlaa Meawd OmranAlaa Meawd Omran',
+      image: 'assets/images/default_profile.png',
+    ),
+  ];
 }
