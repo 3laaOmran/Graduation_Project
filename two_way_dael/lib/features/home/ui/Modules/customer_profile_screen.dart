@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
@@ -176,7 +177,20 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                   ),
                 ],
               ),
-              currentWidget,
+              PageTransitionSwitcher(
+                duration: const Duration(milliseconds: 900),
+                transitionBuilder: (Widget child,
+                    Animation<double> primaryAnimation,
+                    Animation<double> secondaryAnimation) {
+                  return SharedAxisTransition(
+                    animation: primaryAnimation,
+                    secondaryAnimation: secondaryAnimation,
+                    transitionType: SharedAxisTransitionType.vertical,
+                    child: child,
+                  );
+                },
+                child: currentWidget,
+              ),
             ],
           ),
         );

@@ -37,7 +37,7 @@ class _SellerDetailsScreenState extends State<SellerDetailsScreen> {
                     border: Border(
                       bottom: BorderSide(
                         width: 2,
-                        color: Colors.black,
+                        color: ColorManager.gray,
                       ),
                     ),
                     borderRadius: BorderRadius.only(
@@ -57,7 +57,6 @@ class _SellerDetailsScreenState extends State<SellerDetailsScreen> {
                             });
                           },
                           child: Container(
-                            
                             decoration: BoxDecoration(
                               color: isAboutSelected
                                   ? ColorManager.mainOrange
@@ -78,8 +77,8 @@ class _SellerDetailsScreenState extends State<SellerDetailsScreen> {
                         ),
                       ),
                       Container(
-                        width: 1,
-                        color: Colors.black,
+                        width: 1.3,
+                        color: ColorManager.gray,
                       ),
                       Expanded(
                         child: GestureDetector(

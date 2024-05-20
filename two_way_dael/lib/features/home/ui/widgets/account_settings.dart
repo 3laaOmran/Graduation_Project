@@ -14,61 +14,74 @@ class AccountSettings extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Account Settings',
-            style: TextStyles.font20blackbold,
-          ),
-          verticalSpace(30),
-          InkWell(
-            onTap: () {
-              context.pushNamed(Routes.yourOrdersScreen);
-            },
-            child: buildAccountSettingsItem(
-              image: 'assets/images/orders_list.png',
-              text: 'Your Orders',
+      child: Container(
+        color: Colors.white,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Account Settings',
+              style: TextStyles.font20blackbold,
             ),
-          ),
-          verticalSpace(20),
-          InkWell(
-            onTap: () {
-              context.pushNamed(Routes.donationScreen);
-            },
-            child: buildAccountSettingsItem(
-              image: 'assets/images/donate.png',
-              text: 'Donate',
+            verticalSpace(30),
+            InkWell(
+              onTap: () {
+                context.pushNamed(Routes.yourOrdersScreen);
+              },
+              child: buildAccountSettingsItem(
+                image: 'assets/images/orders_list.png',
+                text: 'Your Orders',
+              ),
             ),
-          ),
-          verticalSpace(20),
-          InkWell(
-            onTap: () {
-              context.pushNamed(Routes.aboutAppScreen);
-            },
-            child: buildAccountSettingsItem(
-              image: 'assets/images/about.png',
-              text: 'About App',
+            verticalSpace(20),
+            InkWell(
+              onTap: () {
+                // context.pushNamed(Routes.yourOrdersScreen);
+              },
+              child: buildAccountSettingsItem(
+                image: 'assets/images/orders_list.png',
+                text: 'Favorites',
+              ),
             ),
-          ),
-          verticalSpace(50),
-          AppTextButton(
-            buttonText: 'Logout',
-            textStyle: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+            verticalSpace(20),
+            InkWell(
+              onTap: () {
+                context.pushNamed(Routes.donationScreen);
+              },
+              child: buildAccountSettingsItem(
+                image: 'assets/images/donate.png',
+                text: 'Contact Us',
+              ),
             ),
-            onPressed: () {
-              CashHelper.removeData(key: 'token').then((value) {
-                if (value) {
-                  context.pushNamedAndRemoveUntil(Routes.loginScreen,
-                      predicate: ((route) => false));
-                }
-              });
-            },
-          ),
-        ],
+            verticalSpace(20),
+            InkWell(
+              onTap: () {
+                context.pushNamed(Routes.aboutAppScreen);
+              },
+              child: buildAccountSettingsItem(
+                image: 'assets/images/about.png',
+                text: 'About App',
+              ),
+            ),
+            verticalSpace(50),
+            AppTextButton(
+              buttonText: 'Logout',
+              textStyle: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+              onPressed: () {
+                CashHelper.removeData(key: 'token').then((value) {
+                  if (value) {
+                    context.pushNamedAndRemoveUntil(Routes.loginScreen,
+                        predicate: ((route) => false));
+                  }
+                });
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

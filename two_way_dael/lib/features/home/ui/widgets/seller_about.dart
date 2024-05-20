@@ -12,68 +12,75 @@ class SellerAbout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        verticalSpace(20),
-        Text(
-          'Customer Reviews',
-          style: TextStyles.font20blackbold,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Row(
-            children: [
-              RatingBarIndicator(
-                rating: 4,
-                itemCount: 5,
-                itemSize: 30.0,
-                itemBuilder: (context, _) => const Icon(
-                  Icons.star,
-                  color: ColorManager.mainOrange,
-                ),
-              ),
-              horizontalSpace(5),
-              Text(
-                '4.0 Stars',
-                style: TextStyles.font13GreyBold,
-              ),
-              const Spacer(),
-              AppTextButton(
-                buttonWidth: 120,
-                buttonHeight: 30,
-                verticalPadding: 0,
-                textStyle: TextStyles.font12White,
-                buttonText: 'Send Review',
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return const ShowAlertDialog();
-                    },
-                  );
-                },
-              ),
-            ],
+    return Container(
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          verticalSpace(20),
+          Text(
+            'Customer Reviews',
+            style: TextStyles.font20blackbold,
           ),
-        ),
-        verticalSpace(20),
-        Text(
-          'About',
-          style: TextStyles.font20blackbold,
-        ),
-        verticalSpace(20),
-        richText(
-          text1: 'Address: ',
-          text2: ' ElBhira / Nobaria',
-        ),
-        verticalSpace(20),
-        richText(
-          text1: 'Contacts: ',
-          text2: ' 01286765359',
-        ),
-        verticalSpace(20),
-      ],
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Row(
+              children: [
+                Column(
+                  children: [
+                    RatingBarIndicator(
+                      rating: 4,
+                      itemCount: 5,
+                      itemSize: 30.0,
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: ColorManager.mainOrange,
+                      ),
+                    ),
+                    verticalSpace(5),
+                    Text(
+                      '4.0 Stars',
+                      style: TextStyles.font13GreyBold,
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                AppTextButton(
+                  buttonWidth: 110,
+                  buttonHeight: 30,
+                  verticalPadding: 0,
+                  textStyle: TextStyles.font12White,
+                  buttonText: 'Send Review',
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const ShowAlertDialog();
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+          verticalSpace(20),
+          Text(
+            'About',
+            style: TextStyles.font20blackbold,
+          ),
+          verticalSpace(20),
+          richText(
+            text1: 'Address: ',
+            text2: ' ElBhira / Nobaria',
+          ),
+          verticalSpace(20),
+          richText(
+            text1: 'Contacts: ',
+            text2: ' 01286765359',
+          ),
+          verticalSpace(20),
+        ],
+      ),
     );
   }
 }

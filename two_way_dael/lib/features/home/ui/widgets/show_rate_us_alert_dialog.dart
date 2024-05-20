@@ -35,7 +35,7 @@ class _ShowAlertDialogState extends State<ShowAlertDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 50),
+            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 40),
             child: RatingBar.builder(
               initialRating: rating,
               direction: Axis.horizontal,
