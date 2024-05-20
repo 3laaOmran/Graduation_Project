@@ -45,6 +45,7 @@ dependencies:
   flutter_screenutil: ^5.9.0
   fluttertoast: ^8.2.5
   image_picker: ^1.1.1
+  number_pagination: ^1.0.6
   shared_preferences: ^2.2.3
   smooth_page_indicator: ^1.1.0
 

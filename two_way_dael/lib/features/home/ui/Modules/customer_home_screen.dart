@@ -225,35 +225,34 @@ class CustomerHomeScreen extends StatelessWidget {
                 const SizedBox(
                   height: 5.0,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    physics: const BouncingScrollPhysics(),
                     child: Row(
                       children: [
-                        buildCategoryItem(context, text: 'Food'),
-                        const SizedBox(
+                        BuildCategoryItem(text: 'Food'),
+                        SizedBox(
                           width: 10.0,
                         ),
-                        buildCategoryItem(context, text: 'Drink'),
-                        const SizedBox(
+                        BuildCategoryItem(text: 'Drink'),
+                        SizedBox(
                           width: 10.0,
                         ),
-                        buildCategoryItem(context, text: 'Soup'),
-                        const SizedBox(
+                        BuildCategoryItem(text: 'Soup'),
+                        SizedBox(
                           width: 10.0,
                         ),
-                        buildCategoryItem(context, text: 'Pizza'),
-                        const SizedBox(
+                        BuildCategoryItem(text: 'Pizza'),
+                        SizedBox(
                           width: 10.0,
                         ),
-                        buildCategoryItem(context, text: 'Burger'),
-                        const SizedBox(
+                        BuildCategoryItem(text: 'Burger'),
+                        SizedBox(
                           width: 10.0,
                         ),
-                        buildCategoryItem(context, text: 'Soda'),
-                        const SizedBox(
+                        BuildCategoryItem(text: 'Soda'),
+                        SizedBox(
                           width: 10.0,
                         ),
                       ],

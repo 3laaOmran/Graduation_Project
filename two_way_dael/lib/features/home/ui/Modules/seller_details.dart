@@ -48,59 +48,63 @@ class _SellerDetailsScreenState extends State<SellerDetailsScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            isAboutSelected = true;
-                            currentWidget = const SellerAbout();
-                          });
-                        },
-                        child: Container(
-                          width: 120,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: isAboutSelected
-                                ? ColorManager.mainOrange
-                                : Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'About',
-                              style: isAboutSelected
-                                  ? TextStyles.font17WhiteBold
-                                  : TextStyles.font17BlackBold,
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isAboutSelected = true;
+                              currentWidget = const SellerAbout();
+                            });
+                          },
+                          child: Container(
+                            
+                            decoration: BoxDecoration(
+                              color: isAboutSelected
+                                  ? ColorManager.mainOrange
+                                  : Colors.white,
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(20),
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'About',
+                                style: isAboutSelected
+                                    ? TextStyles.font17WhiteBold
+                                    : TextStyles.font17BlackBold,
+                              ),
                             ),
                           ),
                         ),
                       ),
                       Container(
                         width: 1,
-                        height: 20,
                         color: Colors.black,
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            isAboutSelected = false;
-                            currentWidget = const SellerProducts();
-                          });
-                        },
-                        child: Container(
-                          width: 120,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: isAboutSelected
-                                ? Colors.white
-                                : ColorManager.mainOrange,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Products',
-                              style: isAboutSelected
-                                  ? TextStyles.font17BlackBold
-                                  : TextStyles.font17WhiteBold,
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isAboutSelected = false;
+                              currentWidget = const SellerProducts();
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: isAboutSelected
+                                  ? Colors.white
+                                  : ColorManager.mainOrange,
+                              borderRadius: const BorderRadius.only(
+                                bottomRight: Radius.circular(20),
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Products',
+                                style: isAboutSelected
+                                    ? TextStyles.font17BlackBold
+                                    : TextStyles.font17WhiteBold,
+                              ),
                             ),
                           ),
                         ),
@@ -139,6 +143,3 @@ class _SellerDetailsScreenState extends State<SellerDetailsScreen> {
     );
   }
 }
-
-
-
