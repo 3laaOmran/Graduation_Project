@@ -40,16 +40,16 @@ class SellerAbout extends StatelessWidget {
               ),
               const Spacer(),
               AppTextButton(
-                buttonWidth: 100,
+                buttonWidth: 120,
                 buttonHeight: 30,
                 verticalPadding: 0,
                 textStyle: TextStyles.font12White,
-                buttonText: 'Rate us',
+                buttonText: 'Send Review',
                 onPressed: () {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return  ShowAlertDialog();
+                      return const ShowAlertDialog();
                     },
                   );
                 },
@@ -77,8 +77,6 @@ class SellerAbout extends StatelessWidget {
     );
   }
 }
-
-
 
 Widget richText({
   required String text1,
