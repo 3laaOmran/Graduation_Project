@@ -1,189 +1,134 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
-import 'package:two_way_dael/core/widgets/custom_button.dart';
-import 'package:two_way_dael/features/home/ui/widgets/build_food_item.dart';
+import 'package:animations/animations.dart';
 import 'package:two_way_dael/features/home/ui/widgets/build_sliver_appbar.dart';
+import 'package:two_way_dael/features/home/ui/widgets/seller_about.dart';
+import 'package:two_way_dael/features/home/ui/widgets/seller_products.dart';
+import 'package:two_way_dael/features/home/ui/widgets/sliver_appbar_delegate.dart';
 
-class SellerDetailsScreen extends StatelessWidget {
+class SellerDetailsScreen extends StatefulWidget {
   const SellerDetailsScreen({super.key});
 
+  @override
+  State<SellerDetailsScreen> createState() => _SellerDetailsScreenState();
+}
+
+Widget currentWidget = const SellerAbout();
+bool isAboutSelected = true;
+
+class _SellerDetailsScreenState extends State<SellerDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           buildSliverAppBar(context),
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: SliverAppBarDelegate(
+              minHeight: 50.0,
+              maxHeight: 50.0,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 2,
+                        color: Colors.black,
+                      ),
+                    ),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isAboutSelected = true;
+                            currentWidget = const SellerAbout();
+                          });
+                        },
+                        child: Container(
+                          width: 120,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: isAboutSelected
+                                ? ColorManager.mainOrange
+                                : Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'About',
+                              style: isAboutSelected
+                                  ? TextStyles.font17WhiteBold
+                                  : TextStyles.font17BlackBold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 1,
+                        height: 20,
+                        color: Colors.black,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isAboutSelected = false;
+                            currentWidget = const SellerProducts();
+                          });
+                        },
+                        child: Container(
+                          width: 120,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: isAboutSelected
+                                ? Colors.white
+                                : ColorManager.mainOrange,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Products',
+                              style: isAboutSelected
+                                  ? TextStyles.font17BlackBold
+                                  : TextStyles.font17WhiteBold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
           SliverList(
             delegate: SliverChildListDelegate(
               [
                 Padding(
                   padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Row(
-                          children: [
-                            RatingBarIndicator(
-                              rating: 4,
-                              itemCount: 5,
-                              itemSize: 25.0,
-                              itemBuilder: (context, _) => const Icon(
-                                Icons.star,
-                                color: ColorManager.mainOrange,
-                              ),
-                            ),
-                            const Spacer(),
-                            AppTextButton(
-                              buttonWidth: 100,
-                              buttonHeight: 30,
-                              verticalPadding: 0,
-                              textStyle: TextStyles.font12White,
-                              buttonText: 'Rate us',
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      backgroundColor: Colors.white,
-                                      title: const Center(
-                                          child: Text(
-                                        'Rate Us',
-                                        style: TextStyle(
-                                          color: ColorManager.mainOrange,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      )),
-                                      content: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 20),
-                                        child: Center(
-                                          heightFactor:
-                                              BorderSide.strokeAlignCenter,
-                                          child: RatingBarIndicator(
-                                            rating: 0,
-                                            itemCount: 5,
-                                            itemSize: 25.0,
-                                            itemBuilder: (context, _) =>
-                                                const Icon(
-                                              Icons.star,
-                                              color: ColorManager.mainOrange,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      actions: <Widget>[
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            AppTextButton(
-                                              buttonText: 'Cancel',
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              buttonWidth: 80,
-                                              verticalPadding: 0,
-                                              buttonHeight: 30,
-                                              textStyle: TextStyles.font12White,
-                                            ),
-                                            horizontalSpace(20),
-                                            AppTextButton(
-                                              buttonText: 'Send',
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              buttonWidth: 80,
-                                              verticalPadding: 0,
-                                              buttonHeight: 30,
-                                              textStyle: TextStyles.font12White,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      verticalSpace(20),
-                      Row(
-                        children: [
-                          Text(
-                            'About',
-                            style: TextStyles.font20blackbold,
-                          ),
-                          const Spacer(),
-                          CircleAvatar(
-                            radius: 20.0,
-                            backgroundColor: ColorManager.gray,
-                            child: IconButton(
-                              padding: const EdgeInsetsDirectional.only(
-                                end: 2.0,
-                                start: 2.0,
-                                top: 3.0,
-                                bottom: 2.0,
-                              ),
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.favorite,
-                                size: 25.0,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      verticalSpace(20),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                                text: 'Address: ',
-                                style: TextStyles.font17BlackBold),
-                            TextSpan(
-                                text: ' ElBhira / Nobaria',
-                                style: TextStyles.font17BlackBold),
-                          ],
-                        ),
-                      ),
-                      verticalSpace(20),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                                text: 'Contacts: ',
-                                style: TextStyles.font17BlackBold),
-                            TextSpan(
-                                text: ' 01286765359',
-                                style: TextStyles.font17BlackBold),
-                          ],
-                        ),
-                      ),
-                      verticalSpace(20),
-                      Text(
-                        'Products',
-                        style: TextStyles.font20blackbold,
-                      ),
-                      GridView.count(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 5,
-                        mainAxisSpacing: 1,
-                        childAspectRatio: 1 / 1.35, //width / height
-
-                        children:
-                            List.generate(20, (index) => buildItem(context)),
-                      ),
-                    ],
+                  child: PageTransitionSwitcher(
+                    duration: const Duration(milliseconds: 900),
+                    transitionBuilder: (Widget child,
+                        Animation<double> primaryAnimation,
+                        Animation<double> secondaryAnimation) {
+                      return SharedAxisTransition(
+                        animation: primaryAnimation,
+                        secondaryAnimation: secondaryAnimation,
+                        transitionType: SharedAxisTransitionType.vertical,
+                        child: child,
+                      );
+                    },
+                    child: currentWidget,
                   ),
                 ),
               ],
@@ -194,3 +139,6 @@ class SellerDetailsScreen extends StatelessWidget {
     );
   }
 }
+
+
+

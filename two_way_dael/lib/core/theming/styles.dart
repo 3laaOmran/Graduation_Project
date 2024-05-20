@@ -81,6 +81,11 @@ class TextStyles {
     color: Colors.black,
     fontWeight: FontWeightHelper.bold,
   );
+  static TextStyle font17WhiteBold = TextStyle(
+    fontSize: 17.sp,
+    color: Colors.white,
+    fontWeight: FontWeightHelper.bold,
+  );
   static TextStyle font15BlackBold = TextStyle(
     fontSize: 15.sp,
     color: Colors.black,

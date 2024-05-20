@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:two_way_dael/core/theming/colors.dart';
 
 void showToast({
   required String message,
@@ -15,7 +16,7 @@ void showToast({
       fontSize: 16.0);
 }
 
-enum TostStates { SUCCESS, ERROR, WARNING }
+enum TostStates { SUCCESS, ERROR, WARNING, others }
 
 Color chooseToastColor(TostStates state) {
   Color color;
@@ -28,6 +29,9 @@ Color chooseToastColor(TostStates state) {
       break;
     case TostStates.WARNING:
       color = Colors.amber;
+      break;
+    case TostStates.others:
+      color = ColorManager.mainOrange;
       break;
   }
   return color;

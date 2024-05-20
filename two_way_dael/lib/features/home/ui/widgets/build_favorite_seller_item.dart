@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
+import 'package:two_way_dael/core/widgets/custom_icon_button.dart';
 import 'package:two_way_dael/features/home/ui/Modules/seller_details.dart';
 
 Widget buildFavoriteSellerItem(context) => InkWell(
@@ -54,20 +55,21 @@ Widget buildFavoriteSellerItem(context) => InkWell(
                     horizontalSpace(5),
                     const Spacer(),
                     CircleAvatar(
-                      radius: 13.0,
-                      backgroundColor: ColorManager.gray,
-                      child: IconButton(
-                        padding: const EdgeInsetsDirectional.only(
-                          end: 2.0,
-                          start: 2.0,
-                          top: 3.0,
-                          bottom: 2.0,
-                        ),
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.favorite,
-                          size: 18.0,
+                      radius: 20.0,
+                      backgroundColor: ColorManager.mainOrange,
+                      child: Center(
+                        child: customIconButton(
+                          padding: const EdgeInsets.only(
+                            left: 2.0,
+                            right: 2.0,
+                            top: 3.0,
+                            bottom: 2.0,
+                          ),
+                          onPressed: () {},
+                          icon: Icons.favorite,
                           color: Colors.white,
+                          size: 25.0,
+                          toolTip: 'Remove from favorite',
                         ),
                       ),
                     ),
