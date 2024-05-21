@@ -33,32 +33,33 @@ class YourOrdersScreen extends StatelessWidget {
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/images/no_orders.png'),
-            Text(
-              'No Orders Yet !!',
-              style: TextStyles.font18Grey800bold,
-            ),
+            Image.asset('assets/images/empty_cart.png'),
             verticalSpace(30),
+            Text(
+              'You have not order any\n product yet !!',
+              style: TextStyles.font18Grey800bold,
+              textAlign: TextAlign.center,
+            ),
+            verticalSpace(50),
             AppTextButton(
-                buttonText: 'Order Now',
-                buttonWidth: 200,
-                textStyle: TextStyles.font17WhiteBold,
-                onPressed: () {
-                  context.pop();
-                })
+              buttonText: 'Order Now',
+              buttonWidth: 200,
+              textStyle: TextStyles.font17WhiteBold,
+              onPressed: () {
+                context.pop();
+              },
+            ),
           ],
         )),
-        // child: GridView.count(
-        //   // shrinkWrap: true,
-        //   // physics: const NeverScrollableScrollPhysics(),
-        //   crossAxisCount: 2,
-        //   crossAxisSpacing: 5,
-        //   mainAxisSpacing: 1,
-        //   childAspectRatio: 1 / 1.35, //width / height
-
-        //   children: List.generate(20, (index) => buildItem(context)),
-        // ),
       ),
     );
   }
 }
+//  child: GridView.count(
+          //   crossAxisCount: 2,
+          //   crossAxisSpacing: 5,
+          //   mainAxisSpacing: 1,
+          //   childAspectRatio: 1 / 1.35, //width / height
+        
+          //   children: List.generate(5, (index) => buildItem(context)),
+          // ),

@@ -113,7 +113,7 @@ class _ChangeProfilePhotoState extends State<ChangeProfilePhoto> {
               ),
               onPressed: () {},
             ),
-            verticalSpace(100),
+            verticalSpace(150),
           ],
         ),
       ),

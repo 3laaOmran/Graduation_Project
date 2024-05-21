@@ -62,7 +62,7 @@ class AppRouter {
       case Routes.changePasswordScreen:
         return MaterialPageRoute(builder: (_) => const ChangePasswordScreen());
       case Routes.contactUsScreen:
-        return MaterialPageRoute(builder: (_) => const ContactUsScreen());
+        return MaterialPageRoute(builder: (_) =>  ContactUsScreen());
       default:
         return MaterialPageRoute(
             builder: (context) => Scaffold(

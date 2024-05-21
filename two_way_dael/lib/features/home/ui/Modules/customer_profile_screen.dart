@@ -130,7 +130,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                     ),
                   ),
                   Positioned(
-                    top: 35,
+                    top: 10,
                     child: Stack(
                       alignment: AlignmentDirectional.topEnd,
                       children: [
