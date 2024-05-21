@@ -10,6 +10,7 @@ class Routes {
   static const String photoAddressScreen = '/photoAddressScreen';
   static const String notificationsScreen = '/notificationsScreen';
   static const String donationScreen = '/donationScreen';
+  static const String contactUsScreen = '/contactUsScreen';
   static const String aboutAppScreen = '/aboutAppScreen';
   static const String yourOrdersScreen = '/yourOrdersScreen';
   static const String favoriteSellers = '/favoriteSellers';

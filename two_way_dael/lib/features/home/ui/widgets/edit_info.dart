@@ -189,6 +189,7 @@ class EditInfo extends StatelessWidget {
                       }
                     },
                   ),
+                  verticalSpace(100),
                 ],
               ),
             ),

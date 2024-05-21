@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/helpers/spacing.dart';
+import 'package:two_way_dael/core/routing/routes.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_icon_button.dart';
-import 'package:two_way_dael/features/home/ui/Modules/seller_details.dart';
 
-Widget buildFavoriteSellerItem(context) => InkWell(
+class BuildFavoriteSellerItem extends StatelessWidget {
+  const BuildFavoriteSellerItem({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
       onTap: () {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => SellerDetailsScreen()));
+        context.pushNamed(Routes.sellerDeatailsScreen);
       },
       child: Card(
         clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -81,3 +86,5 @@ Widget buildFavoriteSellerItem(context) => InkWell(
         ),
       ),
     );
+  }
+}

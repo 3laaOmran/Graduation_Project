@@ -36,20 +36,20 @@ class AccountSettings extends StatelessWidget {
             verticalSpace(20),
             InkWell(
               onTap: () {
-                // context.pushNamed(Routes.yourOrdersScreen);
+                context.pushNamed(Routes.favoriteSellers);
               },
               child: buildAccountSettingsItem(
-                image: 'assets/images/orders_list.png',
+                image: 'assets/images/favorites.png',
                 text: 'Favorites',
               ),
             ),
             verticalSpace(20),
             InkWell(
               onTap: () {
-                context.pushNamed(Routes.donationScreen);
+                context.pushNamed(Routes.contactUsScreen);
               },
               child: buildAccountSettingsItem(
-                image: 'assets/images/donate.png',
+                image: 'assets/images/contact_us_icon.png',
                 text: 'Contact Us',
               ),
             ),

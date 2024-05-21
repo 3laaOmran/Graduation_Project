@@ -10,10 +10,11 @@ class CustomTextFormField extends StatelessWidget {
   final InputBorder? enabledBorder;
   final TextStyle? inputTextStyle;
   final TextStyle? hintStyle;
-  final String hintText;
+  final String? hintText;
   final double? suffixIconSize;
   final String? labelText;
   final Widget? prefixIcon;
+  final int? maxLines;
   final bool isObsecureText;
   final IconData? sufixIcon;
   final Function(String)? onFieldSubmitted;
@@ -30,7 +31,7 @@ class CustomTextFormField extends StatelessWidget {
       this.enabledBorder,
       this.inputTextStyle,
       this.hintStyle,
-      required this.hintText,
+      this.hintText,
       required this.isObsecureText,
       this.sufixIcon,
       this.backgroundColor,
@@ -40,11 +41,15 @@ class CustomTextFormField extends StatelessWidget {
       this.keyboardType,
       this.borderRadius,
       this.labelText,
-      this.suffixOnPressed, this.onFieldSubmitted, this.suffixIconSize});
+      this.suffixOnPressed,
+      this.onFieldSubmitted,
+      this.suffixIconSize,
+      this.maxLines});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      maxLines:isObsecureText ? 1: maxLines,
       onFieldSubmitted: onFieldSubmitted,
       keyboardType: keyboardType,
       cursorColor: ColorManager.mainOrange,
@@ -91,7 +96,7 @@ class CustomTextFormField extends StatelessWidget {
         hintStyle: hintStyle ?? TextStyles.font15GrayRegular,
         hintText: hintText,
         labelText: labelText,
-        suffixIcon: IconButton(
+        suffixIcon:sufixIcon == null ? null : IconButton(
             onPressed: suffixOnPressed,
             icon: Icon(
               sufixIcon,

@@ -9,9 +9,11 @@ import 'package:two_way_dael/features/auth/login/ui/views/phone_for_forget_passw
 import 'package:two_way_dael/features/auth/signup/ui/views/otp_screen.dart';
 import 'package:two_way_dael/features/auth/signup/ui/views/photo_and_address_screen.dart';
 import 'package:two_way_dael/features/home/ui/Modules/about_app.dart';
+import 'package:two_way_dael/features/home/ui/Modules/contact_us_screen.dart';
 import 'package:two_way_dael/features/home/ui/Modules/donation_module.dart';
 import 'package:two_way_dael/features/home/ui/Modules/favorite_sellers.dart';
 import 'package:two_way_dael/features/home/ui/Modules/notifications_module.dart';
+import 'package:two_way_dael/features/home/ui/Modules/seller_details.dart';
 import 'package:two_way_dael/features/home/ui/Modules/your_orders_screen.dart';
 import 'package:two_way_dael/features/home/ui/widgets/change_password_screen.dart';
 
@@ -56,16 +58,18 @@ class AppRouter {
       case Routes.favoriteSellers:
         return MaterialPageRoute(builder: (_) => const FvaoriteSellers());
       case Routes.sellerDeatailsScreen:
-        return MaterialPageRoute(builder: (_) => const FvaoriteSellers());
+        return MaterialPageRoute(builder: (_) => const SellerDetailsScreen());
       case Routes.changePasswordScreen:
         return MaterialPageRoute(builder: (_) => const ChangePasswordScreen());
+      case Routes.contactUsScreen:
+        return MaterialPageRoute(builder: (_) => const ContactUsScreen());
       default:
         return MaterialPageRoute(
             builder: (context) => Scaffold(
-              backgroundColor: Colors.white30,
-              body: Center(
-                child: AlertDialog(
-                  backgroundColor: Colors.white,
+                  backgroundColor: Colors.white30,
+                  body: Center(
+                    child: AlertDialog(
+                      backgroundColor: Colors.white,
                       title: const Text('Exit'),
                       content: const Text('Do you want to exit?'),
                       actions: [
@@ -81,8 +85,8 @@ class AppRouter {
                             child: const Text('No')),
                       ],
                     ),
-              ),
-            ));
+                  ),
+                ));
     }
   }
 }

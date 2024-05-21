@@ -112,7 +112,7 @@ class _SellerProductsState extends State<SellerProducts> {
                 selectedPageNumber = index;
               });
             },
-            pageTotal: 5,
+            pageTotal: 3,
           ),
         ],
       ),
