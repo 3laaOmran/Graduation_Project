@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:meta/meta.dart';
 import 'package:two_way_dael/core/networking/dio_helper.dart';
 import 'package:two_way_dael/core/networking/end_points.dart';
 import 'package:two_way_dael/features/auth/login/data/models/login_model.dart';

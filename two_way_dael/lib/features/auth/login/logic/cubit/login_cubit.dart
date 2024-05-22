@@ -12,6 +12,7 @@ class LoginCubit extends Cubit<LoginStates> {
   static LoginCubit get(context) => BlocProvider.of(context);
 
   LoginModel? loginModel;
+  // LoginErrorModel? loginErrorModel;
   void userLogin({
     required String email,
     required String password,
@@ -30,6 +31,8 @@ class LoginCubit extends Cubit<LoginStates> {
 
       emit(LoginSuccessState(loginModel!));
     }).catchError((error) {
+      // loginErrorModel = LoginErrorModel.fromJson(error);
+
       emit(LoginErrorState(error.toString()));
     });
   }
@@ -45,10 +48,10 @@ class LoginCubit extends Cubit<LoginStates> {
   bool isObsecure = true;
   void changePasswordVisibility() {
     isObsecure = !isObsecure;
-    suffixIcon =
-        isObsecure ? Icons.visibility : Icons.visibility_off;
+    suffixIcon = isObsecure ? Icons.visibility : Icons.visibility_off;
     emit(LoginChangePasswordVisibilityState());
   }
+
   IconData confirmSuffixIcon = Icons.visibility;
   bool confirmIsObsecure = true;
   void changeConfirmPasswordVisibility() {
@@ -57,6 +60,4 @@ class LoginCubit extends Cubit<LoginStates> {
         confirmIsObsecure ? Icons.visibility : Icons.visibility_off;
     emit(LoginChangePasswordVisibilityState());
   }
-
-  
 }

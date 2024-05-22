@@ -16,7 +16,6 @@ import '../../../../../core/theming/colors.dart';
 import '../../../../../core/widgets/resuable_text.dart';
 import '../widgets/email_and_password.dart';
 
-// ignore: must_be_immutable
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
@@ -29,7 +28,7 @@ class LoginScreen extends StatelessWidget {
       child: BlocConsumer<LoginCubit, LoginStates>(
         listener: (context, state) {
           if (state is LoginSuccessState) {
-            if (state.loginModel.status!) {
+            if (state.loginModel.status == 200) {
               CashHelper.saveData(
                       key: 'token', value: state.loginModel.data!.token)
                   .then((value) {
@@ -37,11 +36,14 @@ class LoginScreen extends StatelessWidget {
                 context.pushNamedAndRemoveUntil(Routes.homeScreen,
                     predicate: (route) => false);
               });
-            } else {
+            } else if(state.loginModel.status == 422){
               showToast(
                   message: state.loginModel.message!, state: TostStates.ERROR);
             }
-          }
+          }else if (state is LoginErrorState){
+              showToast(
+                  message: 'Some Thing Went Wrong', state: TostStates.ERROR);
+            }
         },
         builder: (context, state) {
           var cubit = LoginCubit.get(context);

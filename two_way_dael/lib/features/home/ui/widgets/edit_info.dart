@@ -24,9 +24,9 @@ class EditInfo extends StatelessWidget {
         TextEditingController governorateController = TextEditingController();
         TextEditingController cityController = TextEditingController();
         var cubit = CustomerCubit.get(context);
-        var model = cubit.userModel;
-        cubit.nameController.text = model!.data!.name!;
-        cubit.emailController.text = model.data!.email!;
+        // var model = cubit.userModel;
+        // cubit.nameController.text = model!.data!.name!;
+        // cubit.emailController.text = model.data!.email!;
         List<SelectedListItem> governorates = [
           SelectedListItem(name: 'Cairo'),
           SelectedListItem(name: 'Behira'),

@@ -75,7 +75,7 @@ class CustomerCubit extends Cubit<CustomerStates> {
       token: token,
     ).then((value) {
       userModel = LoginModel.fromJson(value.data);
-      debugPrint(userModel!.data!.email);
+      // debugPrint(userModel!.data!.email);
       emit(GetUserDataSuccessState(userModel!));
     }).catchError((error) {
       debugPrint(error.toString());
@@ -99,7 +99,7 @@ class CustomerCubit extends Cubit<CustomerStates> {
       },
     ).then((value) {
       userModel = LoginModel.fromJson(value.data);
-      debugPrint(userModel!.data!.email);
+      // debugPrint(userModel!.data!.email);
       emit(CustomerUpdateProfileSuccessState(userModel!));
     }).catchError((error) {
       debugPrint(error.toString());

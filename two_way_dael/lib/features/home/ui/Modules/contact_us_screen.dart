@@ -39,7 +39,7 @@ class ContactUsScreen extends StatelessWidget {
       ),
       body: Container(
         height: double.infinity,
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsetsDirectional.only(end: 20.0,start: 20.0,top: 30.0),
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
