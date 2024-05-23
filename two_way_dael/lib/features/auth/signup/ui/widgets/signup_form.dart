@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:two_way_dael/core/widgets/custom_text_form_field.dart';
 import 'package:two_way_dael/core/widgets/resuable_text.dart';
+import 'package:two_way_dael/features/auth/login/ui/widgets/validation.dart';
 import 'package:two_way_dael/features/auth/signup/logic/cubit/siginup_cubit.dart';
 
 import '../../../../../../core/helpers/spacing.dart';
@@ -26,11 +27,7 @@ class SignupForm extends StatelessWidget {
               ),
               CustomTextFormField(
                 keyboardType: TextInputType.name,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your name';
-                  }
-                },
+                validator: nameValidation,
                 hintText: "Name",
                 controller: cubit.nameController,
                 isObsecureText: false,
@@ -44,11 +41,7 @@ class SignupForm extends StatelessWidget {
               CustomTextFormField(
                 hintText: "Email Address",
                 keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a valid email';
-                  }
-                },
+                validator: emailValidation,
                 controller: cubit.emailController,
                 isObsecureText: false,
                 prefixIcon: const Icon(Icons.email),
@@ -58,11 +51,7 @@ class SignupForm extends StatelessWidget {
               CustomTextFormField(
                 keyboardType: TextInputType.phone,
                 hintText: "Phone",
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a valid phone number';
-                  }
-                },
+                validator: phoneNumberValidation,
                 controller: cubit.phoneController,
                 isObsecureText: false,
                 prefixIcon: const Icon(Icons.phone),
@@ -82,11 +71,7 @@ class SignupForm extends StatelessWidget {
                 suffixOnPressed: () {
                   cubit.changePasswordVisibility();
                 },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
-                  }
-                },
+                validator: passwordValidation,
               ),
               verticalSpace(10),
             ],

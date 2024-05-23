@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/core/widgets/custom_text_form_field.dart';
+import 'package:two_way_dael/core/widgets/show_toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ContactUsScreen extends StatelessWidget {
@@ -39,7 +39,8 @@ class ContactUsScreen extends StatelessWidget {
       ),
       body: Container(
         height: double.infinity,
-        padding: const EdgeInsetsDirectional.only(end: 20.0,start: 20.0,top: 30.0),
+        padding:
+            const EdgeInsetsDirectional.only(end: 20.0, start: 20.0, top: 30.0),
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
@@ -68,12 +69,12 @@ class ContactUsScreen extends StatelessWidget {
                   children: [
                     CustomTextFormField(
                       prefixIcon: const Icon(Icons.title_outlined),
-                      hintText: 'Title',
+                      hintText: 'Subject',
                       controller: titleController,
                       isObsecureText: false,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'Please enter email title';
+                          return 'Please Enter Your Subject';
                         }
                       },
                     ),
@@ -88,7 +89,7 @@ class ContactUsScreen extends StatelessWidget {
                       isObsecureText: false,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'Please enter email message';
+                          return 'Please Enter Your Message';
                         }
                       },
                     ),
@@ -97,11 +98,44 @@ class ContactUsScreen extends StatelessWidget {
               ),
               verticalSpace(20),
               AppTextButton(
-                buttonText: 'Send Email',
+                buttonText: 'Send Message',
                 textStyle: TextStyles.font17WhiteBold,
-                onPressed: _sendEmail,
+                onPressed: () {
+                  if (emailFormKey.currentState!.validate()) {
+                    showToast(
+                        message: 'Your Message Sent Successfully',
+                        state: TostStates.SUCCESS);
+                  }
+                },
               ),
               verticalSpace(20),
+              Row(
+                children: [
+                  Text(
+                    'Or you can contact us by ',
+                    style: TextStyles.font15BlackBold,
+                  ),
+                  GestureDetector(
+                    onTap: _sendEmail,
+                    child:  Row(
+                      children: [
+                        const Icon(
+                          Icons.email,
+                          color: ColorManager.mainOrange,
+                        ),
+                        Text(
+                    'email...',
+                    style: TextStyles.font15BlackBold.copyWith(
+                      color: ColorManager.mainOrange,
+                    ),
+                  ),
+                      ],
+                    ),
+                  ),
+                  
+                ],
+              ),
+              verticalSpace(10),
               Column(
                 children: [
                   Text(
@@ -149,22 +183,24 @@ class ContactUsScreen extends StatelessWidget {
   }
 
   void _sendEmail() async {
-    if (emailFormKey.currentState!.validate()) {
-      final Email email = Email(
-        recipients: ['alaaomran1102002@gmail.com'],
-        subject: titleController.text,
-        body: messageController.text,
+    
+      final Uri emailUri = Uri(
+        scheme: 'mailto',
+        path: 'alaaomran1102002@gmail.com',
+        queryParameters: {
+          'subject': '',
+          'body': '',
+        },
       );
 
-      try {
-        await FlutterEmailSender.send(email);
-        debugPrint('Email sent successfully!');
-      } on Exception catch (error) {
-        debugPrint('Error sending email: $error');
+      if (await canLaunchUrl(emailUri)) {
+        await launchUrl(emailUri);
+      } else {
+        debugPrint('Could not launch $emailUri');
       }
     }
   }
-}
+
 
 Widget buildSocialMediaItem({required String image, Function()? onTap}) {
   return InkWell(

@@ -30,7 +30,42 @@ class DioHelper {
 //   data: data,
 // );
 
+static Future<Response> postData({
+    required String url,
+    String? token,
+    Map<String, dynamic>? query,
+    required Map<String, dynamic> data,
+  }) async {
+    // Set default headers for the request
+    dio.options.headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
 
+    // If token is provided, include it in the headers with Bearer scheme
+    if (token != null && token.isNotEmpty) {
+      dio.options.headers['Authorization'] = 'Bearer $token';
+    }
+
+    try {
+      // Sending the POST request
+      final response = await dio.post(
+        url,
+        queryParameters: query,
+        data: data,
+      );
+
+      // Returning the response
+      return response;
+    } on DioException catch (e) {
+      // Handling the error and returning the response for further handling
+      return e.response ?? Response(
+        requestOptions: RequestOptions(path: url),
+        statusCode: 500,
+        statusMessage: 'An error occurred',
+      );
+    }
+  }
 
   static Future<Response> getData({
     required String url,
@@ -41,32 +76,37 @@ class DioHelper {
     dio.options.headers = {
       'Content-Type': 'application/json',
       'lang': lang,
-      'Authorization': token ?? '',
+      'Authorization': token,
     };
+    
     return dio.get(
       url,
       queryParameters: query,
     );
   }
 
-  static Future<Response> postData({
-    required String url,
-    String? token,
-    Map<String, dynamic>? qurey,
-    required Map<String, dynamic> data,
-  }) async {
-    dio.options.headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': token ?? '',
-    };
+  // static Future<Response> postData({
+  //   required String url,
+  //   String? token,
+  //   Map<String, dynamic>? qurey,
+  //   required Map<String, dynamic> data,
+  // }) async {
+  //   dio.options.headers = {
+  //     'Content-Type': 'application/json',
+  //     'Accept': 'application/json',
+  //     'Authorization': token,
+  //   };
 
-    return await dio.post(
-      url,
-      queryParameters: qurey,
-      data: data,
-    );
-  }
+  //   if (token != null && token.isNotEmpty) {
+  //     dio.options.headers['Authorization'] = 'Bearer $token';
+  //   }
+    
+  //   return await dio.post(
+  //     url,
+  //     queryParameters: qurey,
+  //     data: data,
+  //   );
+  // }
 
   static Future<Response> updateData({
     required String url,

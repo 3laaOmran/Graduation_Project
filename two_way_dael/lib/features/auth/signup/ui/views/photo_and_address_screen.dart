@@ -1,4 +1,3 @@
-import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
@@ -16,29 +15,13 @@ class PhotoAndAddressScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SignupCubit(),
+      create: (context) => SignupCubit()..getGovernorates(),
       child: BlocBuilder<SignupCubit, SignupStates>(
         builder: (context, state) {
           var cubit = SignupCubit.get(context);
-          TextEditingController governorateController = TextEditingController();
-          TextEditingController cityController = TextEditingController();
-          var formKey = GlobalKey<FormState>();
-          List<SelectedListItem> governoratesList = [
-            SelectedListItem(name: 'Cairo'),
-            SelectedListItem(name: 'Alexandria'),
-            SelectedListItem(name: 'ElBehira'),
-            SelectedListItem(name: 'Giza'),
-            SelectedListItem(name: 'Aswan'),
-            SelectedListItem(name: 'Banha'),
-          ];
-          List<SelectedListItem> citiesList = [
-            SelectedListItem(name: 'Abohomoss'),
-            SelectedListItem(name: 'El8Pzor'),
-            SelectedListItem(name: 'KafrEldawar'),
-            SelectedListItem(name: 'Balakter'),
-            SelectedListItem(name: 'Elgenawia'),
-            SelectedListItem(name: 'Dsoness'),
-          ];
+          // var model = cubit.governoratesModel;
+          
+
           return Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -49,12 +32,12 @@ class PhotoAndAddressScreen extends StatelessWidget {
               resizeToAvoidBottomInset: true,
               backgroundColor: Colors.transparent,
               body: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: SizedBox(
                   width: double.infinity,
                   child: SingleChildScrollView(
                     child: Form(
-                      key: formKey,
+                      key: cubit.photoAndAddressFormKey,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -157,8 +140,9 @@ class PhotoAndAddressScreen extends StatelessWidget {
                                   Icons.location_city_outlined,
                                   color: ColorManager.mainOrange,
                                 ),
-                                dropedList: governoratesList,
-                                textEditingController: governorateController,
+                                dropedList: cubit.governoratesList,
+                                textEditingController:
+                                    cubit.governorateController,
                                 title: 'Governorate',
                                 hint: 'Governorate',
                                 isCitySelected: true,
@@ -175,8 +159,8 @@ class PhotoAndAddressScreen extends StatelessWidget {
                                   Icons.location_on,
                                   color: ColorManager.mainOrange,
                                 ),
-                                dropedList: citiesList,
-                                textEditingController: cityController,
+                                dropedList: cubit.citiesList,
+                                textEditingController: cubit.cityController,
                                 title: 'City',
                                 hint: 'City',
                                 isCitySelected: true,
@@ -188,11 +172,12 @@ class PhotoAndAddressScreen extends StatelessWidget {
                             buttonText: 'Next',
                             textStyle: TextStyles.font20Whitebold,
                             onPressed: () {
-                              if (formKey.currentState!.validate()) {
+                              if (cubit.photoAndAddressFormKey.currentState!
+                                  .validate()) {
                                 context.pushNamedAndRemoveUntil(
-                                Routes.homeScreen,
-                                predicate: (route) => false,
-                              );
+                                  Routes.homeScreen,
+                                  predicate: (route) => false,
+                                );
                               }
                             },
                           ),

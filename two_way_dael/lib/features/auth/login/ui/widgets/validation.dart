@@ -27,3 +27,22 @@ String? emailValidation(value) {
     return null;
   }
 }
+
+String? phoneNumberValidation(value) {
+  if (value == null || value.isEmpty) {
+    return 'Please Enter Your Phone Number.';
+  } else if (!AppRegex.isPhoneNumberValid(value)) {
+    return 'Please Enter a Valid Phone Number \nFormat 01211111111.';
+  } else {
+    return null;
+  }
+}
+String? nameValidation(value) {
+  if (value == null || value.isEmpty) {
+    return 'Please Enter Your Name';
+  } else if (!AppRegex.isNameValid(value)) {
+    return 'Please Enter a Valid Name';
+  } else {
+    return null;
+  }
+}

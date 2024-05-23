@@ -18,4 +18,15 @@ class SignupUserData {
   }
 }
 
+//*-------------------------------
+
+class VerificationModel {
+  int? status;
+  String? message;
+
+  VerificationModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    message = json['message'];
+  }
+}
 

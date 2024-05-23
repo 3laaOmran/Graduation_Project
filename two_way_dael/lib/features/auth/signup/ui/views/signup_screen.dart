@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:two_way_dael/core/constants/constants.dart';
+import 'package:two_way_dael/core/helpers/cash_helper.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
+import 'package:two_way_dael/core/widgets/show_toast.dart';
 import 'package:two_way_dael/features/auth/signup/logic/cubit/siginup_cubit.dart';
 
 import '../../../../../core/helpers/spacing.dart';
@@ -16,26 +19,27 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return BlocProvider(
       create: (context) => SignupCubit(),
       child: BlocConsumer<SignupCubit, SignupStates>(
         listener: (context, state) {
           if (state is SignupSuccessState) {
-            // if (state.loginModel.status!) {
-            //   CashHelper.saveData(
-            //           key: 'token', value: state.loginModel.data!.token)
-            //       .then((value) {
-            //     token = state.loginModel.data!.token;
-            //     // CashHelper.getData(key: 'token');
-            //     context.pushNamed(Routes.otpScreen,
-            //         predicate: (route) => false);
-            //   });
-            // } else {
-            //   showToast(
-            //       message: state.loginModel.message!, state: TostStates.ERROR);
-            // }
+            if (state.signupModel.status == 201) {
+              context.pushNamed(Routes.otpScreen);
+              showToast(
+                  message: state.signupModel.message!, state: TostStates.SUCCESS);
+              CashHelper.saveData(
+                      key: 'token', value: state.signupModel.data!.token)
+                  .then((value) {
+                token = state.signupModel.data!.token;
+                // CashHelper.getData(key: 'token');
+                context.pushNamed(Routes.otpScreen);
+              });
+            } else {
+              showToast(
+                  message: state.signupModel.message!, state: TostStates.ERROR);
+            }
           }
         },
         builder: (context, state) {
@@ -108,7 +112,6 @@ class SignUpScreen extends StatelessWidget {
                                           phone: cubit.phoneController.text,
                                           password:
                                               cubit.passwordController.text,
-                                          
                                         );
                                         // context.pushNamedAndRemoveUntil(
                                         //     Routes.otpScreen,
@@ -126,7 +129,7 @@ class SignUpScreen extends StatelessWidget {
                               firstText: 'Already have an account ? ',
                               secondText: '  Login',
                               ontap: () {
-                                context.pushNamed(Routes.loginScreen);
+                                context.pushNamed(Routes.photoAddressScreen);
                               },
                             ),
                           ],
