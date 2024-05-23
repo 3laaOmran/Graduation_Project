@@ -103,7 +103,6 @@ class SignupCubit extends Cubit<SignupStates> {
 
   GovernoratesModel? governoratesModel;
   List<SelectedListItem> governoratesList = [];
-
   void getGovernorates() {
     emit(GetGoverniratesLoadingState());
     DioHelper.getData(
@@ -126,7 +125,83 @@ class SignupCubit extends Cubit<SignupStates> {
       emit(GetGoverniratesErrorState(error.toString()));
     });
   }
+
+  List<SelectedListItem> selectedCities = [];
+  CityModel? cityModel;
+  void getCities(governorateid) {
+    emit(GetCitiesLoadingState());
+    DioHelper.getData(
+      url: CITIES,
+      query: {
+        'governorate_id': governorateid,
+      },
+    ).then((value) {
+      selectedCities.clear();
+      cityModel = CityModel.fromJson(value.data);
+      if (cityModel!.data != null) {
+        cityModel!.data!.forEach((cityData) {
+          selectedCities.add(SelectedListItem(name: cityData.name,value: cityData.id.toString()));
+          print("City ID: ${cityData.id}, City Name: ${cityData.name}");
+        });
+      } else {
+        print("No cities available for this governorate.");
+      }
+      emit(GetCitiesSuccessState());
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(GetCitiesErrorState(error.toString()));
+    });
+  }
 }
+
+class CityModel {
+  int? status;
+  String? message;
+  List<Data>? data;
+
+  CityModel({this.status, this.message, this.data});
+
+  CityModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'] as int?;
+    message = json['message'] as String?;
+    if (json['data'] != null) {
+      data = <Data>[];
+      json['data'].forEach((v) {
+        data!.add(Data.fromJson(v as Map<String, dynamic>));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Data {
+  int? id;
+  String name = '';
+
+  Data({this.id, required this.name});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    id = json['id'] as int?;
+    name = json['name'] as String;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    return data;
+  }
+}
+
 
 //-------------------------
 

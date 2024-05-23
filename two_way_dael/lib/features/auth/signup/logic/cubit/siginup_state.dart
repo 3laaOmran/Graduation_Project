@@ -44,6 +44,19 @@ final class GetGoverniratesErrorState extends SignupStates {
 
   GetGoverniratesErrorState(this.error);
 }
+final class GetCitiesLoadingState extends SignupStates {}
+
+final class GetCitiesSuccessState extends SignupStates {
+  // final GovernoratesModel governoratesModel;
+
+  // GetGoverniratesSuccessState(this.governoratesModel);
+}
+
+final class GetCitiesErrorState extends SignupStates {
+  final String error;
+
+  GetCitiesErrorState(this.error);
+}
 
 final class SiginupChangePasswordVisibilityState extends SignupStates {}
 

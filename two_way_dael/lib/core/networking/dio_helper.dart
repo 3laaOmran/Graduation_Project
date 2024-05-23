@@ -69,13 +69,12 @@ static Future<Response> postData({
 
   static Future<Response> getData({
     required String url,
-    String lang = 'en',
     String? token,
     Map<String, dynamic>? query,
   }) {
     dio.options.headers = {
       'Content-Type': 'application/json',
-      'lang': lang,
+      'Accept': 'application/json',
       'Authorization': token,
     };
     

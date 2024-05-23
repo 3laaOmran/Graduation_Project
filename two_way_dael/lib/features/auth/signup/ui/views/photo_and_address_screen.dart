@@ -1,3 +1,4 @@
+import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
@@ -20,8 +21,6 @@ class PhotoAndAddressScreen extends StatelessWidget {
         builder: (context, state) {
           var cubit = SignupCubit.get(context);
           // var model = cubit.governoratesModel;
-          
-
           return Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -130,6 +129,21 @@ class PhotoAndAddressScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               CustomDropDownList(
+                                selectedItems: (List<dynamic> selectedList) {
+                                  for (var item in selectedList) {
+                                    if (item is SelectedListItem) {
+                                      cubit.governorateController.text =
+                                          item.name;
+                                      debugPrint('item.name: ${item.name}');
+                                      debugPrint(
+                                          'widget.dropedList!.indexOf(item): ${cubit.governoratesList.indexOf(item)}');
+                                      SignupCubit.get(context).getCities(
+                                          cubit.governoratesList.indexOf(item) +
+                                              1);
+                                      cubit.cityController.text = '';
+                                    }
+                                  }
+                                },
                                 validation: (value) {
                                   if (value!.isEmpty) {
                                     return 'Address is required';
@@ -149,6 +163,18 @@ class PhotoAndAddressScreen extends StatelessWidget {
                               ),
                               verticalSpace(20),
                               CustomDropDownList(
+                                selectedItems: (List<dynamic> selectedList) {
+                                  for (var item in selectedList) {
+                                    if (item is SelectedListItem) {
+                                      cubit.cityController.text =
+                                          item.name;
+                                      debugPrint('item.name: ${item.name}');
+                                      debugPrint(
+                                          'widget.dropedList!.indexOf(item): ${cubit.selectedCities.indexOf(item)}');
+                                      
+                                    }
+                                  }
+                                },
                                 validation: (value) {
                                   if (value!.isEmpty) {
                                     return 'Address is required';
@@ -159,12 +185,12 @@ class PhotoAndAddressScreen extends StatelessWidget {
                                   Icons.location_on,
                                   color: ColorManager.mainOrange,
                                 ),
-                                dropedList: cubit.citiesList,
+                                dropedList: cubit.selectedCities,
                                 textEditingController: cubit.cityController,
                                 title: 'City',
                                 hint: 'City',
                                 isCitySelected: true,
-                              ),
+                              )
                             ],
                           ),
                           verticalSpace(50),
