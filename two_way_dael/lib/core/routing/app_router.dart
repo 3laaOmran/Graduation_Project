@@ -10,7 +10,6 @@ import 'package:two_way_dael/features/auth/signup/ui/views/otp_screen.dart';
 import 'package:two_way_dael/features/auth/signup/ui/views/photo_and_address_screen.dart';
 import 'package:two_way_dael/features/home/ui/Modules/about_app.dart';
 import 'package:two_way_dael/features/home/ui/Modules/contact_us_screen.dart';
-import 'package:two_way_dael/features/home/ui/Modules/donation_module.dart';
 import 'package:two_way_dael/features/home/ui/Modules/favorite_sellers.dart';
 import 'package:two_way_dael/features/home/ui/Modules/notifications_module.dart';
 import 'package:two_way_dael/features/home/ui/Modules/seller_details.dart';
@@ -41,8 +40,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const PhotoAndAddressScreen());
       case Routes.notificationsScreen:
         return MaterialPageRoute(builder: (_) => const NotificationsScreen());
-      case Routes.donationScreen:
-        return MaterialPageRoute(builder: (_) => const DonationScreen());
+      // case Routes.donationScreen:
+        // return MaterialPageRoute(builder: (_) => const DonationScreen());
       case Routes.forgetPasswordScreen:
         return MaterialPageRoute(builder: (_) => const ForgetPasswordScreen());
       case Routes.phoneForForgetPasswordScreen:

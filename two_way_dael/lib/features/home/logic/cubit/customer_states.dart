@@ -1,4 +1,5 @@
 import 'package:two_way_dael/features/auth/login/data/models/login_model.dart';
+import 'package:two_way_dael/features/home/data/models/get_profile_model.dart';
 
 abstract class CustomerStates {}
 
@@ -31,9 +32,9 @@ class CustomerGetProductsErrorState extends CustomerStates {}
 final class GetUserDataLoadingState extends CustomerStates {}
 
 final class GetUserDataSuccessState extends CustomerStates {
-  final LoginModel loginModel;
+  final UserDataModel userDataModel;
 
-  GetUserDataSuccessState(this.loginModel);
+  GetUserDataSuccessState(this.userDataModel);
 }
 
 final class GetUserDataErrorState extends CustomerStates {

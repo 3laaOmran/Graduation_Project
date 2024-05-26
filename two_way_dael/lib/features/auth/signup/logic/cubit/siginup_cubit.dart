@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:two_way_dael/core/networking/dio_helper.dart';
 import 'package:two_way_dael/core/networking/end_points.dart';
-import 'package:two_way_dael/features/auth/signup/data/models/address_model.dart';
+import 'package:two_way_dael/features/auth/signup/data/models/get_gov_and_city_model.dart';
 import 'package:two_way_dael/features/auth/signup/data/models/signup_model.dart';
 
 part 'siginup_state.dart';
@@ -28,7 +28,6 @@ class SignupCubit extends Cubit<SignupStates> {
   var cityController = TextEditingController();
 
   SignupModel? signupModel;
-  // String? signupToken;
   void userSignup({
     required String email,
     required String name,
@@ -45,10 +44,7 @@ class SignupCubit extends Cubit<SignupStates> {
         'password': password,
       },
     ).then((value) {
-      // debugPrint(value.data);
-      // print(value.data['token']);
       signupModel = SignupModel.fromJson(value.data);
-      // signupToken = value.data['token'];
       emit(SignupSuccessState(signupModel!));
     }).catchError((error) {
       emit(SignupErrorState(error.toString()));
@@ -76,6 +72,33 @@ class SignupCubit extends Cubit<SignupStates> {
       emit(VerificationErrorState(error.toString()));
     });
   }
+int? selectedGovernorateId ;
+int? selectedCityId ;
+  PhotoAndAddressModel? photoAndAddressModel;
+  void photoAndAddress({
+    required int cityId,
+    required int governorateId,
+    required String token,
+    File? image,
+  }) {
+    emit(PhotoAndAddressLoadingState());
+    DioHelper.postData(
+      token: token,
+      url: PHOTOANDADDRESS,
+      data: {
+        'city_id': cityId,
+        'governorate_id': governorateId,
+        'image': image ?? 'assets/images/default_profile.png',
+      },
+    ).then((value) {
+      photoAndAddressModel = PhotoAndAddressModel.fromJson(value.data);
+      debugPrint(value.data['message']);
+      emit(PhotoAndAddressSuccessState(photoAndAddressModel!));
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(PhotoAndAddressErrorState(error.toString()));
+    });
+  }
 
   File? imagePick;
   void pickImage() async {
@@ -92,15 +115,6 @@ class SignupCubit extends Cubit<SignupStates> {
     emit(SiginupChangePasswordVisibilityState());
   }
 
-  List<SelectedListItem> citiesList = [
-    SelectedListItem(name: 'Abohomoss'),
-    SelectedListItem(name: 'El8Pzor'),
-    SelectedListItem(name: 'KafrEldawar'),
-    SelectedListItem(name: 'Balakter'),
-    SelectedListItem(name: 'Elgenawia'),
-    SelectedListItem(name: 'Dsoness'),
-  ];
-
   GovernoratesModel? governoratesModel;
   List<SelectedListItem> governoratesList = [];
   void getGovernorates() {
@@ -111,11 +125,9 @@ class SignupCubit extends Cubit<SignupStates> {
       governoratesModel = GovernoratesModel.fromJson(value.data);
       if (governoratesModel!.data != null) {
         governoratesModel!.data!.forEach((dataItem) {
-          // Create SelectedListItem object and add it to the list
           governoratesList.add(SelectedListItem(name: dataItem.name));
           print("ID: ${dataItem.id}, Name: ${dataItem.name}");
         });
-        // Now you have the data stored in the selectedItems list for later use
       } else {
         print("No data available.");
       }
@@ -140,7 +152,8 @@ class SignupCubit extends Cubit<SignupStates> {
       cityModel = CityModel.fromJson(value.data);
       if (cityModel!.data != null) {
         cityModel!.data!.forEach((cityData) {
-          selectedCities.add(SelectedListItem(name: cityData.name,value: cityData.id.toString()));
+          selectedCities.add(SelectedListItem(
+              name: cityData.name, value: cityData.id.toString()));
           print("City ID: ${cityData.id}, City Name: ${cityData.name}");
         });
       } else {
@@ -153,76 +166,3 @@ class SignupCubit extends Cubit<SignupStates> {
     });
   }
 }
-
-class CityModel {
-  int? status;
-  String? message;
-  List<Data>? data;
-
-  CityModel({this.status, this.message, this.data});
-
-  CityModel.fromJson(Map<String, dynamic> json) {
-    status = json['status'] as int?;
-    message = json['message'] as String?;
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data!.add(Data.fromJson(v as Map<String, dynamic>));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['status'] = status;
-    data['message'] = message;
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class Data {
-  int? id;
-  String name = '';
-
-  Data({this.id, required this.name});
-
-  Data.fromJson(Map<String, dynamic> json) {
-    id = json['id'] as int?;
-    name = json['name'] as String;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    return data;
-  }
-}
-
-
-//-------------------------
-
-// class GovernoratesModel {
-//   int? status;
-//   String? message;
-//   GoverNorateData? data;
-
-//   GovernoratesModel.fromJson(Map<String, dynamic> json) {
-//     status = json['status'];
-//     message = json['message'];
-//     data = json['data'] != null ? GoverNorateData.fromJson(json['data']) : null;
-//   }
-// }
-
-// class GoverNorateData {
-//   int? id;
-//   String? name;
-
-//   GoverNorateData.fromJson(List<dynamic> json) {
-//     id = json[0]['id'];
-//     name = json[0]['name'];
-//   }
-// }

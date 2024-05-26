@@ -4,5 +4,6 @@ const REGISTER = 'auth/register/customer';
 const VERIFICATION = 'auth/verify/customer';
 const GOVERNORATES = 'governerates';
 const CITIES = 'cities';
+const PHOTOANDADDRESS = 'auth/address/customer';
 const UPDATE = 'update-profile';
-const PROFILE = 'profile';
+const PROFILE = 'me';

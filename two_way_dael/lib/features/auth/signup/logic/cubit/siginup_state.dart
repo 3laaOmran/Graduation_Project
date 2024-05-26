@@ -31,6 +31,19 @@ final class VerificationErrorState extends SignupStates {
 
   VerificationErrorState(this.error);
 }
+final class PhotoAndAddressLoadingState extends SignupStates {}
+
+final class PhotoAndAddressSuccessState extends SignupStates {
+  final PhotoAndAddressModel photoAndAddressModel;
+
+  PhotoAndAddressSuccessState(this.photoAndAddressModel);
+}
+
+final class PhotoAndAddressErrorState extends SignupStates {
+  final String error;
+
+  PhotoAndAddressErrorState(this.error);
+}
 final class GetGoverniratesLoadingState extends SignupStates {}
 
 final class GetGoverniratesSuccessState extends SignupStates {

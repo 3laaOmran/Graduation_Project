@@ -1,4 +1,3 @@
-import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
@@ -19,42 +18,20 @@ class EditInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CustomerCubit, CustomerStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is GetUserDataSuccessState) {
+          
+        }
+      },
       builder: (context, state) {
         TextEditingController governorateController = TextEditingController();
         TextEditingController cityController = TextEditingController();
         var cubit = CustomerCubit.get(context);
-        // var model = cubit.userModel;
+        // var model = cubit.userDataModel;
         // cubit.nameController.text = model!.data!.name!;
         // cubit.emailController.text = model.data!.email!;
-        List<SelectedListItem> governorates = [
-          SelectedListItem(name: 'Cairo'),
-          SelectedListItem(name: 'Behira'),
-          SelectedListItem(name: 'Giza'),
-          SelectedListItem(name: 'Alex'),
-          SelectedListItem(name: 'Dakahlia'),
-          SelectedListItem(name: 'Banhaa'),
-          SelectedListItem(name: 'Cairo'),
-          SelectedListItem(name: 'Behira'),
-          SelectedListItem(name: 'Giza'),
-          SelectedListItem(name: 'Alex'),
-          SelectedListItem(name: 'Dakahlia'),
-          SelectedListItem(name: 'Banhaa'),
-        ];
-        List<SelectedListItem> cities = [
-          SelectedListItem(name: 'Cairo'),
-          SelectedListItem(name: 'Behira'),
-          SelectedListItem(name: 'Giza'),
-          SelectedListItem(name: 'Alex'),
-          SelectedListItem(name: 'Dakahlia'),
-          SelectedListItem(name: 'Banhaa'),
-          SelectedListItem(name: 'Cairo'),
-          SelectedListItem(name: 'Behira'),
-          SelectedListItem(name: 'Giza'),
-          SelectedListItem(name: 'Alex'),
-          SelectedListItem(name: 'Dakahlia'),
-          SelectedListItem(name: 'Banhaa'),
-        ];
+        // cubit.phoneController.text = model.data!.phone!;
+        
         return Container(
           color: Colors.white,
           child: Padding(
@@ -115,6 +92,7 @@ class EditInfo extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                   CustomTextFormField(
+                    controller: cubit.phoneController,
                     prefixIcon: const Icon(Icons.phone),
                     keyboardType: TextInputType.phone,
                     isObsecureText: false,
@@ -134,7 +112,7 @@ class EditInfo extends StatelessWidget {
                           Icons.location_city_outlined,
                           color: ColorManager.mainOrange,
                         ),
-                        dropedList: governorates,
+                        dropedList: [],
                         textEditingController: governorateController,
                         title: 'Governorate',
                         hint: 'Governorate',
@@ -146,7 +124,7 @@ class EditInfo extends StatelessWidget {
                           Icons.location_on,
                           color: ColorManager.mainOrange,
                         ),
-                        dropedList: cities,
+                        dropedList: [],
                         textEditingController: cityController,
                         title: 'City',
                         hint: 'City',
@@ -181,11 +159,11 @@ class EditInfo extends StatelessWidget {
                     ),
                     onPressed: () {
                       if (cubit.formKey.currentState!.validate()) {
-                        cubit.updateUserData(
-                          name: cubit.nameController.text,
-                          email: cubit.emailController.text,
-                          // phone: cubit.phoneController.text,
-                        );
+                        // cubit.updateUserData(
+                        //   name: cubit.nameController.text,
+                        //   email: cubit.emailController.text,
+                        //   // phone: cubit.phoneController.text,
+                        // );
                       }
                     },
                   ),

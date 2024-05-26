@@ -1,6 +1,8 @@
 import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:two_way_dael/core/constants/constants.dart';
+import 'package:two_way_dael/core/helpers/cash_helper.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/routing/routes.dart';
@@ -8,6 +10,7 @@ import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/core/widgets/custom_drop_down_list.dart';
+import 'package:two_way_dael/core/widgets/show_toast.dart';
 import 'package:two_way_dael/features/auth/signup/logic/cubit/siginup_cubit.dart';
 
 class PhotoAndAddressScreen extends StatelessWidget {
@@ -17,7 +20,26 @@ class PhotoAndAddressScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => SignupCubit()..getGovernorates(),
-      child: BlocBuilder<SignupCubit, SignupStates>(
+      child: BlocConsumer<SignupCubit, SignupStates>(
+        listener: (context, state) {
+          if (state is PhotoAndAddressLoadingState) {
+            CashHelper.getData(key: 'token');
+          } else if (state is PhotoAndAddressSuccessState) {
+            if (state.photoAndAddressModel.status == 200) {
+              showToast(
+                  message: state.photoAndAddressModel.message!,
+                  state: TostStates.SUCCESS);
+              context.pushNamedAndRemoveUntil(Routes.homeScreen,
+                  predicate: (route) => false);
+            } else {
+              showToast(
+                  message: state.photoAndAddressModel.message!,
+                  state: TostStates.WARNING);
+            }
+          } else if (state is PhotoAndAddressErrorState) {
+            showToast(message: 'An Error Occurred', state: TostStates.ERROR);
+          }
+        },
         builder: (context, state) {
           var cubit = SignupCubit.get(context);
           // var model = cubit.governoratesModel;
@@ -134,19 +156,25 @@ class PhotoAndAddressScreen extends StatelessWidget {
                                     if (item is SelectedListItem) {
                                       cubit.governorateController.text =
                                           item.name;
+                                      cubit.selectedGovernorateId =
+                                          cubit.governoratesList.indexOf(item) +
+                                              1;
                                       debugPrint('item.name: ${item.name}');
+                                      debugPrint(
+                                          'gov id: ${cubit.selectedGovernorateId}');
+
                                       debugPrint(
                                           'widget.dropedList!.indexOf(item): ${cubit.governoratesList.indexOf(item)}');
                                       SignupCubit.get(context).getCities(
-                                          cubit.governoratesList.indexOf(item) +
-                                              1);
+                                          cubit.selectedGovernorateId);
                                       cubit.cityController.text = '';
+                                      cubit.selectedCityId = null;
                                     }
                                   }
                                 },
                                 validation: (value) {
                                   if (value!.isEmpty) {
-                                    return 'Address is required';
+                                    return 'Governorate is required';
                                   }
                                   return null;
                                 },
@@ -161,36 +189,51 @@ class PhotoAndAddressScreen extends StatelessWidget {
                                 hint: 'Governorate',
                                 isCitySelected: true,
                               ),
-                              verticalSpace(20),
-                              CustomDropDownList(
-                                selectedItems: (List<dynamic> selectedList) {
-                                  for (var item in selectedList) {
-                                    if (item is SelectedListItem) {
-                                      cubit.cityController.text =
-                                          item.name;
-                                      debugPrint('item.name: ${item.name}');
-                                      debugPrint(
-                                          'widget.dropedList!.indexOf(item): ${cubit.selectedCities.indexOf(item)}');
-                                      
-                                    }
-                                  }
-                                },
-                                validation: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Address is required';
-                                  }
-                                  return null;
-                                },
-                                prefixIcon: const Icon(
-                                  Icons.location_on,
-                                  color: ColorManager.mainOrange,
-                                ),
-                                dropedList: cubit.selectedCities,
-                                textEditingController: cubit.cityController,
-                                title: 'City',
-                                hint: 'City',
-                                isCitySelected: true,
-                              )
+                              cubit.selectedCities.isNotEmpty
+                                  ? Column(
+                                      children: [
+                                        verticalSpace(20),
+                                        CustomDropDownList(
+                                          selectedItems:
+                                              (List<dynamic> selectedList) {
+                                            for (var item in selectedList) {
+                                              if (item is SelectedListItem) {
+                                                cubit.cityController.text =
+                                                    item.name;
+                                                cubit.selectedCityId = cubit
+                                                        .selectedCities
+                                                        .indexOf(item) +
+                                                    1;
+                                                debugPrint(
+                                                    'item.name: ${item.name}');
+                                                debugPrint(
+                                                    'city id: ${cubit.selectedCityId}');
+
+                                                debugPrint(
+                                                    'widget.dropedList!.indexOf(item): ${cubit.selectedCities.indexOf(item)}');
+                                              }
+                                            }
+                                          },
+                                          validation: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'City is required';
+                                            }
+                                            return null;
+                                          },
+                                          prefixIcon: const Icon(
+                                            Icons.location_on,
+                                            color: ColorManager.mainOrange,
+                                          ),
+                                          dropedList: cubit.selectedCities,
+                                          textEditingController:
+                                              cubit.cityController,
+                                          title: 'City',
+                                          hint: 'City',
+                                          isCitySelected: true,
+                                        ),
+                                      ],
+                                    )
+                                  : Container(),
                             ],
                           ),
                           verticalSpace(50),
@@ -200,13 +243,21 @@ class PhotoAndAddressScreen extends StatelessWidget {
                             onPressed: () {
                               if (cubit.photoAndAddressFormKey.currentState!
                                   .validate()) {
-                                context.pushNamedAndRemoveUntil(
-                                  Routes.homeScreen,
-                                  predicate: (route) => false,
+                                debugPrint(
+                                    'Selected Governorate ID: ${cubit.selectedGovernorateId}');
+                                debugPrint(
+                                    'Selected City ID: ${cubit.selectedCityId}');
+                                debugPrint('${cubit.imagePick}');
+                                cubit.photoAndAddress(
+                                  cityId: cubit.selectedCityId!,
+                                  governorateId: cubit.selectedGovernorateId!,
+                                  token: token!,
+                                  image: cubit.imagePick,
                                 );
                               }
                             },
                           ),
+                          verticalSpace(20),
                         ],
                       ),
                     ),

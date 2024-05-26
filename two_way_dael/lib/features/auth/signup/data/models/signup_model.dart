@@ -12,7 +12,7 @@ class SignupModel {
 
 class SignupUserData {
   String? token;
-  
+
   SignupUserData.fromJson(Map<String, dynamic> json) {
     token = json['token'];
   }
@@ -30,3 +30,13 @@ class VerificationModel {
   }
 }
 
+//*--------------------------------------
+class PhotoAndAddressModel {
+  int? status;
+  String? message;
+
+  PhotoAndAddressModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    message = json['message'];
+  }
+}

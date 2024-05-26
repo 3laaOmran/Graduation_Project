@@ -5,12 +5,11 @@ import 'package:two_way_dael/core/constants/constants.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
-import 'package:two_way_dael/features/auth/login/data/models/login_model.dart';
+import 'package:two_way_dael/features/home/data/models/get_profile_model.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
 import 'package:two_way_dael/features/home/ui/Modules/customer_home_screen.dart';
 import 'package:two_way_dael/features/home/ui/Modules/customer_profile_screen.dart';
 import 'package:two_way_dael/features/home/ui/Modules/notifications_module.dart';
-import 'package:two_way_dael/features/home/ui/widgets/build_charity_item.dart';
 
 import '../../../../core/networking/dio_helper.dart';
 import '../../../../core/networking/end_points.dart';
@@ -67,45 +66,45 @@ class CustomerCubit extends Cubit<CustomerStates> {
     });
   }
 
-  LoginModel? userModel;
+  UserDataModel? userDataModel;
   void getUserData() {
     emit(GetUserDataLoadingState());
     DioHelper.getData(
       url: PROFILE,
       token: token,
     ).then((value) {
-      userModel = LoginModel.fromJson(value.data);
-      // debugPrint(userModel!.data!.email);
-      emit(GetUserDataSuccessState(userModel!));
+      userDataModel = UserDataModel.fromJson(value.data);
+      debugPrint(userDataModel!.data!.name);
+      emit(GetUserDataSuccessState(userDataModel!));
     }).catchError((error) {
       debugPrint(error.toString());
       emit(GetUserDataErrorState(error));
     });
   }
-
-  void updateUserData({
-    required String name,
-    required String email,
-    String? phone,
-  }) {
-    emit(CustomerUpdateProfileLoadingState());
-    DioHelper.updateData(
-      url: UPDATE,
-      token: token,
-      data: {
-        'name': name,
-        'email': email,
-        'phone': phone,
-      },
-    ).then((value) {
-      userModel = LoginModel.fromJson(value.data);
-      // debugPrint(userModel!.data!.email);
-      emit(CustomerUpdateProfileSuccessState(userModel!));
-    }).catchError((error) {
-      debugPrint(error.toString());
-      emit(CustomerUpdateProfileErrorState());
-    });
-  }
+  
+  // void updateUserData({
+  //   required String name,
+  //   required String email,
+  //   String? phone,
+  // }) {
+  //   emit(CustomerUpdateProfileLoadingState());
+  //   DioHelper.updateData(
+  //     url: UPDATE,
+  //     token: token,
+  //     data: {
+  //       'name': name,
+  //       'email': email,
+  //       'phone': phone,
+  //     },
+  //   ).then((value) {
+  //     userModel = LoginModel.fromJson(value.data);
+  //     // debugPrint(userModel!.data!.email);
+  //     emit(CustomerUpdateProfileSuccessState(userModel!));
+  //   }).catchError((error) {
+  //     debugPrint(error.toString());
+  //     emit(CustomerUpdateProfileErrorState());
+  //   });
+  // }
 
   final formKey = GlobalKey<FormState>();
   final changePasswordFormKey = GlobalKey<FormState>();
@@ -141,78 +140,6 @@ class CustomerCubit extends Cubit<CustomerStates> {
     emit(GetUserDataChaneIconVisibilityState());
   }
 
-  List<Widget> charities = [
-    BuildCharityItem(
-      charityItemModel: CharityItemModel(
-        image: 'assets/images/MisrElkhair.png',
-        name: 'Misr EL-Khair',
-        value: 796,
-      ),
-    ),
-    BuildCharityItem(
-      charityItemModel: CharityItemModel(
-        image: 'assets/images/FoodBank.png',
-        name: 'Egyption Food Bank ',
-        value: 152,
-      ),
-    ),
-    BuildCharityItem(
-      charityItemModel: CharityItemModel(
-        image: 'assets/images/AhlMasr.png',
-        name: 'Ahl Masr Foundation',
-        value: 150,
-      ),
-    ),
-    BuildCharityItem(
-      charityItemModel: CharityItemModel(
-        image: 'assets/images/Orman.png',
-        name: 'Al Orman Association',
-        value: 888,
-      ),
-    ),
-    BuildCharityItem(
-      charityItemModel: CharityItemModel(
-        image: 'assets/images/57357.png',
-        name: '57357',
-        value: 888,
-      ),
-    ),
-    BuildCharityItem(
-      charityItemModel: CharityItemModel(
-        image: 'assets/images/MisrElkhair.png',
-        name: 'Misr EL-Khair',
-        value: 796,
-      ),
-    ),
-    BuildCharityItem(
-      charityItemModel: CharityItemModel(
-        image: 'assets/images/FoodBank.png',
-        name: 'Egyption Food Bank',
-        value: 152,
-      ),
-    ),
-    BuildCharityItem(
-      charityItemModel: CharityItemModel(
-        image: 'assets/images/AhlMasr.png',
-        name: 'Ahl Masr Foundation',
-        value: 150,
-      ),
-    ),
-    BuildCharityItem(
-      charityItemModel: CharityItemModel(
-        image: 'assets/images/Orman.png',
-        name: 'Al Orman Association',
-        value: 888,
-      ),
-    ),
-    BuildCharityItem(
-      charityItemModel: CharityItemModel(
-        image: 'assets/images/MagdyYacuop.png',
-        name: 'Magdy Yacoub Heart ',
-        value: 888,
-      ),
-    ),
-  ];
 
   void markNotificationAsRead(int index) {
     notifications[index].isNew = false;
