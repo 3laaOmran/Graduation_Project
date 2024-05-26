@@ -27,10 +27,12 @@ class EditInfo extends StatelessWidget {
         TextEditingController governorateController = TextEditingController();
         TextEditingController cityController = TextEditingController();
         var cubit = CustomerCubit.get(context);
-        // var model = cubit.userDataModel;
-        // cubit.nameController.text = model!.data!.name!;
-        // cubit.emailController.text = model.data!.email!;
-        // cubit.phoneController.text = model.data!.phone!;
+        var model = cubit.userDataModel;
+        cubit.nameController.text = model!.data!.name!;
+        cubit.emailController.text = model.data!.email!;
+        cubit.phoneController.text = model.data!.phone.toString();
+        governorateController.text = model.data!.governorate!;
+        cityController.text = model.data!.city!;
         
         return Container(
           color: Colors.white,

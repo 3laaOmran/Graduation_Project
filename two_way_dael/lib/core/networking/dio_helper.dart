@@ -75,7 +75,7 @@ static Future<Response> postData({
     dio.options.headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': token,
+      'Authorization': 'Bearer $token',
     };
     
     return dio.get(

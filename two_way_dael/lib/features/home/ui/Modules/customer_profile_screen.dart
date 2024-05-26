@@ -30,8 +30,8 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
       listener: (context, state) {},
       builder: (context, state) {
         var cubit = CustomerCubit.get(context);
-        // var model = cubit.userDataModel;
-        // cubit.nameController.text = model.data.name;
+        var model = cubit.userDataModel;
+        cubit.nameController.text = model!.data!.name!;
         return SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

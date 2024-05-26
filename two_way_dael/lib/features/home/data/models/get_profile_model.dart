@@ -49,6 +49,8 @@ class Data {
   String? profilePicture;
   int? phone;
   String? joinedFrom;
+  String? governorate;
+  String? city;
 
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -58,6 +60,8 @@ class Data {
     profilePicture = json['profile_picture'];
     phone = json['phone'];
     joinedFrom = json['joined_from'];
+    governorate = json['governorate'];
+    city = json['city'];
   }
 
   Map<String, dynamic> toJson() {

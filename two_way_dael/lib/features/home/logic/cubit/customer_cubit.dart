@@ -74,14 +74,14 @@ class CustomerCubit extends Cubit<CustomerStates> {
       token: token,
     ).then((value) {
       userDataModel = UserDataModel.fromJson(value.data);
-      debugPrint(userDataModel!.data!.name);
+      debugPrint(userDataModel!.data!.city);
       emit(GetUserDataSuccessState(userDataModel!));
     }).catchError((error) {
       debugPrint(error.toString());
       emit(GetUserDataErrorState(error));
     });
   }
-  
+
   // void updateUserData({
   //   required String name,
   //   required String email,
@@ -139,7 +139,6 @@ class CustomerCubit extends Cubit<CustomerStates> {
         confirmIsObsecure ? Icons.visibility : Icons.visibility_off;
     emit(GetUserDataChaneIconVisibilityState());
   }
-
 
   void markNotificationAsRead(int index) {
     notifications[index].isNew = false;
