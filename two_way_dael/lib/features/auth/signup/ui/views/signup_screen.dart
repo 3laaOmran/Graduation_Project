@@ -30,9 +30,9 @@ class SignUpScreen extends StatelessWidget {
               showToast(
                   message: state.signupModel.message!, state: TostStates.SUCCESS);
               CashHelper.saveData(
-                      key: 'token', value: state.signupModel.data!.token)
+                      key: 'registerToken', value: state.signupModel.data!.token)
                   .then((value) {
-                token = state.signupModel.data!.token;
+                registerToken = state.signupModel.data!.token;
                 // CashHelper.getData(key: 'token');
                 context.pushNamed(Routes.otpScreen);
               });

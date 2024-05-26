@@ -31,6 +31,10 @@ class PhotoAndAddressScreen extends StatelessWidget {
                   state: TostStates.SUCCESS);
               context.pushNamedAndRemoveUntil(Routes.homeScreen,
                   predicate: (route) => false);
+              CashHelper.saveData(key: 'token', value: registerToken)
+                  .then((value) {
+                token = registerToken;
+              });
             } else {
               showToast(
                   message: state.photoAndAddressModel.message!,
@@ -251,7 +255,7 @@ class PhotoAndAddressScreen extends StatelessWidget {
                                 cubit.photoAndAddress(
                                   cityId: cubit.selectedCityId!,
                                   governorateId: cubit.selectedGovernorateId!,
-                                  token: token!,
+                                  token: registerToken!,
                                   image: cubit.imagePick,
                                 );
                               }

@@ -24,7 +24,7 @@ class ConfirmAccount extends StatelessWidget {
       child: BlocConsumer<SignupCubit, SignupStates>(
         listener: (context, state) {
           if (state is VerificationLoadingState) {
-            CashHelper.getData(key: 'token');
+            CashHelper.getData(key: 'registerToken');
           }
           if (state is VerificationSuccessState) {
             if (state.verificationModel.status == 200) {
@@ -36,9 +36,8 @@ class ConfirmAccount extends StatelessWidget {
             } else {
               showToast(
                 message: state.verificationModel.message!,
-                state: TostStates.SUCCESS,
+                state: TostStates.ERROR,
               );
-              context.pushNamed(Routes.photoAddressScreen);
             }
           } else if (state is VerificationErrorState) {
             showToast(
@@ -179,7 +178,7 @@ class ConfirmAccount extends StatelessWidget {
                                       .validate()) {
                                     cubit.otpVerification(
                                       otp: otpController.text,
-                                      token: token!,
+                                      token: registerToken!,
                                     );
                                   }
                                 },

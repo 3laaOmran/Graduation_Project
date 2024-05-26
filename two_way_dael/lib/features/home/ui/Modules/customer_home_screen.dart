@@ -67,7 +67,7 @@ class CustomerHomeScreen extends StatelessWidget {
                       Container(
                         decoration: const BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(45.0)),
+                          borderRadius: BorderRadius.all(Radius.circular(0.0)),
                         ),
                         clipBehavior: Clip.antiAliasWithSaveLayer,
                         child: CarouselSlider(
@@ -117,40 +117,33 @@ class CustomerHomeScreen extends StatelessWidget {
                             ?.copyWith(
                                 fontWeight: FontWeight.bold, fontSize: 21.0),
                       ),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10),
+                      verticalSpace(5),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              BuildCategoryItem(text: 'Food'),
-                              SizedBox(
-                                width: 10.0,
-                              ),
-                              BuildCategoryItem(text: 'Drink'),
-                              SizedBox(
-                                width: 10.0,
-                              ),
-                              BuildCategoryItem(text: 'Soup'),
-                              SizedBox(
-                                width: 10.0,
-                              ),
-                              BuildCategoryItem(text: 'Pizza'),
-                              SizedBox(
-                                width: 10.0,
-                              ),
-                              BuildCategoryItem(text: 'Burger'),
-                              SizedBox(
-                                width: 10.0,
-                              ),
-                              BuildCategoryItem(text: 'Soda'),
-                              SizedBox(
-                                width: 10.0,
-                              ),
-                            ],
+                          child: SizedBox(
+                            height: 25,
+                            child: Row(
+                              children: [
+                                const BuildCategoryItem(text: 'All'),
+                                horizontalSpace(10),
+                                const BuildCategoryItem(text: 'Food'),
+                                horizontalSpace(10),
+                                const BuildCategoryItem(text: 'Drink'),
+                                horizontalSpace(10),
+                                const BuildCategoryItem(text: 'Soup'),
+                                horizontalSpace(10),
+                                const BuildCategoryItem(text: 'Pizza'),
+                                horizontalSpace(10),
+                                const BuildCategoryItem(text: 'Burger'),
+                                horizontalSpace(10),
+                                const BuildCategoryItem(text: 'Soda'),
+                                horizontalSpace(10),
+                                const BuildCategoryItem(text: 'Others'),
+                                horizontalSpace(10),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -188,6 +181,7 @@ class CustomerHomeScreen extends StatelessWidget {
                 color: Colors.white,
                 child: Row(
                   children: [
+                    horizontalSpace(12),
                     GestureDetector(
                       onTap: () {
                         cubit.changeBottomNav(cubit.currentIndex + 1);
@@ -220,7 +214,6 @@ class CustomerHomeScreen extends StatelessWidget {
                         children: [
                           Text(
                             'Two Way Deal',
-                            // 'Hello, ${CustomerCubit.get(context).nameController.text}',
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineSmall
