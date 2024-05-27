@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 
 class DioHelper {
@@ -30,42 +32,82 @@ class DioHelper {
 //   data: data,
 // );
 
-static Future<Response> postData({
+
+  static Future<Response> postData({
     required String url,
     String? token,
     Map<String, dynamic>? query,
     required Map<String, dynamic> data,
+    File? image,
   }) async {
-    // Set default headers for the request
     dio.options.headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
     };
 
-    // If token is provided, include it in the headers with Bearer scheme
     if (token != null && token.isNotEmpty) {
       dio.options.headers['Authorization'] = 'Bearer $token';
     }
 
+    FormData formData = FormData.fromMap(data);
+
+    if (image != null) {
+      String fileName = image.path.split('/').last;
+      formData.files.add(
+        MapEntry(
+          'image',
+          await MultipartFile.fromFile(image.path, filename: fileName),
+        ),
+      );
+    }
+
     try {
-      // Sending the POST request
       final response = await dio.post(
         url,
         queryParameters: query,
-        data: data,
+        data: formData,
       );
-
-      // Returning the response
       return response;
-    } on DioException catch (e) {
-      // Handling the error and returning the response for further handling
-      return e.response ?? Response(
-        requestOptions: RequestOptions(path: url),
-        statusCode: 500,
-        statusMessage: 'An error occurred',
-      );
+    } catch (e) {
+      throw e;
     }
   }
+// static Future<Response> postData({
+//     required String url,
+//     String? token,
+//     Map<String, dynamic>? query,
+//     required Map<String, dynamic> data,
+//   }) async {
+//     // Set default headers for the request
+//     dio.options.headers = {
+//       'Content-Type': 'application/json',
+//       'Accept': 'application/json',
+//     };
+
+//     // If token is provided, include it in the headers with Bearer scheme
+//     if (token != null && token.isNotEmpty) {
+//       dio.options.headers['Authorization'] = 'Bearer $token';
+//     }
+
+//     try {
+//       // Sending the POST request
+//       final response = await dio.post(
+//         url,
+//         queryParameters: query,
+//         data: data,
+//       );
+
+//       // Returning the response
+//       return response;
+//     } on DioException catch (e) {
+//       // Handling the error and returning the response for further handling
+//       return e.response ?? Response(
+//         requestOptions: RequestOptions(path: url),
+//         statusCode: 500,
+//         statusMessage: 'An error occurred',
+//       );
+//     }
+//   }
 
   static Future<Response> getData({
     required String url,

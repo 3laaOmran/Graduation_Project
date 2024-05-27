@@ -32,6 +32,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
         var cubit = CustomerCubit.get(context);
         var model = cubit.userDataModel;
         cubit.nameController.text = model!.data!.name!;
+        var image = model.data!.profilePicture;
         return SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,10 +61,13 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                           },
                           child: Stack(
                             children: [
-                              const CircleAvatar(
+                              CircleAvatar(
                                 radius: 80.0,
-                                backgroundImage: AssetImage(
-                                    'assets/images/default_profile.png'),
+                                backgroundImage: image == null
+                                    ? const AssetImage(
+                                            'assets/images/default_profile.png')
+                                        as ImageProvider
+                                    : NetworkImage(image),
                               ),
                               Positioned(
                                 bottom: 0,
