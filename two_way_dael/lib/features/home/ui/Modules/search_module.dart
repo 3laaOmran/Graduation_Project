@@ -65,49 +65,58 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                   ),
                   horizontalSpace(10),
-                  DropdownButton<String>(
-                    menuMaxHeight: 500.h,
-                    borderRadius: BorderRadius.circular(10),
-                    dropdownColor: Colors.white,
-                    alignment: Alignment.center,
-                    value: dropDownValue,
-                    icon: const Icon(Icons.keyboard_arrow_down_rounded),
-                    underline: Container(
-                      height: 2,
-                      color: ColorManager.gray,
-                    ),
-                    isDense: true,
-                    items: const [
-                      DropdownMenuItem(
-                        value: 'All',
-                        child: Text('All'),
+                  Column(
+                    children: [
+                      Text(
+                        'Search For',
+                        style: TextStyles.font14BlackBold,
                       ),
-                      DropdownMenuItem(
-                        value: 'Food',
-                        child: Text('Food'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'Drinks',
-                        child: Text('Drinks'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'Pizza',
-                        child: Text('Pizza'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'Soup',
-                        child: Text('Soup'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'Others',
-                        child: Text('Others'),
+                      verticalSpace(5),
+                      DropdownButton<String>(
+                        menuMaxHeight: 500.h,
+                        borderRadius: BorderRadius.circular(10),
+                        dropdownColor: Colors.white,
+                        alignment: Alignment.center,
+                        value: dropDownValue,
+                        icon: const Icon(Icons.keyboard_arrow_down_rounded),
+                        underline: Container(
+                          height: 2,
+                          color: ColorManager.gray,
+                        ),
+                        isDense: true,
+                        items: const [
+                          DropdownMenuItem(
+                            value: 'All',
+                            child: Text('All'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'Food',
+                            child: Text('Food'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'Drinks',
+                            child: Text('Drinks'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'Pizza',
+                            child: Text('Pizza'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'Soup',
+                            child: Text('Soup'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'Others',
+                            child: Text('Others'),
+                          ),
+                        ],
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            dropDownValue = newValue!;
+                          });
+                        },
                       ),
                     ],
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropDownValue = newValue!;
-                      });
-                    },
                   ),
                 ],
               ),

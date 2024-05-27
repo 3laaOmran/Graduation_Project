@@ -163,12 +163,6 @@ class PhotoAndAddressScreen extends StatelessWidget {
                                       cubit.selectedGovernorateId =
                                           cubit.governoratesList.indexOf(item) +
                                               1;
-                                      debugPrint('item.name: ${item.name}');
-                                      debugPrint(
-                                          'gov id: ${cubit.selectedGovernorateId}');
-
-                                      debugPrint(
-                                          'widget.dropedList!.indexOf(item): ${cubit.governoratesList.indexOf(item)}');
                                       SignupCubit.get(context).getCities(
                                           cubit.selectedGovernorateId);
                                       cubit.cityController.text = '';
@@ -208,13 +202,6 @@ class PhotoAndAddressScreen extends StatelessWidget {
                                                         .selectedCities
                                                         .indexOf(item) +
                                                     1;
-                                                debugPrint(
-                                                    'item.name: ${item.name}');
-                                                debugPrint(
-                                                    'city id: ${cubit.selectedCityId}');
-
-                                                debugPrint(
-                                                    'widget.dropedList!.indexOf(item): ${cubit.selectedCities.indexOf(item)}');
                                               }
                                             }
                                           },
@@ -241,26 +228,28 @@ class PhotoAndAddressScreen extends StatelessWidget {
                             ],
                           ),
                           verticalSpace(50),
-                          AppTextButton(
-                            buttonText: 'Next',
-                            textStyle: TextStyles.font20Whitebold,
-                            onPressed: () {
-                              if (cubit.photoAndAddressFormKey.currentState!
-                                  .validate()) {
-                                debugPrint(
-                                    'Selected Governorate ID: ${cubit.selectedGovernorateId}');
-                                debugPrint(
-                                    'Selected City ID: ${cubit.selectedCityId}');
-                                debugPrint('${cubit.imagePick}');
-                                cubit.photoAndAddress(
-                                  cityId: cubit.selectedCityId!,
-                                  governorateId: cubit.selectedGovernorateId!,
-                                  token: registerToken!,
-                                  image: cubit.imagePick,
-                                );
-                              }
-                            },
-                          ),
+                          state is PhotoAndAddressLoadingState
+                              ? const Center(
+                                  child: CircularProgressIndicator(
+                                  color: ColorManager.mainOrange,
+                                ))
+                              : AppTextButton(
+                                  buttonText: 'Next',
+                                  textStyle: TextStyles.font20Whitebold,
+                                  onPressed: () {
+                                    if (cubit
+                                        .photoAndAddressFormKey.currentState!
+                                        .validate()) {
+                                      cubit.photoAndAddress(
+                                        cityId: cubit.selectedCityId!,
+                                        governorateId:
+                                            cubit.selectedGovernorateId!,
+                                        token: registerToken!,
+                                        image: cubit.imagePick,
+                                      );
+                                    }
+                                  },
+                                ),
                           verticalSpace(20),
                         ],
                       ),
