@@ -44,12 +44,18 @@ class CustomerHomeScreen extends StatelessWidget {
                         elevation: 6,
                         shadowColor: Colors.grey,
                         borderRadius: BorderRadius.circular(25),
-                        child: CustomTextFormField(
-                          hintText: 'Search...',
-                          isObsecureText: false,
-                          sufixIcon: Icons.search,
-                          suffixIconSize: 25,
-                          validator: (value) {},
+                        child: GestureDetector(
+                          onTap: () {
+                            context.pushNamed(Routes.searchScreen);
+                          },
+                          child: CustomTextFormField(
+                            enabled: false,
+                            hintText: 'Search...',
+                            isObsecureText: false,
+                            sufixIcon: Icons.search,
+                            suffixIconSize: 25,
+                            validator: (value) {},
+                          ),
                         ),
                       ),
                       verticalSpace(25),

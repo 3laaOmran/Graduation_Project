@@ -12,6 +12,7 @@ import 'package:two_way_dael/features/home/ui/Modules/about_app.dart';
 import 'package:two_way_dael/features/home/ui/Modules/contact_us_screen.dart';
 import 'package:two_way_dael/features/home/ui/Modules/favorite_sellers.dart';
 import 'package:two_way_dael/features/home/ui/Modules/notifications_module.dart';
+import 'package:two_way_dael/features/home/ui/Modules/search_module.dart';
 import 'package:two_way_dael/features/home/ui/Modules/seller_details.dart';
 import 'package:two_way_dael/features/home/ui/Modules/your_orders_screen.dart';
 import 'package:two_way_dael/features/home/ui/widgets/change_password_screen.dart';
@@ -40,8 +41,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const PhotoAndAddressScreen());
       case Routes.notificationsScreen:
         return MaterialPageRoute(builder: (_) => const NotificationsScreen());
-      // case Routes.donationScreen:
-        // return MaterialPageRoute(builder: (_) => const DonationScreen());
+      case Routes.searchScreen:
+        return MaterialPageRoute(builder: (_) => const SearchScreen());
       case Routes.forgetPasswordScreen:
         return MaterialPageRoute(builder: (_) => const ForgetPasswordScreen());
       case Routes.phoneForForgetPasswordScreen:

@@ -74,7 +74,6 @@ class CustomerCubit extends Cubit<CustomerStates> {
       token: token,
     ).then((value) {
       userDataModel = UserDataModel.fromJson(value.data);
-      debugPrint(userDataModel!.data!.city);
       emit(GetUserDataSuccessState(userDataModel!));
     }).catchError((error) {
       debugPrint(error.toString());

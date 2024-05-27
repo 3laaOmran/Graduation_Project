@@ -24,6 +24,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextInputType? keyboardType;
   final TextEditingController? controller;
   final Function(String?) validator;
+  final bool? enabled;
   const CustomTextFormField(
       {super.key,
       this.contentPadding,
@@ -44,12 +45,14 @@ class CustomTextFormField extends StatelessWidget {
       this.suffixOnPressed,
       this.onFieldSubmitted,
       this.suffixIconSize,
-      this.maxLines});
+      this.maxLines,
+      this.enabled});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      maxLines:isObsecureText ? 1: maxLines,
+      enabled: enabled,
+      maxLines: isObsecureText ? 1 : maxLines,
       onFieldSubmitted: onFieldSubmitted,
       keyboardType: keyboardType,
       cursorColor: ColorManager.mainOrange,
@@ -57,7 +60,13 @@ class CustomTextFormField extends StatelessWidget {
       decoration: InputDecoration(
         //remove default padding
         isDense: true,
-
+        border: OutlineInputBorder(
+          borderSide: const BorderSide(
+            color: ColorManager.gray,
+            width: 1.3,
+          ),
+          borderRadius: borderRadius ?? BorderRadius.circular(50.0),
+        ),
         contentPadding: contentPadding ??
             EdgeInsets.symmetric(
               vertical: 12.h,
@@ -96,13 +105,15 @@ class CustomTextFormField extends StatelessWidget {
         hintStyle: hintStyle ?? TextStyles.font15GrayRegular,
         hintText: hintText,
         labelText: labelText,
-        suffixIcon:sufixIcon == null ? null : IconButton(
-            onPressed: suffixOnPressed,
-            icon: Icon(
-              sufixIcon,
-              size: suffixIconSize,
-              color: ColorManager.mainOrange,
-            )),
+        suffixIcon: sufixIcon == null
+            ? null
+            : IconButton(
+                onPressed: suffixOnPressed,
+                icon: Icon(
+                  sufixIcon,
+                  size: suffixIconSize,
+                  color: ColorManager.mainOrange,
+                )),
         prefixIcon: prefixIcon, prefixIconColor: ColorManager.mainOrange,
         fillColor: backgroundColor ?? Colors.white,
         filled: true,

@@ -16,5 +16,6 @@ class Routes {
   static const String favoriteSellers = '/favoriteSellers';
   static const String sellerDeatailsScreen = '/sellerDeatailsScreen';
   static const String changePasswordScreen = '/changePasswordScreen';
+  static const String searchScreen = '/searchScreen';
 
 }

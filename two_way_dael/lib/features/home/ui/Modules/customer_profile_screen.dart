@@ -27,7 +27,9 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CustomerCubit, CustomerStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is GetUserDataLoadingState) {}
+      },
       builder: (context, state) {
         var cubit = CustomerCubit.get(context);
         var model = cubit.userDataModel;
@@ -49,89 +51,96 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                     fit: BoxFit.cover,
                   ),
                   Center(
-                    child: Column(
-                      children: [
-                        verticalSpace(38),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              currentWidget = const ChangeProfilePhoto();
-                              icon = Icons.arrow_back;
-                            });
-                          },
-                          child: Stack(
+                    child: state is GetUserDataLoadingState
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          )
+                        : Column(
                             children: [
-                              CircleAvatar(
-                                radius: 80.0,
-                                backgroundImage: image == null
-                                    ? const AssetImage(
-                                            'assets/images/default_profile.png')
-                                        as ImageProvider
-                                    : NetworkImage(image),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                right: 13,
-                                child: CircleAvatar(
-                                  radius: 10,
-                                  backgroundColor: Colors.transparent,
-                                  child: Icon(
-                                    Icons.edit_square,
-                                    color: Colors.grey[300],
-                                    size: 15,
-                                  ),
+                              verticalSpace(38),
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    currentWidget = const ChangeProfilePhoto();
+                                    icon = Icons.arrow_back;
+                                  });
+                                },
+                                child: Stack(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 80.0,
+                                      backgroundImage: image == null
+                                          ? const AssetImage(
+                                                  'assets/images/default_profile.png')
+                                              as ImageProvider
+                                          : NetworkImage(image),
+                                    ),
+                                    Positioned(
+                                      bottom: 0,
+                                      right: 13,
+                                      child: CircleAvatar(
+                                        radius: 10,
+                                        backgroundColor: Colors.transparent,
+                                        child: Icon(
+                                          Icons.edit_square,
+                                          color: Colors.grey[300],
+                                          size: 15,
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
-                              )
+                              ),
+                              verticalSpace(20),
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    currentWidget = const EditInfo();
+                                    icon = Icons.arrow_back;
+                                  });
+                                },
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Hello, ${cubit.nameController.text}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headlineSmall
+                                              ?.copyWith(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 20.0),
+                                        ),
+                                        horizontalSpace(8),
+                                        Icon(
+                                          Icons.edit_square,
+                                          size: 12,
+                                          color: Colors.grey[300],
+                                        )
+                                      ],
+                                    ),
+                                    Text(
+                                      'Egypt',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall
+                                          ?.copyWith(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 11.0),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
-                        ),
-                        verticalSpace(20),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              currentWidget = const EditInfo();
-                              icon = Icons.arrow_back;
-                            });
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Hello, ${cubit.nameController.text}',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall
-                                        ?.copyWith(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20.0),
-                                  ),
-                                  horizontalSpace(8),
-                                  Icon(
-                                    Icons.edit_square,
-                                    size: 12,
-                                    color: Colors.grey[300],
-                                  )
-                                ],
-                              ),
-                              Text(
-                                'Egypt',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineSmall
-                                    ?.copyWith(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 11.0),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
                   Positioned(
                     top: 10,
