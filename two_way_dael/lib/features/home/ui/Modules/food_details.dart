@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:two_way_dael/core/helpers/extensions.dart';
+import 'package:two_way_dael/core/helpers/spacing.dart';
+import 'package:two_way_dael/core/routing/routes.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
+import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/components.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_cubit.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
@@ -93,70 +97,101 @@ class FoodDetails extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        'Pizza',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineSmall
-                            ?.copyWith(
-                                fontWeight: FontWeight.bold, fontSize: 27.0),
-                      ),
-                      const Spacer(),
-                      const Card(
-                        shape: CircleBorder(),
-                        elevation: 3.0,
-                        child: CircleAvatar(
-                          radius: 20.0,
-                          backgroundColor: Colors.white,
-                          child: Icon(
-                            Icons.favorite_border,
-                            color: ColorManager.mainOrange,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    textBaseline: TextBaseline.alphabetic,
-                    children: [
-                      Text(
-                        '75 ',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                            fontSize: 24.0),
-                      ),
-                      Text(
-                        'egp',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                            fontSize: 12.0),
-                      ),
-                      const Spacer(),
-                      Row(
+                      Column(
                         children: [
-                          const Icon(
-                            Icons.star,
-                            color: ColorManager.mainOrange,
-                            size: 19.0,
-                          ),
                           Text(
-                            '5.0 (23 Reviews)',
+                            'Pizza',
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyMedium
+                                .headlineSmall
                                 ?.copyWith(
-                                    fontWeight: FontWeight.w100,
-                                    color: Colors.grey[700],
-                                    fontSize: 11.0),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 27.0),
+                          ),
+                          // const Spacer(),
+                          // const Card(
+                          //   shape: CircleBorder(),
+                          //   elevation: 3.0,
+                          //   child: CircleAvatar(
+                          //     radius: 20.0,
+                          //     backgroundColor: Colors.white,
+                          //     child: Icon(
+                          //       Icons.favorite_border,
+                          //       color: ColorManager.mainOrange,
+                          //     ),
+                          //   ),
+                          // ),
+
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            textBaseline: TextBaseline.alphabetic,
+                            children: [
+                              Text(
+                                '75 ',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black,
+                                        fontSize: 24.0),
+                              ),
+                              Text(
+                                'egp',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black,
+                                        fontSize: 12.0),
+                              ),
+                              // const Spacer(),
+                              // Row(
+                              //   children: [
+                              //     const Icon(
+                              //       Icons.star,
+                              //       color: ColorManager.mainOrange,
+                              //       size: 19.0,
+                              //     ),
+                              //     Text(
+                              //       '5.0 (23 Reviews)',
+                              //       style: Theme.of(context)
+                              //           .textTheme
+                              //           .bodyMedium
+                              //           ?.copyWith(
+                              //               fontWeight: FontWeight.w100,
+                              //               color: Colors.grey[700],
+                              //               fontSize: 11.0),
+                              //     ),
+                              //   ],
+                              // ),
+                            ],
                           ),
                         ],
                       ),
+                      const Spacer(),
+                      InkWell(
+                        onTap: () {
+                          context.pushNamed(Routes.sellerDeatailsScreen);
+                        },
+                        child: Column(
+                          children: [
+                            const CircleAvatar(
+                              radius: 40,
+                              backgroundImage: AssetImage(
+                                  'assets/images/default_profile.png'),
+                            ),
+                            Text(
+                              'Seller Name',
+                              style: TextStyles.font15BlackBold,
+                            )
+                          ],
+                        ),
+                      )
                     ],
                   ),
                   const SizedBox(
@@ -196,9 +231,7 @@ class FoodDetails extends StatelessWidget {
                                 itemBuilder: (context, index) =>
                                     itemBottomSheet(context),
                                 separatorBuilder: (context, index) =>
-                                    const SizedBox(
-                                  height: 15.0,
-                                ),
+                                    verticalSpace(15),
                                 itemCount: 10,
                               ),
                               Column(
