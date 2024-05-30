@@ -30,7 +30,7 @@ class EditInfo extends StatelessWidget {
         var model = cubit.userDataModel;
         cubit.nameController.text = model!.data!.name!;
         cubit.emailController.text = model.data!.email!;
-        cubit.phoneController.text = model.data!.phone!.toString();
+        cubit.phoneController.text = model.data!.phone.toString();
         governorateController.text = model.data!.governorate!;
         cityController.text = model.data!.city!;
         
