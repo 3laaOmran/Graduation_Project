@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:two_way_dael/core/widgets/custom_text_form_field.dart';
 import 'package:two_way_dael/core/widgets/resuable_text.dart';
-import 'package:two_way_dael/features/auth/login/ui/widgets/validation.dart';
+import 'package:two_way_dael/core/widgets/validation.dart';
 import 'package:two_way_dael/features/auth/signup/logic/cubit/siginup_cubit.dart';
 
 import '../../../../../../core/helpers/spacing.dart';

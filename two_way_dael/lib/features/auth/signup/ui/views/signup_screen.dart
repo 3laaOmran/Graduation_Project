@@ -28,9 +28,11 @@ class SignUpScreen extends StatelessWidget {
             if (state.signupModel.status == 201) {
               context.pushNamed(Routes.otpScreen);
               showToast(
-                  message: state.signupModel.message!, state: TostStates.SUCCESS);
+                  message: state.signupModel.message!,
+                  state: TostStates.SUCCESS);
               CashHelper.saveData(
-                      key: 'registerToken', value: state.signupModel.data!.token)
+                      key: 'registerToken',
+                      value: state.signupModel.data!.token)
                   .then((value) {
                 registerToken = state.signupModel.data!.token;
                 // CashHelper.getData(key: 'token');
@@ -91,7 +93,9 @@ class SignUpScreen extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const SignupForm(),
+                                AbsorbPointer(
+                                  absorbing: state is SignupLoadingState? true:false,
+                                  child: const SignupForm()),
                                 verticalSpace(30),
                               ],
                             ),
@@ -129,7 +133,7 @@ class SignUpScreen extends StatelessWidget {
                               firstText: 'Already have an account ? ',
                               secondText: '  Login',
                               ontap: () {
-                                context.pushNamed(Routes.photoAddressScreen);
+                                context.pushNamed(Routes.loginScreen);
                               },
                             ),
                           ],

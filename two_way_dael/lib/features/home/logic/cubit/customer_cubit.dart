@@ -74,6 +74,7 @@ class CustomerCubit extends Cubit<CustomerStates> {
       token: token,
     ).then((value) {
       userDataModel = UserDataModel.fromJson(value.data);
+      debugPrint('Imge Is :${userDataModel!.data!.profilePicture}');
       emit(GetUserDataSuccessState(userDataModel!));
     }).catchError((error) {
       debugPrint(error.toString());

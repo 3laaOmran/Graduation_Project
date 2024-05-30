@@ -61,197 +61,200 @@ class PhotoAndAddressScreen extends StatelessWidget {
                 child: SizedBox(
                   width: double.infinity,
                   child: SingleChildScrollView(
-                    child: Form(
-                      key: cubit.photoAndAddressFormKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          verticalSpace(100),
-                          Text(
-                            'Last Step',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium
-                                ?.copyWith(
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 30.0),
-                          ),
-                          Text(
-                            'Add more details',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall
-                                ?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18.0),
-                          ),
-                          verticalSpace(40),
-                          Text(
-                            'Add Your Profile Photo',
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall
-                                ?.copyWith(
-                                    fontSize: 19.0,
-                                    fontWeight: FontWeight.w100),
-                          ),
-                          verticalSpace(10),
-                          SizedBox(
-                            width: 250,
-                            height: 180,
-                            child: Stack(
-                              alignment: AlignmentDirectional.bottomEnd,
-                              children: [
-                                Positioned(
-                                  top: 0,
-                                  left: 0,
-                                  child: Container(
-                                    width: 240.0,
-                                    height: 170.0,
+                    child: AbsorbPointer(
+                      absorbing: state is PhotoAndAddressLoadingState?true : false,
+                      child: Form(
+                        key: cubit.photoAndAddressFormKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            verticalSpace(100),
+                            Text(
+                              'Last Step',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium
+                                  ?.copyWith(
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 30.0),
+                            ),
+                            Text(
+                              'Add more details',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall
+                                  ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0),
+                            ),
+                            verticalSpace(40),
+                            Text(
+                              'Add Your Profile Photo',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelSmall
+                                  ?.copyWith(
+                                      fontSize: 19.0,
+                                      fontWeight: FontWeight.w100),
+                            ),
+                            verticalSpace(10),
+                            SizedBox(
+                              width: 250,
+                              height: 180,
+                              child: Stack(
+                                alignment: AlignmentDirectional.bottomEnd,
+                                children: [
+                                  Positioned(
+                                    top: 0,
+                                    left: 0,
+                                    child: Container(
+                                      width: 240.0,
+                                      height: 170.0,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          image: cubit.imagePick == null
+                                              ? const DecorationImage(
+                                                  image: AssetImage(
+                                                      'assets/images/image_picker_background.png'),
+                                                  fit: BoxFit.none)
+                                              : DecorationImage(
+                                                  image: FileImage(
+                                                      cubit.imagePick!)),
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(25.0)),
+                                          border: Border.all(
+                                              color: Colors.grey, width: 1.0)),
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                                    ),
+                                  ),
+                                  Container(
                                     decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        image: cubit.imagePick == null
-                                            ? const DecorationImage(
-                                                image: AssetImage(
-                                                    'assets/images/image_picker_background.png'),
-                                                fit: BoxFit.none)
-                                            : DecorationImage(
-                                                image: FileImage(
-                                                    cubit.imagePick!)),
                                         borderRadius: const BorderRadius.all(
                                             Radius.circular(25.0)),
                                         border: Border.all(
-                                            color: Colors.grey, width: 1.0)),
-                                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  ),
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(25.0)),
-                                      border: Border.all(
+                                            color: ColorManager.mainOrange,
+                                            width: 1.0)),
+                                    child: CircleAvatar(
+                                      radius: 17.0,
+                                      backgroundColor: Colors.white,
+                                      child: IconButton(
+                                        onPressed: () {
+                                          cubit.pickImage();
+                                        },
+                                        icon: const Icon(
+                                          Icons.add,
+                                          size: 20.0,
                                           color: ColorManager.mainOrange,
-                                          width: 1.0)),
-                                  child: CircleAvatar(
-                                    radius: 17.0,
-                                    backgroundColor: Colors.white,
-                                    child: IconButton(
-                                      onPressed: () {
-                                        cubit.pickImage();
-                                      },
-                                      icon: const Icon(
-                                        Icons.add,
-                                        size: 20.0,
-                                        color: ColorManager.mainOrange,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          verticalSpace(50),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CustomDropDownList(
-                                selectedItems: (List<dynamic> selectedList) {
-                                  for (var item in selectedList) {
-                                    if (item is SelectedListItem) {
-                                      cubit.governorateController.text =
-                                          item.name;
-                                      cubit.selectedGovernorateId =
-                                          cubit.governoratesList.indexOf(item) +
-                                              1;
-                                      SignupCubit.get(context).getCities(
-                                          cubit.selectedGovernorateId);
-                                      cubit.cityController.text = '';
-                                      cubit.selectedCityId = null;
-                                    }
-                                  }
-                                },
-                                validation: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Governorate is required';
-                                  }
-                                  return null;
-                                },
-                                prefixIcon: const Icon(
-                                  Icons.location_city_outlined,
-                                  color: ColorManager.mainOrange,
-                                ),
-                                dropedList: cubit.governoratesList,
-                                textEditingController:
-                                    cubit.governorateController,
-                                title: 'Governorate',
-                                hint: 'Governorate',
-                                isCitySelected: true,
+                                ],
                               ),
-                              cubit.selectedCities.isNotEmpty
-                                  ? Column(
-                                      children: [
-                                        verticalSpace(20),
-                                        CustomDropDownList(
-                                          selectedItems:
-                                              (List<dynamic> selectedList) {
-                                            for (var item in selectedList) {
-                                              if (item is SelectedListItem) {
-                                                cubit.cityController.text =
-                                                    item.name;
-                                                cubit.selectedCityId = cubit
-                                                        .selectedCities
-                                                        .indexOf(item) +
-                                                    1;
-                                              }
-                                            }
-                                          },
-                                          validation: (value) {
-                                            if (value!.isEmpty) {
-                                              return 'City is required';
-                                            }
-                                            return null;
-                                          },
-                                          prefixIcon: const Icon(
-                                            Icons.location_on,
-                                            color: ColorManager.mainOrange,
-                                          ),
-                                          dropedList: cubit.selectedCities,
-                                          textEditingController:
-                                              cubit.cityController,
-                                          title: 'City',
-                                          hint: 'City',
-                                          isCitySelected: true,
-                                        ),
-                                      ],
-                                    )
-                                  : Container(),
-                            ],
-                          ),
-                          verticalSpace(50),
-                          state is PhotoAndAddressLoadingState
-                              ? const Center(
-                                  child: CircularProgressIndicator(
-                                  color: ColorManager.mainOrange,
-                                ))
-                              : AppTextButton(
-                                  buttonText: 'Next',
-                                  textStyle: TextStyles.font20Whitebold,
-                                  onPressed: () {
-                                    if (cubit
-                                        .photoAndAddressFormKey.currentState!
-                                        .validate()) {
-                                      cubit.photoAndAddress(
-                                        cityId: cubit.selectedCityId!,
-                                        governorateId:
-                                            cubit.selectedGovernorateId!,
-                                        token: registerToken!,
-                                        image: cubit.imagePick,
-                                      );
+                            ),
+                            verticalSpace(50),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CustomDropDownList(
+                                  selectedItems: (List<dynamic> selectedList) {
+                                    for (var item in selectedList) {
+                                      if (item is SelectedListItem) {
+                                        cubit.governorateController.text =
+                                            item.name;
+                                        cubit.selectedGovernorateId =
+                                            cubit.governoratesList.indexOf(item) +
+                                                1;
+                                        SignupCubit.get(context).getCities(
+                                            cubit.selectedGovernorateId);
+                                        cubit.cityController.text = '';
+                                        cubit.selectedCityId = null;
+                                      }
                                     }
                                   },
+                                  validation: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Governorate is required';
+                                    }
+                                    return null;
+                                  },
+                                  prefixIcon: const Icon(
+                                    Icons.location_city_outlined,
+                                    color: ColorManager.mainOrange,
+                                  ),
+                                  dropedList: cubit.governoratesList,
+                                  textEditingController:
+                                      cubit.governorateController,
+                                  title: 'Governorate',
+                                  hint: 'Governorate',
+                                  isCitySelected: true,
                                 ),
-                          verticalSpace(20),
-                        ],
+                                cubit.selectedCities.isNotEmpty
+                                    ? Column(
+                                        children: [
+                                          verticalSpace(20),
+                                          CustomDropDownList(
+                                            selectedItems:
+                                                (List<dynamic> selectedList) {
+                                              for (var item in selectedList) {
+                                                if (item is SelectedListItem) {
+                                                  cubit.cityController.text =
+                                                      item.name;
+                                                  cubit.selectedCityId = cubit
+                                                          .selectedCities
+                                                          .indexOf(item) +
+                                                      1;
+                                                }
+                                              }
+                                            },
+                                            validation: (value) {
+                                              if (value!.isEmpty) {
+                                                return 'City is required';
+                                              }
+                                              return null;
+                                            },
+                                            prefixIcon: const Icon(
+                                              Icons.location_on,
+                                              color: ColorManager.mainOrange,
+                                            ),
+                                            dropedList: cubit.selectedCities,
+                                            textEditingController:
+                                                cubit.cityController,
+                                            title: 'City',
+                                            hint: 'City',
+                                            isCitySelected: true,
+                                          ),
+                                        ],
+                                      )
+                                    : Container(),
+                              ],
+                            ),
+                            verticalSpace(50),
+                            state is PhotoAndAddressLoadingState
+                                ? const Center(
+                                    child: CircularProgressIndicator(
+                                    color: ColorManager.mainOrange,
+                                  ))
+                                : AppTextButton(
+                                    buttonText: 'Next',
+                                    textStyle: TextStyles.font20Whitebold,
+                                    onPressed: () {
+                                      if (cubit
+                                          .photoAndAddressFormKey.currentState!
+                                          .validate()) {
+                                        cubit.photoAndAddress(
+                                          cityId: cubit.selectedCityId!,
+                                          governorateId:
+                                              cubit.selectedGovernorateId!,
+                                          token: registerToken!,
+                                          image: cubit.imagePick,
+                                        );
+                                      }
+                                    },
+                                  ),
+                            verticalSpace(20),
+                          ],
+                        ),
                       ),
                     ),
                   ),

@@ -47,7 +47,7 @@ class Data {
   String? name;
   String? email;
   String? profilePicture;
-  String? phone;
+  int? phone;
   String? joinedFrom;
   String? governorate;
   String? city;

@@ -117,41 +117,44 @@ class ConfirmAccount extends StatelessWidget {
                         ),
                         verticalSpace(10),
                         Center(
-                          child: Form(
-                            key: cubit.otpFormKey,
-                            child: Pinput(
-                              controller: otpController,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Required';
-                                }
-                                return null;
-                              },
-                              cursor: Container(
-                                width: 2,
-                                height: 40,
-                                color: Colors.white,
-                              ),
-                              length: 4,
-                              defaultPinTheme: defaultPinTheme,
-                              focusedPinTheme: defaultPinTheme.copyWith(
-                                decoration:
-                                    defaultPinTheme.decoration!.copyWith(
-                                  color: ColorManager.mainOrange,
-                                ),
-                              ),
-                              submittedPinTheme: defaultPinTheme.copyWith(
-                                textStyle: defaultPinTheme.textStyle!.copyWith(
+                          child: AbsorbPointer(
+                            absorbing: state is VerificationLoadingState?true:false,
+                            child: Form(
+                              key: cubit.otpFormKey,
+                              child: Pinput(
+                                controller: otpController,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Required';
+                                  }
+                                  return null;
+                                },
+                                cursor: Container(
+                                  width: 2,
+                                  height: 40,
                                   color: Colors.white,
                                 ),
-                                decoration:
-                                    defaultPinTheme.decoration!.copyWith(
-                                  color: ColorManager.mainOrange,
+                                length: 4,
+                                defaultPinTheme: defaultPinTheme,
+                                focusedPinTheme: defaultPinTheme.copyWith(
+                                  decoration:
+                                      defaultPinTheme.decoration!.copyWith(
+                                    color: ColorManager.mainOrange,
+                                  ),
                                 ),
+                                submittedPinTheme: defaultPinTheme.copyWith(
+                                  textStyle: defaultPinTheme.textStyle!.copyWith(
+                                    color: Colors.white,
+                                  ),
+                                  decoration:
+                                      defaultPinTheme.decoration!.copyWith(
+                                    color: ColorManager.mainOrange,
+                                  ),
+                                ),
+                                onCompleted: (value) {
+                                  debugPrint(otpController.text);
+                                },
                               ),
-                              onCompleted: (value) {
-                                debugPrint(otpController.text);
-                              },
                             ),
                           ),
                         ),

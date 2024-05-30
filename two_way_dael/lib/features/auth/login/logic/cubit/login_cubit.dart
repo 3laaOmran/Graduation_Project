@@ -41,6 +41,7 @@ class LoginCubit extends Cubit<LoginStates> {
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
+  final forgetPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
   IconData suffixIcon = Icons.visibility;
@@ -58,5 +59,80 @@ class LoginCubit extends Cubit<LoginStates> {
     confirmSuffixIcon =
         confirmIsObsecure ? Icons.visibility : Icons.visibility_off;
     emit(LoginChangePasswordVisibilityState());
+  }
+
+  void checkPhoneNumber({
+    required String phone,
+  }) {
+    emit(PhoneForgetPasswordLoadingState());
+    DioHelper.postData(
+      url: PASSWORDFORGOT,
+      data: {
+        'phone': phone,
+      },
+    ).then((value) {
+      loginModel = LoginModel.fromJson(value.data);
+      debugPrint(loginModel!.data!.token);
+      debugPrint(loginModel!.message);
+      emit(PhoneForgetPasswordSuccessState(loginModel!));
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(PhoneForgetPasswordErrorState(error.toString()));
+    });
+  }
+
+  ConfirmPhoneModel? confirmPhoneModel;
+  void confirmPhoneNumber({
+    required String otp,
+    required String token,
+  }) {
+    emit(ConfirmPhoneNumberLoadingState());
+    DioHelper.postData(
+      token: token,
+      url: CONFIRMPHONENUMBER,
+      data: {
+        'otp': otp,
+      },
+    ).then((value) {
+      confirmPhoneModel = ConfirmPhoneModel.fromJson(value.data);
+      debugPrint(value.data['message']);
+      emit(ConfirmPhoneNumberSuccessState(confirmPhoneModel!));
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(ConfirmPhoneNumberErrorState(error.toString()));
+    });
+  }
+
+  void changePassword({
+    required String password,
+    required String passwordConfirmation,
+    required String token,
+  }) {
+    emit(ChangePasswordLoadingState());
+    DioHelper.postData(
+      token: token,
+      url: CHANGEPASSWORD,
+      data: {
+        'password': password,
+        'password_confirmation': passwordConfirmation,
+      },
+    ).then((value) {
+      confirmPhoneModel = ConfirmPhoneModel.fromJson(value.data);
+      debugPrint(value.data['message']);
+      emit(ChangePasswordSuccessState(confirmPhoneModel!));
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(ChangePasswordErrorState(error.toString()));
+    });
+  }
+}
+
+class ConfirmPhoneModel {
+  int? status;
+  String? message;
+
+  ConfirmPhoneModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    message = json['message'];
   }
 }

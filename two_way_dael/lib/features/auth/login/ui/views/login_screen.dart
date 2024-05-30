@@ -79,7 +79,9 @@ class LoginScreen extends StatelessWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const EmailAndPassword(),
+                              AbsorbPointer(
+                                absorbing: state is LoginLoadingState ? true : false,
+                                child: const EmailAndPassword()),
                               SizedBox(
                                 height: height * 0.04,
                               ),
