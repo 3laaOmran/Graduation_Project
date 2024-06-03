@@ -9,7 +9,6 @@ class CustomDropDownList extends StatefulWidget {
   final String hint;
   final Widget? prefixIcon;
   final bool isCitySelected;
-  final Function(String)? onChanged;
   final String? Function(String?)? validation;
   final List<SelectedListItem>? dropedList;
   final Function(List<SelectedListItem>)? selectedItems;
@@ -23,7 +22,7 @@ class CustomDropDownList extends StatefulWidget {
     super.key,
     this.prefixIcon,
     this.validation,
-    this.onChanged, this.selectedItems,
+    this.selectedItems,
   });
 
   @override
@@ -43,7 +42,7 @@ class _CustomDropDownListState extends State<CustomDropDownList> {
           ),
         ),
         data: widget.dropedList ?? [],
-        selectedItems:widget. selectedItems,
+        selectedItems: widget.selectedItems,
       ),
     ).showModal(context);
   }
@@ -64,7 +63,6 @@ class _CustomDropDownListState extends State<CustomDropDownList> {
           height: 5.0,
         ),
         TextFormField(
-          onChanged: widget.onChanged,
           validator: widget.validation,
           readOnly: true,
           controller: widget.textEditingController,

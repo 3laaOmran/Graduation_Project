@@ -1,3 +1,4 @@
+import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
@@ -7,6 +8,7 @@ import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_drop_down_list.dart';
 import 'package:two_way_dael/core/widgets/resuable_text.dart';
+import 'package:two_way_dael/core/widgets/validation.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_cubit.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
 
@@ -19,21 +21,18 @@ class EditInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<CustomerCubit, CustomerStates>(
       listener: (context, state) {
-        if (state is GetUserDataSuccessState) {
-          
-        }
+        if (state is GetUserDataSuccessState) {}
       },
       builder: (context, state) {
-        TextEditingController governorateController = TextEditingController();
-        TextEditingController cityController = TextEditingController();
+       
         var cubit = CustomerCubit.get(context);
         var model = cubit.userDataModel;
         cubit.nameController.text = model!.data!.name!;
         cubit.emailController.text = model.data!.email!;
-        cubit.phoneController.text = model.data!.phone.toString();
-        governorateController.text = model.data!.governorate!;
-        cityController.text = model.data!.city!;
-        
+        cubit.phoneController.text = model.data!.phone!;
+        cubit.governorateController.text = model.data!.governorate!;
+        cubit.cityController.text = model.data!.city!;
+
         return Container(
           color: Colors.white,
           child: Padding(
@@ -63,11 +62,7 @@ class EditInfo extends StatelessWidget {
                     isObsecureText: false,
                     keyboardType: TextInputType.text,
                     hintText: 'Name',
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a valid name';
-                      }
-                    },
+                    validator: nameValidation,
                   ),
                   verticalSpace(20),
                   resuableText(
@@ -81,11 +76,7 @@ class EditInfo extends StatelessWidget {
                     controller: cubit.emailController,
                     isObsecureText: false,
                     hintText: 'Email Address',
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a valid email';
-                      }
-                    },
+                    validator: emailValidation,
                   ),
                   verticalSpace(20),
                   resuableText(
@@ -99,39 +90,91 @@ class EditInfo extends StatelessWidget {
                     keyboardType: TextInputType.phone,
                     isObsecureText: false,
                     hintText: 'Phone',
-                    validator: (value) {
-                      // if (value == null || value.isEmpty) {
-                      //   return 'Please enter a valid phone number';
-                      // }
-                    },
+                    validator: phoneNumberValidation,
                   ),
                   verticalSpace(20),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomDropDownList(
+                        selectedItems: (List<dynamic> selectedList) {
+                          for (var item in selectedList) {
+                            if (item is SelectedListItem) {
+                              cubit.governorateController.text = item.name;
+                              cubit.selectedGovernorateId =
+                                  cubit.governoratesList.indexOf(item) + 1;
+                              cubit.getCities(cubit.selectedGovernorateId);
+                              cubit.cityController.text = '';
+                              cubit.selectedCityId = null;
+                            }
+                          }
+                        },
+                        validation: (value) {
+                          if (value!.isEmpty) {
+                            return 'Governorate is required';
+                          }
+                          return null;
+                        },
                         prefixIcon: const Icon(
                           Icons.location_city_outlined,
                           color: ColorManager.mainOrange,
                         ),
-                        dropedList: [],
-                        textEditingController: governorateController,
+                        dropedList: cubit.governoratesList,
+                        textEditingController: cubit.governorateController,
                         title: 'Governorate',
                         hint: 'Governorate',
                         isCitySelected: true,
                       ),
                       verticalSpace(20),
                       CustomDropDownList(
+                        selectedItems: (List<dynamic> selectedList) {
+                          for (var item in selectedList) {
+                            if (item is SelectedListItem) {
+                              cubit.cityController.text = item.name;
+                              cubit.selectedCityId =
+                                  cubit.selectedCities.indexOf(item) + 1;
+                            }
+                          }
+                        },
+                        validation: (value) {
+                          if (value!.isEmpty) {
+                            return 'City is required';
+                          }
+                          return null;
+                        },
                         prefixIcon: const Icon(
                           Icons.location_on,
                           color: ColorManager.mainOrange,
                         ),
-                        dropedList: [],
-                        textEditingController: cityController,
+                        dropedList: cubit.selectedCities,
+                        textEditingController: cubit.cityController,
                         title: 'City',
                         hint: 'City',
                         isCitySelected: true,
                       ),
+                      // CustomDropDownList(
+                      //   prefixIcon: const Icon(
+                      //     Icons.location_city_outlined,
+                      //     color: ColorManager.mainOrange,
+                      //   ),
+                      //   dropedList: [],
+                      //   textEditingController: governorateController,
+                      //   title: 'Governorate',
+                      //   hint: 'Governorate',
+                      //   isCitySelected: true,
+                      // ),
+                      // verticalSpace(20),
+                      // CustomDropDownList(
+                      //   prefixIcon: const Icon(
+                      //     Icons.location_on,
+                      //     color: ColorManager.mainOrange,
+                      //   ),
+                      //   dropedList: [],
+                      //   textEditingController: cityController,
+                      //   title: 'City',
+                      //   hint: 'City',
+                      //   isCitySelected: true,
+                      // ),
                     ],
                   ),
                   verticalSpace(20),

@@ -76,6 +76,7 @@ class ContactUsScreen extends StatelessWidget {
                         if (value!.isEmpty) {
                           return 'Please Enter Your Subject';
                         }
+                        return null;
                       },
                     ),
                     verticalSpace(20),
@@ -91,6 +92,7 @@ class ContactUsScreen extends StatelessWidget {
                         if (value!.isEmpty) {
                           return 'Please Enter Your Message';
                         }
+                        return null;
                       },
                     ),
                   ],
@@ -117,22 +119,21 @@ class ContactUsScreen extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: _sendEmail,
-                    child:  Row(
+                    child: Row(
                       children: [
                         const Icon(
                           Icons.email,
                           color: ColorManager.mainOrange,
                         ),
                         Text(
-                    'email...',
-                    style: TextStyles.font15BlackBold.copyWith(
-                      color: ColorManager.mainOrange,
-                    ),
-                  ),
+                          'email...',
+                          style: TextStyles.font15BlackBold.copyWith(
+                            color: ColorManager.mainOrange,
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  
                 ],
               ),
               verticalSpace(10),
@@ -183,24 +184,22 @@ class ContactUsScreen extends StatelessWidget {
   }
 
   void _sendEmail() async {
-    
-      final Uri emailUri = Uri(
-        scheme: 'mailto',
-        path: 'alaaomran1102002@gmail.com',
-        queryParameters: {
-          'subject': '',
-          'body': '',
-        },
-      );
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: 'alaaomran1102002@gmail.com',
+      queryParameters: {
+        'subject': '',
+        'body': '',
+      },
+    );
 
-      if (await canLaunchUrl(emailUri)) {
-        await launchUrl(emailUri);
-      } else {
-        debugPrint('Could not launch $emailUri');
-      }
+    if (await canLaunchUrl(emailUri)) {
+      await launchUrl(emailUri);
+    } else {
+      debugPrint('Could not launch $emailUri');
     }
   }
-
+}
 
 Widget buildSocialMediaItem({required String image, Function()? onTap}) {
   return InkWell(

@@ -9,6 +9,7 @@ import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
 import 'package:two_way_dael/features/home/ui/widgets/account_settings.dart';
 import 'package:two_way_dael/features/home/ui/widgets/change_profile_photo.dart';
 import 'package:two_way_dael/features/home/ui/widgets/edit_info.dart';
+import 'package:two_way_dael/features/home/ui/widgets/profile_skelton_loading.dart';
 
 import '../../../../core/theming/colors.dart';
 import '../../../../core/widgets/custom_icon_button.dart';
@@ -35,29 +36,24 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
         var model = cubit.userDataModel;
         cubit.nameController.text = model!.data!.name!;
         var image = model.data!.profilePicture;
-        return SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                alignment: AlignmentDirectional.topEnd,
-                children: [
-                  const Image(
-                    image: AssetImage(
-                      'assets/images/profile_bg.png',
-                    ),
-                    width: double.infinity,
-                    height: 280,
-                    fit: BoxFit.cover,
-                  ),
-                  Center(
-                    child: state is GetUserDataLoadingState
-                        ? const Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                            ),
-                          )
-                        : Column(
+        return state is! GetUserDataLoadingState
+            ? SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Stack(
+                      alignment: AlignmentDirectional.topEnd,
+                      children: [
+                        const Image(
+                          image: AssetImage(
+                            'assets/images/profile_bg.png',
+                          ),
+                          width: double.infinity,
+                          height: 280,
+                          fit: BoxFit.cover,
+                        ),
+                        Center(
+                          child: Column(
                             children: [
                               verticalSpace(38),
                               GestureDetector(
@@ -100,6 +96,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                     currentWidget = const EditInfo();
                                     icon = Icons.arrow_back;
                                   });
+                                  // cubit.getGovernorates();
                                 },
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -141,72 +138,73 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                               ),
                             ],
                           ),
-                  ),
-                  Positioned(
-                    top: 10,
-                    child: Stack(
-                      alignment: AlignmentDirectional.topEnd,
-                      children: [
-                        customIconButton(
-                          toolTip: 'Notifications',
-                          onPressed: () {
-                            context.pushNamed(Routes.notificationsScreen);
-                          },
-                          icon: Icons.notifications,
-                          color: Colors.white,
-                          size: 30.0,
                         ),
-                        Container(
-                          padding: const EdgeInsetsDirectional.only(
-                            top: 11.0,
-                            end: 12.0,
+                        Positioned(
+                          top: 10,
+                          child: Stack(
+                            alignment: AlignmentDirectional.topEnd,
+                            children: [
+                              customIconButton(
+                                toolTip: 'Notifications',
+                                onPressed: () {
+                                  context.pushNamed(Routes.notificationsScreen);
+                                },
+                                icon: Icons.notifications,
+                                color: Colors.white,
+                                size: 30.0,
+                              ),
+                              Container(
+                                padding: const EdgeInsetsDirectional.only(
+                                  top: 11.0,
+                                  end: 12.0,
+                                ),
+                                child: const CircleAvatar(
+                                  radius: 4.5,
+                                  backgroundColor: Colors.white,
+                                  child: CircleAvatar(
+                                    radius: 3.5,
+                                    backgroundColor: ColorManager.mainOrange,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          child: const CircleAvatar(
-                            radius: 4.5,
-                            backgroundColor: Colors.white,
-                            child: CircleAvatar(
-                              radius: 3.5,
-                              backgroundColor: ColorManager.mainOrange,
-                            ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          child: customIconButton(
+                            toolTip: 'back',
+                            onPressed: () {
+                              setState(() {
+                                currentWidget = const AccountSettings();
+                                icon = null;
+                              });
+                            },
+                            icon: icon,
+                            color: Colors.white,
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    child: customIconButton(
-                      toolTip: 'back',
-                      onPressed: () {
-                        setState(() {
-                          currentWidget = const AccountSettings();
-                          icon = null;
-                        });
+                    PageTransitionSwitcher(
+                      duration: const Duration(milliseconds: 900),
+                      transitionBuilder: (Widget child,
+                          Animation<double> primaryAnimation,
+                          Animation<double> secondaryAnimation) {
+                        return SharedAxisTransition(
+                          animation: primaryAnimation,
+                          secondaryAnimation: secondaryAnimation,
+                          transitionType: SharedAxisTransitionType.vertical,
+                          child: child,
+                        );
                       },
-                      icon: icon,
-                      color: Colors.white,
+                      child: currentWidget,
                     ),
-                  ),
-                ],
-              ),
-              PageTransitionSwitcher(
-                duration: const Duration(milliseconds: 900),
-                transitionBuilder: (Widget child,
-                    Animation<double> primaryAnimation,
-                    Animation<double> secondaryAnimation) {
-                  return SharedAxisTransition(
-                    animation: primaryAnimation,
-                    secondaryAnimation: secondaryAnimation,
-                    transitionType: SharedAxisTransitionType.vertical,
-                    child: child,
-                  );
-                },
-                child: currentWidget,
-              ),
-            ],
-          ),
-        );
+                  ],
+                ),
+              )
+            : ProfileSkeltonLoading();
       },
     );
   }

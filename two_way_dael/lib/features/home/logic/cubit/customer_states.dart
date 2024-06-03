@@ -43,6 +43,40 @@ final class GetUserDataErrorState extends CustomerStates {
   GetUserDataErrorState(this.error);
 }
 
+final class GetSearchDataLoadingState extends CustomerStates {}
+
+final class GetSearchDataSuccessState extends CustomerStates {
+  // final UserDataModel userDataModel;
+
+  // GetSearchDataSuccessState(this.userDataModel);
+}
+
+final class GetSearchDataErrorState extends CustomerStates {
+  final String error;
+
+  GetSearchDataErrorState(this.error);
+}
+
+final class GetGoverniratesLoadingState extends CustomerStates {}
+
+final class GetGoverniratesSuccessState extends CustomerStates {}
+
+final class GetGoverniratesErrorState extends CustomerStates {
+  final String error;
+
+  GetGoverniratesErrorState(this.error);
+}
+
+final class GetCitiesLoadingState extends CustomerStates {}
+
+final class GetCitiesSuccessState extends CustomerStates {}
+
+final class GetCitiesErrorState extends CustomerStates {
+  final String error;
+
+  GetCitiesErrorState(this.error);
+}
+
 final class GetUserDataChaneIconVisibilityState extends CustomerStates {}
 
 class CustomerUpdateProfileLoadingState extends CustomerStates {}
@@ -56,4 +90,5 @@ class CustomerUpdateProfileSuccessState extends CustomerStates {
 class CustomerUpdateProfileErrorState extends CustomerStates {}
 
 class NotificationsState extends CustomerStates {}
+
 class DeleteNotificationsState extends CustomerStates {}

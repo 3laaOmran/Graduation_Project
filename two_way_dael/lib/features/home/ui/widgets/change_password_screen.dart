@@ -80,6 +80,7 @@ class ChangePasswordScreen extends StatelessWidget {
                                   if (value == null || value.isEmpty) {
                                     return 'Please enter your old password';
                                   }
+                                  return null;
                                 },
                               ),
                               verticalSpace(30),
@@ -99,6 +100,7 @@ class ChangePasswordScreen extends StatelessWidget {
                                   if (value == null || value.isEmpty) {
                                     return 'Please enter your new password';
                                   }
+                                  return null;
                                 },
                               ),
                               verticalSpace(30),
@@ -118,6 +120,7 @@ class ChangePasswordScreen extends StatelessWidget {
                                   if (value == null || value.isEmpty) {
                                     return 'Please enter your password confirmation';
                                   }
+                                  return null;
                                 },
                               ),
                               verticalSpace(60),

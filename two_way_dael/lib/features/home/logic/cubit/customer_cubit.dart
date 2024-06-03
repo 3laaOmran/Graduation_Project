@@ -1,10 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:two_way_dael/core/constants/constants.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
+import 'package:two_way_dael/features/auth/signup/data/models/get_gov_and_city_model.dart';
 import 'package:two_way_dael/features/home/data/models/get_profile_model.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
 import 'package:two_way_dael/features/home/ui/Modules/customer_home_screen.dart';
@@ -78,7 +80,92 @@ class CustomerCubit extends Cubit<CustomerStates> {
       emit(GetUserDataSuccessState(userDataModel!));
     }).catchError((error) {
       debugPrint(error.toString());
-      emit(GetUserDataErrorState(error));
+      emit(GetUserDataErrorState(error.toString()));
+    });
+  }
+
+  List<ProductsModel> searchProducts = [];
+  SearchModel? searchModel;
+  void getSearchData({
+    String? name,
+    int? categryId,
+    int? minPrice,
+    int? maxPrice,
+    String? sortBy,
+    String? sortWith,
+  })async {
+    emit(GetSearchDataLoadingState());
+    await DioHelper.getData(
+      url: SEARCH,
+      query: {
+        'name': name,
+        'category_id': categryId,
+        'min_price': minPrice,
+        'max_price': maxPrice,
+        'sort_by': sortBy,
+        'sort_order': sortWith,
+      },
+    ).then((value) {
+      searchModel = SearchModel.fromJson(value.data);
+      emit(GetSearchDataSuccessState());
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(GetSearchDataErrorState(error.toString()));
+    });
+  }
+
+  var governorateController = TextEditingController();
+  var cityController = TextEditingController();
+  int? selectedGovernorateId;
+  int? selectedCityId;
+  GovernoratesModel? governoratesModel;
+  List<SelectedListItem> governoratesList = [];
+  void getGovernorates() {
+    emit(GetGoverniratesLoadingState());
+    DioHelper.getData(
+      url: GOVERNORATES,
+    ).then((value) {
+      governoratesModel = GovernoratesModel.fromJson(value.data);
+      if (governoratesModel!.data != null) {
+        governoratesModel!.data!.forEach((dataItem) {
+          governoratesList.add(SelectedListItem(name: dataItem.name));
+          print("ID: ${dataItem.id}, Name: ${dataItem.name}");
+        });
+      } else {
+        print("No data available.");
+      }
+      emit(GetGoverniratesSuccessState());
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(GetGoverniratesErrorState(error.toString()));
+    });
+  }
+
+  List<SelectedListItem> selectedCities = [];
+  CityModel? cityModel;
+  void getCities(governorateid) {
+    emit(GetCitiesLoadingState());
+    DioHelper.getData(
+      url: CITIES,
+      query: {
+        'governorate_id': governorateid,
+      },
+    ).then((value) {
+      selectedCities.clear();
+      cityModel = CityModel.fromJson(value.data);
+      if (cityModel!.data != null) {
+        cityModel!.data!.forEach((cityData) {
+          selectedCities.add(SelectedListItem(
+              name: cityData.name, value: cityData.id.toString()));
+          print("City ID: ${cityData.id}, City Name: ${cityData.name}");
+        });
+      } else {
+        print("No cities available for this governorate.");
+      }
+      emit(GetCitiesSuccessState());
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(GetCitiesErrorState(error.toString()));
     });
   }
 
@@ -214,4 +301,79 @@ class CustomerCubit extends Cubit<CustomerStates> {
       image: 'assets/images/default_profile.png',
     ),
   ];
+}
+
+class SearchModel {
+  int? status;
+  String? message;
+  Data? data;
+
+  SearchModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    message = json['message'];
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    return data;
+  }
+}
+
+class Data {
+  int? productsCount;
+  List<Products>? products;
+
+  Data.fromJson(Map<String, dynamic> json) {
+    productsCount = json['products_count'];
+    if (json['products'] != null) {
+      products = <Products>[];
+      json['products'].forEach((v) {
+        products!.add(Products.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['products_count'] = productsCount;
+    if (products != null) {
+      data['products'] = products!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Products {
+  int? id;
+  String? name;
+  double? price;
+  String? discount;
+  String? netPrice;
+  List<String>? images;
+
+  Products.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    price = json['price'];
+    discount = json['discount'];
+    netPrice = json['net_price'];
+    images = json['images'].cast<String>();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['price'] = price;
+    data['discount'] = discount;
+    data['net_price'] = netPrice;
+    data['images'] = images;
+    return data;
+  }
 }

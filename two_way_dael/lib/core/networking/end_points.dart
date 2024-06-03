@@ -10,3 +10,4 @@ const PROFILE = 'me';
 const PASSWORDFORGOT = 'password/forgot/customer';
 const CONFIRMPHONENUMBER = 'password/otp/customer';
 const CHANGEPASSWORD = 'password/change/customer';
+const SEARCH = 'products';

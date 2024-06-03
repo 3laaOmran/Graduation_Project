@@ -23,7 +23,7 @@ class CustomTextFormField extends StatelessWidget {
   final BorderRadius? borderRadius;
   final TextInputType? keyboardType;
   final TextEditingController? controller;
-  final Function(String?) validator;
+  final String? Function(String?)? validator;
   final bool? enabled;
   const CustomTextFormField(
       {super.key,
@@ -37,7 +37,7 @@ class CustomTextFormField extends StatelessWidget {
       this.sufixIcon,
       this.backgroundColor,
       this.controller,
-      required this.validator,
+      this.validator,
       this.prefixIcon,
       this.keyboardType,
       this.borderRadius,
@@ -120,9 +120,7 @@ class CustomTextFormField extends StatelessWidget {
       ),
       obscureText: isObsecureText,
       style: inputTextStyle ?? TextStyles.font15BlackRegular,
-      validator: (value) {
-        return validator(value);
-      },
+      validator: validator,
     );
   }
 }

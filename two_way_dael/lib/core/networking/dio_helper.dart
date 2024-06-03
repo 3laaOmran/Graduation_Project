@@ -69,7 +69,7 @@ class DioHelper {
       );
       return response;
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 // static Future<Response> postData({
