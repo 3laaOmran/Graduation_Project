@@ -52,7 +52,6 @@ class CustomerLayoutScreen extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(50),
                   child: BottomNavigationBar(
-                    showSelectedLabels: false,
                     showUnselectedLabels: false,
                     currentIndex: cubit.currentIndex,
                     selectedItemColor: ColorManager.mainOrange,

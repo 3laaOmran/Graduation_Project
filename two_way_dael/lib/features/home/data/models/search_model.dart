@@ -1,4 +1,3 @@
-
 class SearchModel {
   int? status;
   String? message;

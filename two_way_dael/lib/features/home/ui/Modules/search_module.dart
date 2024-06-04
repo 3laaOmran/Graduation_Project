@@ -84,7 +84,6 @@ class _SearchScreenState extends State<SearchScreen> {
                   onPressed: () {
                     searchTextController.clear();
                     cubit.getSearchData();
-                    // FocusScope.of(context).unfocus();
                   },
                   icon: Icons.clear,
                   color: Colors.white,
