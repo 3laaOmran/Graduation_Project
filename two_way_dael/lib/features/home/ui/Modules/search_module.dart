@@ -7,6 +7,7 @@ import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_icon_button.dart';
 import 'package:two_way_dael/core/widgets/custom_text_form_field.dart';
+import 'package:two_way_dael/features/home/data/models/search_model.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_cubit.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
 
@@ -18,7 +19,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  String categoryDropDownValue = 'All';
+  String categoryDropDownValue = '1';
   bool sortByPriceUsed = true;
   bool sortByDateUsed = false;
   bool sortWithAscUsed = true;
@@ -57,55 +58,37 @@ class _SearchScreenState extends State<SearchScreen> {
                 hintStyle: TextStyles.font20Whitebold,
               ),
               style: TextStyles.font20Whitebold,
-              onSubmitted: (value) {
-                // cubit.getSearchData(
-                //   name: searchTextController.text,
-                //   categryId: 2,
-                // );
-              },
               onChanged: (value) {
                 if (sortByPriceUsed) {
-                  debugPrint('price');
                   sortby = 'price';
                 } else if (sortByDateUsed) {
-                  debugPrint('date');
                   sortby = 'created_at';
-                } else {
-                  null;
                 }
                 if (sortWithAscUsed) {
-                  debugPrint('asc');
                   sortwith = 'asc';
                 } else if (sortWithDescUsed) {
-                  debugPrint('desc');
                   sortwith = 'desc';
-                } else {
-                  null;
                 }
                 cubit.getSearchData(
                   name: searchTextController.text,
-                  // categryId: 2,
-                  minPrice: int.parse(minPriceController.text),
-                  maxPrice: int.parse(maxPriceController.text),
+                  categryId: int.parse(categoryDropDownValue),
+                  minPrice: minPriceController.text,
+                  maxPrice: maxPriceController.text,
                   sortBy: sortwith,
                   sortWith: sortwith,
                 );
-                debugPrint(minPriceController.text);
-                debugPrint(maxPriceController.text);
-                debugPrint(searchTextController.text);
-                debugPrint(sortby);
-                debugPrint(sortwith);
               },
             ),
             actions: [
               customIconButton(
                   onPressed: () {
                     searchTextController.clear();
-                    FocusScope.of(context).unfocus();
+                    cubit.getSearchData();
+                    // FocusScope.of(context).unfocus();
                   },
                   icon: Icons.clear,
                   color: Colors.white,
-                  toolTip: 'Exit searching')
+                  toolTip: 'Clear')
             ],
           ),
           body: SingleChildScrollView(
@@ -117,43 +100,20 @@ class _SearchScreenState extends State<SearchScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
+                        flex: 2,
                         child: searchDropDownMenue(
                           title: 'Search For',
                           value: categoryDropDownValue,
-                          items: const [
-                            DropdownMenuItem(
-                              value: 'All',
-                              child: Text('All'),
-                            ),
-                            DropdownMenuItem(
-                              value: 'Food',
-                              child: Text('Food'),
-                            ),
-                            DropdownMenuItem(
-                              value: 'Drinks',
-                              child: Text('Drinks'),
-                            ),
-                            DropdownMenuItem(
-                              value: 'Pizza',
-                              child: Text('Pizza'),
-                            ),
-                            DropdownMenuItem(
-                              value: 'Soup',
-                              child: Text('Soup'),
-                            ),
-                            DropdownMenuItem(
-                              value: 'Others',
-                              child: Text('Others'),
-                            ),
-                          ],
+                          items: cubit.categoriesList,
                           onChange: (String? newValue) {
                             setState(() {
                               categoryDropDownValue = newValue!;
-                              debugPrint(categoryDropDownValue);
+                              debugPrint(newValue);
                             });
                           },
                         ),
                       ),
+                      horizontalSpace(5),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,7 +129,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 5),
                               isObsecureText: false,
-                              hintText: 'Min Price',
+                              hintText: 'Min',
                               hintStyle: TextStyles.font13GreyBold,
                             ),
                           ],
@@ -191,7 +151,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   horizontal: 10, vertical: 6),
                               keyboardType: TextInputType.number,
                               isObsecureText: false,
-                              hintText: 'Max Price',
+                              hintText: 'Max',
                               hintStyle: TextStyles.font13GreyBold,
                             ),
                           ],
@@ -317,7 +277,6 @@ class _SearchScreenState extends State<SearchScreen> {
                     ],
                   ),
                   verticalSpace(20),
-                  // verticalSpace(20),
                   state is GetSearchDataLoadingState
                       ? const Center(
                           child: LinearProgressIndicator(
@@ -326,27 +285,39 @@ class _SearchScreenState extends State<SearchScreen> {
                         )
                       : Container(),
 
-                  model!.data!.products!.isEmpty
+                  // model!.data!.products!.isEmpty
+                  state is GetSearchDataLoadingState ||
+                          model!.data!.productsCount == 0 ||
+                          searchTextController.text.isEmpty
                       ? Column(
                           children: [
-                            verticalSpace(100),
+                            verticalSpace(80),
                             const Image(
                               image: AssetImage('assets/images/searching.png'),
                             ),
                           ],
                         )
-                      : GridView.count(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 15,
-                          mainAxisSpacing: 15,
-                          childAspectRatio: 1 / 1.4, //width / height
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Total Reasults : ${model.data!.productsCount}',
+                              style: TextStyles.font17BlackBold,
+                            ),
+                            GridView.count(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 15,
+                              mainAxisSpacing: 15,
+                              childAspectRatio: 1 / 1.4, //width / height
 
-                          children: List.generate(
-                              model.data!.products!.length,
-                              (index) => buildSearchItem(
-                                  model.data!.products![index])),
+                              children: List.generate(
+                                  model.data!.products!.length,
+                                  (index) => buildSearchItem(
+                                      model.data!.products![index])),
+                            ),
+                          ],
                         ),
                 ],
               ),
@@ -470,7 +441,7 @@ Widget searchDropDownMenue({
         menuMaxHeight: 500.h,
         borderRadius: BorderRadius.circular(10),
         dropdownColor: Colors.white,
-        alignment: Alignment.center,
+        // alignment: Alignment.center,
         value: value,
         icon: const Icon(Icons.keyboard_arrow_down_rounded),
         underline: Container(
@@ -478,6 +449,7 @@ Widget searchDropDownMenue({
           color: ColorManager.gray,
         ),
         isDense: true,
+        isExpanded: true,
         items: items,
         onChanged: onChange,
       ),

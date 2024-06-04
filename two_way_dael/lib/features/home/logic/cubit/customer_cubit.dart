@@ -8,6 +8,7 @@ import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/features/auth/signup/data/models/get_gov_and_city_model.dart';
 import 'package:two_way_dael/features/home/data/models/get_profile_model.dart';
+import 'package:two_way_dael/features/home/data/models/search_model.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
 import 'package:two_way_dael/features/home/ui/Modules/customer_home_screen.dart';
 import 'package:two_way_dael/features/home/ui/Modules/customer_profile_screen.dart';
@@ -89,11 +90,11 @@ class CustomerCubit extends Cubit<CustomerStates> {
   void getSearchData({
     String? name,
     int? categryId,
-    int? minPrice,
-    int? maxPrice,
+    String? minPrice,
+    String? maxPrice,
     String? sortBy,
     String? sortWith,
-  })async {
+  }) async {
     emit(GetSearchDataLoadingState());
     await DioHelper.getData(
       url: SEARCH,
@@ -301,79 +302,54 @@ class CustomerCubit extends Cubit<CustomerStates> {
       image: 'assets/images/default_profile.png',
     ),
   ];
+  List<DropdownMenuItem<String>>? categoriesList = [];
+  CategoriesModel? categoriesModel;
+  void getCategories() {
+    emit(GetCategoriesLoadingState());
+    DioHelper.getData(url: CATEGORIES).then((value) {
+      categoriesModel = CategoriesModel.fromJson(value.data);
+      if (categoriesModel?.data != null) {
+        for (var i = 0; i < categoriesModel!.data!.length; i++) {
+          categoriesList!.add(
+            DropdownMenuItem(
+              value: '${categoriesModel!.data![i].id}',
+              child: Text('${categoriesModel!.data![i].name}'),
+            ),
+          );
+        }
+      }
+      emit(GetCategoriesSuccessState());
+    }).catchError((error) {
+      emit(GetCategoriesErrorState(error.toString()));
+    });
+  }
 }
 
-class SearchModel {
+class CategoriesModel {
   int? status;
   String? message;
-  Data? data;
+  List<CategoryData>? data;
 
-  SearchModel.fromJson(Map<String, dynamic> json) {
+  CategoriesModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['status'] = status;
-    data['message'] = message;
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
-    }
-    return data;
-  }
-}
-
-class Data {
-  int? productsCount;
-  List<Products>? products;
-
-  Data.fromJson(Map<String, dynamic> json) {
-    productsCount = json['products_count'];
-    if (json['products'] != null) {
-      products = <Products>[];
-      json['products'].forEach((v) {
-        products!.add(Products.fromJson(v));
+    if (json['data'] != null) {
+      data = <CategoryData>[];
+      json['data'].forEach((v) {
+        data!.add(CategoryData.fromJson(v));
       });
     }
   }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['products_count'] = productsCount;
-    if (products != null) {
-      data['products'] = products!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
 }
 
-class Products {
+class CategoryData {
   int? id;
   String? name;
-  double? price;
-  String? discount;
-  String? netPrice;
-  List<String>? images;
+  String? image;
 
-  Products.fromJson(Map<String, dynamic> json) {
+  CategoryData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    price = json['price'];
-    discount = json['discount'];
-    netPrice = json['net_price'];
-    images = json['images'].cast<String>();
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    data['price'] = price;
-    data['discount'] = discount;
-    data['net_price'] = netPrice;
-    data['images'] = images;
-    return data;
+    image = json['image'];
   }
 }

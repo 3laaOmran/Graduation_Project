@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/routing/routes.dart';
+import 'package:two_way_dael/core/theming/styles.dart';
+import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/features/auth/login/ui/views/forget_password_otp_screen.dart';
 import 'package:two_way_dael/features/auth/login/ui/views/forget_password_view.dart';
 import 'package:two_way_dael/features/auth/login/ui/views/phone_for_forget_password.dart';
@@ -62,7 +64,7 @@ class AppRouter {
       case Routes.changePasswordScreen:
         return MaterialPageRoute(builder: (_) => const ChangePasswordScreen());
       case Routes.contactUsScreen:
-        return MaterialPageRoute(builder: (_) =>  ContactUsScreen());
+        return MaterialPageRoute(builder: (_) => ContactUsScreen());
       default:
         return MaterialPageRoute(
             builder: (context) => Scaffold(
@@ -71,18 +73,26 @@ class AppRouter {
                     child: AlertDialog(
                       backgroundColor: Colors.white,
                       title: const Text('Exit'),
-                      content: const Text('Do you want to exit?'),
+                      content: const Text('Are you sure ?!!!!\nYou want to exit?'),
                       actions: [
-                        ElevatedButton(
-                            onPressed: () {
-                              exit(0);
-                            },
-                            child: const Text('Yes')),
-                        ElevatedButton(
-                            onPressed: () {
-                              context.pushReplacementNamed(Routes.homeScreen);
-                            },
-                            child: const Text('No')),
+                        AppTextButton(
+                          buttonText: 'Yes',
+                          textStyle: TextStyles.font12White,
+                          onPressed: () {
+                            exit(0);
+                          },
+                          buttonWidth: 30,
+                          buttonHeight: 15,
+                        ),
+                        AppTextButton(
+                          buttonText: 'No',
+                          textStyle: TextStyles.font12White,
+                          onPressed: () {
+                            context.pushReplacementNamed(Routes.homeScreen);
+                          },
+                          buttonWidth: 30,
+                          buttonHeight: 15,
+                        ),
                       ],
                     ),
                   ),

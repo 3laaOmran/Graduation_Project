@@ -49,6 +49,8 @@ class CustomerHomeScreen extends StatelessWidget {
                               child: GestureDetector(
                                 onTap: () {
                                   context.pushNamed(Routes.searchScreen);
+                                  CustomerCubit.get(context)
+                                      .getSearchData(categryId: 200);
                                 },
                                 child: const CustomTextFormField(
                                   enabled: false,

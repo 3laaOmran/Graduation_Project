@@ -77,6 +77,16 @@ final class GetCitiesErrorState extends CustomerStates {
   GetCitiesErrorState(this.error);
 }
 
+final class GetCategoriesLoadingState extends CustomerStates {}
+
+final class GetCategoriesSuccessState extends CustomerStates {}
+
+final class GetCategoriesErrorState extends CustomerStates {
+  final String error;
+
+  GetCategoriesErrorState(this.error);
+}
+
 final class GetUserDataChaneIconVisibilityState extends CustomerStates {}
 
 class CustomerUpdateProfileLoadingState extends CustomerStates {}
