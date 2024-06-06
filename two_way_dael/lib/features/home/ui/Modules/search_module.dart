@@ -7,9 +7,12 @@ import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_icon_button.dart';
 import 'package:two_way_dael/core/widgets/custom_text_form_field.dart';
-import 'package:two_way_dael/features/home/data/models/search_model.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_cubit.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
+import 'package:two_way_dael/features/home/ui/widgets/build_saerch_filter.dart';
+import 'package:two_way_dael/features/home/ui/widgets/build_search_item.dart';
+
+import '../widgets/search_drop_down_menu.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -38,7 +41,7 @@ class _SearchScreenState extends State<SearchScreen> {
         var model = cubit.searchModel;
         return Scaffold(
           appBar: AppBar(
-            toolbarHeight: 80,
+            toolbarHeight: 80.h,
             leading: customIconButton(
               toolTip: 'back',
               onPressed: () {
@@ -125,8 +128,8 @@ class _SearchScreenState extends State<SearchScreen> {
                               controller: minPriceController,
                               borderRadius: BorderRadius.circular(10),
                               keyboardType: TextInputType.number,
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 10.w, vertical: 5.h),
                               isObsecureText: false,
                               hintText: 'Min',
                               hintStyle: TextStyles.font13GreyBold,
@@ -146,8 +149,8 @@ class _SearchScreenState extends State<SearchScreen> {
                             CustomTextFormField(
                               controller: maxPriceController,
                               borderRadius: BorderRadius.circular(10),
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 6),
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 10.w, vertical: 6.h),
                               keyboardType: TextInputType.number,
                               isObsecureText: false,
                               hintText: 'Max',
@@ -158,11 +161,11 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                     ],
                   ),
-                  const Divider(
-                    height: 40,
-                    thickness: 1.5,
-                    endIndent: 40,
-                    indent: 40,
+                  Divider(
+                    height: 40.h,
+                    thickness: 1.5.h,
+                    endIndent: 40.w,
+                    indent: 40.w,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -283,8 +286,6 @@ class _SearchScreenState extends State<SearchScreen> {
                           ),
                         )
                       : Container(),
-
-                  // model!.data!.products!.isEmpty
                   state is GetSearchDataLoadingState ||
                           model!.data!.productsCount == 0 ||
                           searchTextController.text.isEmpty
@@ -310,7 +311,6 @@ class _SearchScreenState extends State<SearchScreen> {
                               crossAxisSpacing: 15,
                               mainAxisSpacing: 15,
                               childAspectRatio: 1 / 1.4, //width / height
-
                               children: List.generate(
                                   model.data!.products!.length,
                                   (index) => buildSearchItem(
@@ -326,132 +326,4 @@ class _SearchScreenState extends State<SearchScreen> {
       },
     );
   }
-}
-
-Widget buildSearchItem(Products model) {
-  return Container(
-    padding: const EdgeInsets.all(10.0),
-    decoration: BoxDecoration(
-      boxShadow: const [
-        BoxShadow(
-          color: Colors.grey,
-          blurRadius: 15,
-          offset: Offset(8, 15),
-        ),
-      ],
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(15),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              image: DecorationImage(
-                  image: NetworkImage(model.images![1]), fit: BoxFit.cover),
-            ),
-          ),
-        ),
-        verticalSpace(10),
-        Text(
-          model.name!,
-          style: TextStyles.font17BlackBold,
-        ),
-        verticalSpace(5),
-        Row(
-          children: [
-            Text(
-              '${model.price!} egp',
-              style: TextStyles.font13GreyBold,
-            ),
-            const Spacer(),
-            InkWell(
-              onTap: () {},
-              child: const CircleAvatar(
-                radius: 15.0,
-                backgroundColor: ColorManager.gray,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    right: 4,
-                    left: 4,
-                  ),
-                  child: Image(
-                    image: AssetImage('assets/images/white_cart.png'),
-                    width: 30,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
-}
-
-Widget buildSearchFilterItem({
-  required String text,
-  required Function()? ontap,
-  Color? bgColor,
-  Color? borderColor,
-  Color? textColor,
-}) {
-  return GestureDetector(
-    onTap: ontap,
-    child: Container(
-      padding:
-          const EdgeInsetsDirectional.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-          color: bgColor ?? Colors.white,
-          border: Border.all(
-            width: 1.5,
-            color: borderColor ?? ColorManager.gray,
-          ),
-          borderRadius: BorderRadius.circular(10)),
-      child: Center(
-        child: Text(
-          text,
-          style: TextStyles.font14BlackBold
-              .copyWith(color: textColor ?? Colors.black),
-        ),
-      ),
-    ),
-  );
-}
-
-Widget searchDropDownMenue({
-  required String title,
-  required String value,
-  required List<DropdownMenuItem<String>>? items,
-  required Function(String?)? onChange,
-}) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        title,
-        style: TextStyles.font14BlackBold,
-      ),
-      verticalSpace(5),
-      DropdownButton<String>(
-        menuMaxHeight: 500.h,
-        borderRadius: BorderRadius.circular(10),
-        dropdownColor: Colors.white,
-        // alignment: Alignment.center,
-        value: value,
-        icon: const Icon(Icons.keyboard_arrow_down_rounded),
-        underline: Container(
-          height: 2,
-          color: ColorManager.gray,
-        ),
-        isDense: true,
-        isExpanded: true,
-        items: items,
-        onChanged: onChange,
-      ),
-    ],
-  );
 }
