@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:two_way_dael/core/routing/app_router.dart';
 import 'package:two_way_dael/core/theming/themes.dart';
-import 'package:two_way_dael/features/home/logic/cubit/customer_cubit.dart';
+import 'package:two_way_dael/features/customer/home/logic/cubit/customer_cubit.dart';
 
 
 class TwoWayDealApp extends StatelessWidget {
