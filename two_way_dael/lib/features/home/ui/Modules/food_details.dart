@@ -6,11 +6,13 @@ import 'package:two_way_dael/core/routing/routes.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/components.dart';
+import 'package:two_way_dael/features/home/data/models/product_details_model.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_cubit.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
 
 class FoodDetails extends StatelessWidget {
-  FoodDetails({super.key});
+  final Product product;
+  FoodDetails({super.key, required this.product});
 
   final bottomSheetKey = GlobalKey<ScaffoldState>();
 
@@ -38,7 +40,7 @@ class FoodDetails extends StatelessWidget {
                     },
                     icon: const Icon(
                       Icons.arrow_back,
-                      color: Colors.white,
+                      color: ColorManager.mainOrange,
                     ),
                   ),
                 ),
@@ -64,10 +66,9 @@ class FoodDetails extends StatelessWidget {
               flexibleSpace:
                   Stack(alignment: AlignmentDirectional.topStart, children: [
                 Container(
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: NetworkImage(
-                          'https://img.freepik.com/free-photo/pizza-pizza-filled-with-tomatoes-salami-olives_140725-1200.jpg?t=st=1709062734~exp=1709066334~hmac=b314b3c8ea5d4191618437bf25931e53a162f37cf8cd3b9b48a2b39375112742&w=740'),
+                      image: NetworkImage(product.images![1]),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -78,11 +79,11 @@ class FoodDetails extends StatelessWidget {
                     start: 55.0,
                   ),
                   child: Text(
-                    'Food Details',
+                    product.name!,
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.w900,
                         fontSize: 23.0,
-                        color: Colors.white),
+                        color: ColorManager.mainOrange),
                   ),
                 ),
               ]),
@@ -100,7 +101,7 @@ class FoodDetails extends StatelessWidget {
                       Column(
                         children: [
                           Text(
-                            'Pizza',
+                            product.name!,
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineSmall
@@ -130,7 +131,7 @@ class FoodDetails extends StatelessWidget {
                             textBaseline: TextBaseline.alphabetic,
                             children: [
                               Text(
-                                '75 ',
+                                '${product.price!}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium
@@ -186,7 +187,7 @@ class FoodDetails extends StatelessWidget {
                                   'assets/images/default_profile.png'),
                             ),
                             Text(
-                              'Seller Name',
+                              product.store!.name!,
                               style: TextStyles.font15BlackBold,
                             )
                           ],
@@ -198,7 +199,7 @@ class FoodDetails extends StatelessWidget {
                     height: 40.0,
                   ),
                   Text(
-                    'Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type ...',
+                    product.description!,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w400,
                         color: Colors.grey[800],

@@ -1,81 +1,44 @@
 class ProductsModel {
-  String? status;
-  List<Message>? message = [];
+  int? status;
+  String? message;
+  Data? data;
 
   ProductsModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
-    json['message'].forEach((v) {
-      message!.add(Message.fromJson(v));
-    });
+    message = json['message'];
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
 }
 
-class Message {
-  int? id;
-  int? categoryId;
-  int? storeId;
-  String? name;
-  String? expirationDate;
-  String? imagePath;
-  String? description;
-  double? price;
-  int? discount;
-  double? finalPrice;
-  int? availableFor;
-  String? createdAt;
-  String? updatedAt;
-  Store? store;
+class Data {
+  int? productsCount;
+  List<Products>? products;
 
-  Message.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<String, dynamic> json) {
+    productsCount = json['products_count'];
+    if (json['products'] != null) {
+      products = <Products>[];
+      json['products'].forEach((v) {
+        products!.add(Products.fromJson(v));
+      });
+    }
+  }
+}
+
+class Products {
+  int? id;
+  String? name;
+  double? price;
+  String? discount;
+  String? netPrice;
+  List<String>? images;
+
+  Products.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    categoryId = json['category_id'];
-    storeId = json['store_id'];
     name = json['name'];
-    expirationDate = json['expiration_date'];
-    imagePath = json['image_path'];
-    description = json['description'];
     price = json['price'];
     discount = json['discount'];
-    finalPrice = json['final_price'];
-    availableFor = json['available_for'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    store = json['store'] != null ? Store.fromJson(json['store']) : null;
-  }
-}
-
-class Store {
-  int? id;
-  String? name;
-  String? username;
-  String? phone;
-  String? email;
-  int? verified;
-  String? healthApprovalCertificate;
-  String? commercialResturantLicense;
-  String? governorate;
-  String? city;
-  String? street;
-  String? imagePath;
-  double? balance;
-  String? createdAt;
-  String? updatedAt;
-
-  Store.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    username = json['username'];
-    phone = json['phone'];
-    email = json['email'];
-    verified = json['verified'];
-    healthApprovalCertificate = json['HealthApprovalCertificate'];
-    commercialResturantLicense = json['CommercialResturantLicense'];
-    governorate = json['governorate'];
-    city = json['city'];
-    street = json['street'];
-    imagePath = json['image_path'];
-    balance = json['balance'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    netPrice = json['net_price'];
+    images = json['images'] != null ? json['images'].cast<String>() : [];
   }
 }

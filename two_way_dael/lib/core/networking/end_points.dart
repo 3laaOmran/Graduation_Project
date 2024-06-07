@@ -1,4 +1,4 @@
-const GET_PRODUCTS = '/api/products';
+const PRODUCTS = 'products';
 const LOGIN = 'auth/login/customer';
 const REGISTER = 'auth/register/customer';
 const VERIFICATION = 'auth/verify/customer';

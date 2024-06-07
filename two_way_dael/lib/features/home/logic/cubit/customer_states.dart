@@ -45,16 +45,22 @@ final class GetUserDataErrorState extends CustomerStates {
 
 final class GetSearchDataLoadingState extends CustomerStates {}
 
-final class GetSearchDataSuccessState extends CustomerStates {
-  // final UserDataModel userDataModel;
-
-  // GetSearchDataSuccessState(this.userDataModel);
-}
+final class GetSearchDataSuccessState extends CustomerStates {}
 
 final class GetSearchDataErrorState extends CustomerStates {
   final String error;
 
   GetSearchDataErrorState(this.error);
+}
+
+final class GetProductDetailsLoadingState extends CustomerStates {}
+
+final class GetProductDetailsSuccessState extends CustomerStates {}
+
+final class GetProductDetailsErrorState extends CustomerStates {
+  final String error;
+
+  GetProductDetailsErrorState(this.error);
 }
 
 final class GetGoverniratesLoadingState extends CustomerStates {}

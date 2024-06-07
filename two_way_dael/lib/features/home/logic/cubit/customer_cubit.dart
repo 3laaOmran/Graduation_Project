@@ -8,6 +8,7 @@ import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/features/auth/signup/data/models/get_gov_and_city_model.dart';
 import 'package:two_way_dael/features/home/data/models/get_profile_model.dart';
+import 'package:two_way_dael/features/home/data/models/product_details_model.dart';
 import 'package:two_way_dael/features/home/data/models/search_model.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
 import 'package:two_way_dael/features/home/ui/Modules/customer_home_screen.dart';
@@ -16,6 +17,7 @@ import 'package:two_way_dael/features/home/ui/Modules/notifications_module.dart'
 
 import '../../../../core/networking/dio_helper.dart';
 import '../../../../core/networking/end_points.dart';
+import '../../data/models/categoties_model.dart';
 import '../../data/models/products_model.dart';
 
 class CustomerCubit extends Cubit<CustomerStates> {
@@ -54,11 +56,10 @@ class CustomerCubit extends Cubit<CustomerStates> {
   }
 
   ProductsModel? productsModel;
-
   void getProducts() {
     emit(CustomerGetProductsLoadingState());
     DioHelper.getData(
-      url: GET_PRODUCTS,
+      url: PRODUCTS,
     ).then((value) {
       productsModel = ProductsModel.fromJson(value.data);
       print(value.data);
@@ -112,6 +113,24 @@ class CustomerCubit extends Cubit<CustomerStates> {
     }).catchError((error) {
       debugPrint(error.toString());
       emit(GetSearchDataErrorState(error.toString()));
+    });
+  }
+
+  
+
+  ProductDetails? productDetails;
+  void getProductDetails({
+    required int id,
+  }) async {
+    emit(GetProductDetailsLoadingState());
+    await DioHelper.getData(
+      url: 'product/$id',
+    ).then((value) {
+      productDetails = ProductDetails.fromJson(value.data);
+      emit(GetProductDetailsSuccessState());
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(GetProductDetailsErrorState(error.toString()));
     });
   }
 
@@ -322,34 +341,5 @@ class CustomerCubit extends Cubit<CustomerStates> {
     }).catchError((error) {
       emit(GetCategoriesErrorState(error.toString()));
     });
-  }
-}
-
-class CategoriesModel {
-  int? status;
-  String? message;
-  List<CategoryData>? data;
-
-  CategoriesModel.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    message = json['message'];
-    if (json['data'] != null) {
-      data = <CategoryData>[];
-      json['data'].forEach((v) {
-        data!.add(CategoryData.fromJson(v));
-      });
-    }
-  }
-}
-
-class CategoryData {
-  int? id;
-  String? name;
-  String? image;
-
-  CategoryData.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    image = json['image'];
   }
 }

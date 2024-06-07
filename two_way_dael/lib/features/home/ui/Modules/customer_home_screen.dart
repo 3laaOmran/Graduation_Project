@@ -1,11 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/routing/routes.dart';
 import 'package:two_way_dael/core/widgets/custom_text_form_field.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_cubit.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
+import 'package:two_way_dael/features/home/ui/Modules/food_details.dart';
 import 'package:two_way_dael/features/home/ui/widgets/build_ctegory_item.dart';
 import 'package:two_way_dael/features/home/ui/widgets/build_food_item.dart';
 import 'package:two_way_dael/features/home/ui/widgets/home_skelton_loading.dart';
@@ -22,11 +24,19 @@ class CustomerHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CustomerCubit, CustomerStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is GetProductDetailsSuccessState) {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => FoodDetails(
+                    product: CustomerCubit.get(context)
+                        .productDetails!
+                        .data!
+                        .product!,
+                  )));
+        }
+      },
       builder: (context, state) {
-        // var cubit = CustomerCubit.get(context);
-        // var model = cubit.userModel;
-        // cubit.nameController.text = model!.data!.name!;
+        var cubit = CustomerCubit.get(context);
         return Scaffold(
           body: state is! GetUserDataLoadingState
               ? Stack(
@@ -34,7 +44,6 @@ class CustomerHomeScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsetsDirectional.only(
                         start: 20.0,
-                        // top: 20.0,
                         end: 20.0,
                       ),
                       child: SingleChildScrollView(
@@ -171,20 +180,57 @@ class CustomerHomeScreen extends StatelessWidget {
                                       fontWeight: FontWeight.bold,
                                       fontSize: 21.0),
                             ),
-                            const SizedBox(
-                              height: 5.0,
-                            ),
-                            GridView.count(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 5,
-                              mainAxisSpacing: 1,
-                              childAspectRatio: 1 / 1.35, //width / height
+                            verticalSpace(15),
+                            if (cubit.productsModel != null &&
+                                cubit.productsModel!.data != null &&
+                                cubit.productsModel!.data!.products != null)
+                              GridView.count(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                                childAspectRatio: 1 / 1.4, //width / height
+                                children: List.generate(
+                                  cubit.productsModel!.data!.products!.length,
+                                  (index) => InkWell(
+                                    onTap: () {
+                                      cubit.getProductDetails(
+                                          id: cubit.productsModel!.data!
+                                              .products![index].id!);
+                                    },
+                                    child: buildItem(
+                                        context,
+                                        cubit.productsModel!.data!
+                                            .products![index]),
+                                  ),
+                                ),
+                              )
+                            else
+                              Shimmer.fromColors(
+                                baseColor: Colors.grey[400]!,
+                                highlightColor: Colors.grey[300]!,
+                                child: GridView.count(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10,
+                                  childAspectRatio: 1 / 1.4, //width / height
 
-                              children: List.generate(
-                                  20, (index) => buildItem(context)),
-                            ),
+                                  children: List.generate(
+                                      4,
+                                      (index) => Container(
+                                            width: 50,
+                                            height: 100,
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey,
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                            ),
+                                          )),
+                                ),
+                              ),
                           ],
                         ),
                       ),
@@ -196,12 +242,6 @@ class CustomerHomeScreen extends StatelessWidget {
                         children: [
                           horizontalSpace(12),
                           GestureDetector(
-                            // onTap: () {
-                            //   cubit.changeBottomNav(cubit.currentIndex + 1);
-                            //   if (cubit.currentIndex != 1) {
-                            //     cubit.currentIndex = 0;
-                            //   }
-                            // },
                             child: const CircleAvatar(
                               radius: 30.0,
                               backgroundColor: Colors.white,
@@ -215,12 +255,6 @@ class CustomerHomeScreen extends StatelessWidget {
                           ),
                           horizontalSpace(10),
                           GestureDetector(
-                            // onTap: () {
-                            //   cubit.changeBottomNav(cubit.currentIndex + 1);
-                            //   if (cubit.currentIndex != 1) {
-                            //     cubit.currentIndex = 0;
-                            //   }
-                            // },
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -264,12 +298,6 @@ class CustomerHomeScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          // customIconButton(
-                          //   onPressed: () {},
-                          //   icon: Icons.shopping_cart_outlined,
-                          //   color: ColorManager.mainOrange,
-                          //   size: 30,
-                          // ),
                           Stack(
                             alignment: AlignmentDirectional.topEnd,
                             children: [

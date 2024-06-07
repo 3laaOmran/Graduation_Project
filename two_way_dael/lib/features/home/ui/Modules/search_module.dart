@@ -9,6 +9,7 @@ import 'package:two_way_dael/core/widgets/custom_icon_button.dart';
 import 'package:two_way_dael/core/widgets/custom_text_form_field.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_cubit.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
+import 'package:two_way_dael/features/home/ui/Modules/food_details.dart';
 import 'package:two_way_dael/features/home/ui/widgets/build_saerch_filter.dart';
 import 'package:two_way_dael/features/home/ui/widgets/build_search_item.dart';
 
@@ -32,10 +33,21 @@ class _SearchScreenState extends State<SearchScreen> {
   var maxPriceController = TextEditingController();
   String? sortby;
   String? sortwith;
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CustomerCubit, CustomerStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is GetProductDetailsSuccessState) {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => FoodDetails(
+                    product: CustomerCubit.get(context)
+                        .productDetails!
+                        .data!
+                        .product!,
+                  )));
+        }
+      },
       builder: (context, state) {
         var cubit = CustomerCubit.get(context);
         var model = cubit.searchModel;
@@ -308,13 +320,20 @@ class _SearchScreenState extends State<SearchScreen> {
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               crossAxisCount: 2,
-                              crossAxisSpacing: 15,
-                              mainAxisSpacing: 15,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
                               childAspectRatio: 1 / 1.4, //width / height
                               children: List.generate(
                                   model.data!.products!.length,
-                                  (index) => buildSearchItem(
-                                      model.data!.products![index])),
+                                  (index) => InkWell(
+                                        onTap: () {
+                                          cubit.getProductDetails(
+                                              id: model
+                                                  .data!.products![index].id!);
+                                        },
+                                        child: buildSearchItem(
+                                            model.data!.products![index]),
+                                      )),
                             ),
                           ],
                         ),

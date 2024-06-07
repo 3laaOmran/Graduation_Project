@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:two_way_dael/core/helpers/spacing.dart';
-import 'package:two_way_dael/features/home/ui/widgets/build_food_item.dart';
 
 class HomeSkeltonLoading extends StatelessWidget {
   const HomeSkeltonLoading({super.key});
@@ -178,11 +177,20 @@ class HomeSkeltonLoading extends StatelessWidget {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 crossAxisCount: 2,
-                crossAxisSpacing: 5,
-                mainAxisSpacing: 1,
-                childAspectRatio: 1 / 1.35, //width / height
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 1 / 1.4, //width / height
 
-                children: List.generate(4, (index) => buildItem(context)),
+                children: List.generate(
+                    4,
+                    (index) => Container(
+                          width: 50,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        )),
               ),
             ],
           ),
