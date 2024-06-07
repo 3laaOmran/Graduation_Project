@@ -4,6 +4,7 @@ import 'package:two_way_dael/core/widgets/custom_icon_button.dart';
 
 Widget buildSliverAppBar(context) {
   return SliverAppBar(
+    scrolledUnderElevation: 0.0,
     leading: customIconButton(
       toolTip: 'back',
       onPressed: () {
