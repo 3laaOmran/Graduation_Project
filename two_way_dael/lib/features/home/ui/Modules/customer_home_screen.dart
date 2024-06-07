@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/routing/routes.dart';
+import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_text_form_field.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_cubit.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
@@ -39,6 +40,24 @@ class CustomerHomeScreen extends StatelessWidget {
       builder: (context, state) {
         var cubit = CustomerCubit.get(context);
         return Scaffold(
+          floatingActionButton: cubit.cartProducts.isNotEmpty
+              ? Padding(
+                  padding: EdgeInsets.only(bottom: 100.h),
+                  child: SizedBox(
+                    width: 125.w,
+                    child: FloatingActionButton(
+                      backgroundColor: ColorManager.mainOrange,
+                      child: Text(
+                        'Go To Cart ${cubit.cartProducts.length}',
+                        style: TextStyles.font17WhiteBold,
+                      ),
+                      onPressed: () {
+                        context.pushNamed(Routes.cartScreen);
+                      },
+                    ),
+                  ),
+                )
+              : Container(),
           body: state is! GetUserDataLoadingState
               ? CustomScrollView(
                   slivers: [
@@ -92,13 +111,30 @@ class CustomerHomeScreen extends StatelessWidget {
                           ),
                           child: InkWell(
                             onTap: () {
-                              showModalBottomSheet(
-                                  context: context,
-                                  builder: (context) => Container());
+                              context.pushNamed(Routes.cartScreen);
                             },
-                            child: const Image(
-                              image: AssetImage('assets/images/moved_cart.gif'),
-                              width: 35,
+                            child: Stack(
+                              alignment: cubit.cartProducts.isNotEmpty
+                                  ? Alignment.topRight
+                                  : Alignment.center,
+                              children: [
+                                const Image(
+                                  image: AssetImage(
+                                      'assets/images/moved_cart.gif'),
+                                  width: 35,
+                                ),
+                                cubit.cartProducts.isNotEmpty
+                                    ? CircleAvatar(
+                                        radius: 8,
+                                        backgroundColor:
+                                            ColorManager.mainOrange,
+                                        child: Text(
+                                          '${cubit.cartProducts.length}',
+                                          style: TextStyles.font12White,
+                                        ),
+                                      )
+                                    : Container(),
+                              ],
                             ),
                           ),
                         ),

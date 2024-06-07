@@ -9,7 +9,6 @@ import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/features/auth/signup/data/models/get_gov_and_city_model.dart';
 import 'package:two_way_dael/features/home/data/models/get_profile_model.dart';
 import 'package:two_way_dael/features/home/data/models/product_details_model.dart';
-import 'package:two_way_dael/features/home/data/models/search_model.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
 import 'package:two_way_dael/features/home/ui/Modules/customer_home_screen.dart';
 import 'package:two_way_dael/features/home/ui/Modules/customer_profile_screen.dart';
@@ -37,22 +36,89 @@ class CustomerCubit extends Cubit<CustomerStates> {
     emit(ChangeBottomNavState());
   }
 
+  // int itemQuantity = 1;
+  // double itemPrice = 75;
+  // double totalPrice = 75;
+
+  // void minus() {
+  //   if (itemQuantity > 1) {
+  //     itemQuantity--;
+  //     totalPrice -= itemPrice;
+  //     emit(ItemQuantityMinusState(itemQuantity, totalPrice, itemPrice));
+  //   }
+  // }
+
+  // void plus() {
+  //   totalPrice += itemPrice;
+  //   itemQuantity++;
+  //   emit(ItemQuantityPlusState(itemQuantity, totalPrice, itemPrice));
+  // }
+
+  // void updatePrices(int index) {
+  //   itemPrice = productsModel?.data?.products?[index].price;
+  //   totalPrice = productsModel?.data?.products?[index].price;
+  // }
+
   int itemQuantity = 1;
-  double itemPrice = 75;
-  double totalPrice = 75;
+  double? totalPrice;
+  
 
   void minus() {
     if (itemQuantity > 1) {
       itemQuantity--;
-      totalPrice -= itemPrice;
-      emit(ItemQuantityMinusState(itemQuantity, totalPrice, itemPrice));
+      // totalPrice = totalPrice! - itemPrice!;
+      emit(ItemQuantityMinusState());
     }
   }
 
   void plus() {
+    // double itemPrice = productsModel!.data!.products![index].price!;
     itemQuantity++;
-    totalPrice += itemPrice;
-    emit(ItemQuantityPlusState(itemQuantity, totalPrice, itemPrice));
+    // itemPrice += itemPrice;
+    // if (itemPrice != null || totalPrice != null) {
+    //   totalPrice = totalPrice! + itemPrice!;
+    // }
+    emit(ItemQuantityPlusState());
+  }
+
+  List<Products> cartProducts = [];
+
+  void addToCart(Products product) {
+    if (!cartProducts.contains(product)) {
+      cartProducts.add(product);
+      emit(CustomerAddToCartState());
+    }
+  }
+
+  void toggleCart(Products product) {
+    if (cartProducts.contains(product)) {
+      cartProducts.remove(product);
+      emit(CustomerRemoveFromCartState());
+    } else {
+      cartProducts.add(product);
+      emit(CustomerAddToCartState());
+    }
+    // emit(CustomerCartUpdated());
+  }
+
+  bool isInCart(Products product) {
+    return cartProducts.contains(product);
+  }
+
+  // void removeFromCart(product) {
+  //   cartProducts.remove(product);
+  //   emit(CustomerRemoveFromCartState());
+  // }
+  void removeFromCart(Products product) {
+    if (cartProducts.contains(product)) {
+      cartProducts.remove(product);
+      emit(CustomerRemoveFromCartState());
+    }
+  }
+
+  void clearCart(product) {
+    cartProducts.clear();
+    emit(CustomerClearCartState());
   }
 
   ProductsModel? productsModel;
@@ -86,8 +152,8 @@ class CustomerCubit extends Cubit<CustomerStates> {
     });
   }
 
-  List<ProductsModel> searchProducts = [];
-  SearchModel? searchModel;
+  // List<ProductsModel> searchProducts = [];
+  ProductsModel? searchModel;
   void getSearchData({
     String? name,
     int? categryId,
@@ -108,15 +174,13 @@ class CustomerCubit extends Cubit<CustomerStates> {
         'sort_order': sortWith,
       },
     ).then((value) {
-      searchModel = SearchModel.fromJson(value.data);
+      searchModel = ProductsModel.fromJson(value.data);
       emit(GetSearchDataSuccessState());
     }).catchError((error) {
       debugPrint(error.toString());
       emit(GetSearchDataErrorState(error.toString()));
     });
   }
-
-  
 
   ProductDetails? productDetails;
   void getProductDetails({

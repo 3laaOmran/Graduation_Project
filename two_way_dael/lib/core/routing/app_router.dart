@@ -11,6 +11,7 @@ import 'package:two_way_dael/features/auth/login/ui/views/phone_for_forget_passw
 import 'package:two_way_dael/features/auth/signup/ui/views/otp_screen.dart';
 import 'package:two_way_dael/features/auth/signup/ui/views/photo_and_address_screen.dart';
 import 'package:two_way_dael/features/home/ui/Modules/about_app.dart';
+import 'package:two_way_dael/features/home/ui/Modules/cart_screen.dart';
 import 'package:two_way_dael/features/home/ui/Modules/contact_us_screen.dart';
 import 'package:two_way_dael/features/home/ui/Modules/favorite_sellers.dart';
 import 'package:two_way_dael/features/home/ui/Modules/notifications_module.dart';
@@ -65,6 +66,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const ChangePasswordScreen());
       case Routes.contactUsScreen:
         return MaterialPageRoute(builder: (_) => ContactUsScreen());
+      case Routes.cartScreen:
+        return MaterialPageRoute(builder: (_) => const CartScreen());
       default:
         return MaterialPageRoute(
             builder: (context) => Scaffold(

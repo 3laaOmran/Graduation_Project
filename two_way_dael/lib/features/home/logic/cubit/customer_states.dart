@@ -8,20 +8,25 @@ class CustomerInitialState extends CustomerStates {}
 class ChangeBottomNavState extends CustomerStates {}
 
 class ItemQuantityMinusState extends CustomerStates {
-  int itemQuantity;
-  double itemPrice;
-  double totalPrice;
+  // int itemQuantity;
+  // double itemPrice;
+  // double totalPrice;
 
-  ItemQuantityMinusState(this.itemQuantity, this.itemPrice, this.totalPrice);
+  // ItemQuantityMinusState(this.itemQuantity, this.itemPrice, this.totalPrice);
 }
 
 class ItemQuantityPlusState extends CustomerStates {
-  int itemQuantity;
-  double itemPrice;
-  double totalPrice;
+  // int itemQuantity;
+  // double itemPrice;
+  // double totalPrice;
 
-  ItemQuantityPlusState(this.itemQuantity, this.itemPrice, this.totalPrice);
+  // ItemQuantityPlusState(this.itemQuantity, this.itemPrice, this.totalPrice);
 }
+
+class CustomerRemoveFromCartState extends CustomerStates {}
+class CustomerClearCartState extends CustomerStates {}
+class CustomerAddToCartState extends CustomerStates {}
+class CustomerCartUpdated extends CustomerStates {}
 
 class CustomerGetProductsLoadingState extends CustomerStates {}
 

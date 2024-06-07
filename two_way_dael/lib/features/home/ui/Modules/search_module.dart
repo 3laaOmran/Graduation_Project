@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/helpers/spacing.dart';
+import 'package:two_way_dael/core/routing/routes.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_icon_button.dart';
@@ -10,9 +11,8 @@ import 'package:two_way_dael/core/widgets/custom_text_form_field.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_cubit.dart';
 import 'package:two_way_dael/features/home/logic/cubit/customer_states.dart';
 import 'package:two_way_dael/features/home/ui/Modules/food_details.dart';
+import 'package:two_way_dael/features/home/ui/widgets/build_food_item.dart';
 import 'package:two_way_dael/features/home/ui/widgets/build_saerch_filter.dart';
-import 'package:two_way_dael/features/home/ui/widgets/build_search_item.dart';
-
 import '../widgets/search_drop_down_menu.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -52,6 +52,24 @@ class _SearchScreenState extends State<SearchScreen> {
         var cubit = CustomerCubit.get(context);
         var model = cubit.searchModel;
         return Scaffold(
+          floatingActionButton: cubit.cartProducts.isNotEmpty
+              ? Padding(
+                  padding: EdgeInsets.only(bottom: 10.h),
+                  child: SizedBox(
+                    width: 125.w,
+                    child: FloatingActionButton(
+                      backgroundColor: ColorManager.mainOrange,
+                      child: Text(
+                        'Go To Cart ${cubit.cartProducts.length}',
+                        style: TextStyles.font17WhiteBold,
+                      ),
+                      onPressed: () {
+                        context.pushNamed(Routes.cartScreen);
+                      },
+                    ),
+                  ),
+                )
+              : Container(),
           appBar: AppBar(
             toolbarHeight: 80.h,
             leading: customIconButton(
@@ -331,7 +349,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                               id: model
                                                   .data!.products![index].id!);
                                         },
-                                        child: buildSearchItem(
+                                        child: buildItem(context,
                                             model.data!.products![index]),
                                       )),
                             ),
