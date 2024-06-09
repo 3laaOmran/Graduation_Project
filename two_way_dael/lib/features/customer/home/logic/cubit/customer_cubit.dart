@@ -157,8 +157,8 @@ class CustomerCubit extends Cubit<CustomerStates> {
   void getSearchData({
     String? name,
     int? categryId,
-    String? minPrice,
-    String? maxPrice,
+    int? minPrice,
+    int? maxPrice,
     String? sortBy,
     String? sortWith,
   }) async {

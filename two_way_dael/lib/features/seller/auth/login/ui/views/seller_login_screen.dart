@@ -29,6 +29,7 @@ class SellerLoginScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is SellerLoginSuccessState) {
             if (state.loginModel.status == 200) {
+              showSnackBar(context, message: state.loginModel.message!);
               CashHelper.saveData(
                       key: 'sellerToken', value: state.loginModel.data!.token)
                   .then((value) {
@@ -36,7 +37,7 @@ class SellerLoginScreen extends StatelessWidget {
                 context.pushNamedAndRemoveUntil(Routes.sellerHomeScreen,
                     predicate: (route) => false);
               });
-            } 
+            }
           } else if (state is SellerLoginUnauthorizedState) {
             // showToast(
             //     message: state.error, state: TostStates.ERROR);
@@ -45,105 +46,112 @@ class SellerLoginScreen extends StatelessWidget {
         },
         builder: (context, state) {
           var cubit = SellerLoginCubit.get(context);
-          return Scaffold(
-            body: Container(
-              height: double.infinity,
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/main_background.png'),
-                      fit: BoxFit.fill)),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          verticalSpace(80),
-                          GestureDetector(
-                            onTap: () {
-                              context.pushNamed(Routes.chooseAccountTypeScreen);
-                            },
-                            child: Image.asset(
-                              'assets/images/arrow.png',
-                              width: 60.w,
+          return SafeArea(
+            child: Scaffold(
+              body: Container(
+                height: double.infinity,
+                decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/main_background.png'),
+                        fit: BoxFit.fill)),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            verticalSpace(80),
+                            GestureDetector(
+                              onTap: () {
+                                context.pushNamedAndRemoveUntil(
+                                    Routes.chooseAccountTypeScreen,
+                                    predicate: (route) => false);
+                              },
+                              child: Image.asset(
+                                'assets/images/arrow.png',
+                                width: 60.w,
+                              ),
                             ),
-                          ),
-                          verticalSpace(50),
-                          resuableText(
-                              text: "Login Now  ",
-                              fontsize: 30.sp,
-                              letterspacing: 2,
-                              fontWeight: FontWeight.bold),
-                          resuableText(
-                              text: "Welcome Back \nTo Your Business",
-                              fontsize: 17.sp,
-                              fontWeight: FontWeight.w400),
-                          SizedBox(
-                            height: height * 0.06,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              AbsorbPointer(
-                                  absorbing: state is SellerLoginLoadingState
-                                      ? true
-                                      : false,
-                                  child: const EmailAndPassword()),
-                              SizedBox(
-                                height: height * 0.04,
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional.bottomEnd,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    // context.pushNamed(
-                                    //     Routes.phoneForForgetPasswordScreen);
-                                  },
-                                  child: resuableText(
-                                      text: "Forget Password?",
-                                      fontsize: 13.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color: ColorManager.mainOrange),
+                            verticalSpace(50),
+                            resuableText(
+                                text: "Login Now  ",
+                                fontsize: 30.sp,
+                                letterspacing: 2,
+                                fontWeight: FontWeight.bold),
+                            resuableText(
+                                text: "Welcome Back \nTo Your Business",
+                                fontsize: 17.sp,
+                                fontWeight: FontWeight.w400),
+                            SizedBox(
+                              height: height * 0.06,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                AbsorbPointer(
+                                    absorbing: state is SellerLoginLoadingState
+                                        ? true
+                                        : false,
+                                    child: const EmailAndPassword()),
+                                SizedBox(
+                                  height: height * 0.04,
                                 ),
-                              ),
-                            ],
-                          ),
-                          verticalSpace(12),
-                          state is! SellerLoginLoadingState
-                              ? AppTextButton(
-                                  buttonText: "Log in",
-                                  verticalPadding: 10,
-                                  buttonWidth: width,
-                                  textStyle: TextStyles.font18White,
-                                  onPressed: () {
-                                    if (cubit.formKey.currentState!
-                                        .validate()) {
-                                      cubit.userLogin(
-                                        email: cubit.emailController.text,
-                                        password: cubit.passwordController.text,
-                                      );
-                                    }
-                                  },
-                                )
-                              : const Center(
-                                  child: CircularProgressIndicator(
-                                    color: ColorManager.mainOrange,
+                                Align(
+                                  alignment: AlignmentDirectional.bottomEnd,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      // context.pushNamed(
+                                      //     Routes.phoneForForgetPasswordScreen);
+                                    },
+                                    child: resuableText(
+                                        text: "Forget Password?",
+                                        fontsize: 13.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: ColorManager.mainOrange),
                                   ),
                                 ),
-                          verticalSpace(20),
-                          SignupAndLoginFooter(
-                              firstText: "Don't have account ?? ",
-                              secondText: "SignUp",
-                              ontap: () {
-                                context.pushNamed(Routes.sellerSignupScreen);
-                              }),
-                        ],
+                              ],
+                            ),
+                            verticalSpace(12),
+                            state is! SellerLoginLoadingState
+                                ? AppTextButton(
+                                    buttonText: "Log in",
+                                    verticalPadding: 10,
+                                    buttonWidth: width,
+                                    textStyle: TextStyles.font18White,
+                                    onPressed: () {
+                                      if (cubit.formKey.currentState!
+                                          .validate()) {
+                                        cubit.userLogin(
+                                          email: cubit.emailController.text,
+                                          password:
+                                              cubit.passwordController.text,
+                                        );
+                                      }
+                                    },
+                                  )
+                                : const Center(
+                                    child: CircularProgressIndicator(
+                                      color: ColorManager.mainOrange,
+                                    ),
+                                  ),
+                            verticalSpace(20),
+                            SignupAndLoginFooter(
+                                firstText: "Don't have account ?? ",
+                                secondText: "SignUp",
+                                ontap: () {
+                                  context.pushNamedAndRemoveUntil(
+                                      Routes.sellerSignupScreen,
+                                      predicate: (route) => false);
+                                }),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

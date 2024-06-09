@@ -69,7 +69,8 @@ class SellerSignupCubit extends Cubit<SellerSignupStates> {
         emit(SellerSignupUsedEmailOrPhoneErrorState(errorMessage));
       } else if (error is DioException && error.response?.statusCode == 429) {
         print('Unauthorized: ${error.response!.data['message']}');
-        emit(SellerSignupUsedEmailOrPhoneErrorState(error.response!.data['message']));
+        emit(SellerSignupUsedEmailOrPhoneErrorState(
+            error.response!.data['message']));
       }
       debugPrint('errorState: ${error.toString()}');
       emit(SellerSignupErrorState(error.toString()));
@@ -94,7 +95,8 @@ class SellerSignupCubit extends Cubit<SellerSignupStates> {
       emit(SellerVerificationSuccessState(verificationModel!));
     }).catchError((error) {
       if (error is DioException && error.response?.statusCode == 422) {
-        emit(SellerVerificationOtpErrorState(error.response!.data['data']['otp'][0]));
+        emit(SellerVerificationOtpErrorState(
+            error.response!.data['data']['otp'][0]));
       } else if (error is DioException && error.response?.statusCode == 401) {
         emit(SellerVerificationOtpErrorState(error.response!.data['message']));
       }
@@ -111,7 +113,7 @@ class SellerSignupCubit extends Cubit<SellerSignupStates> {
     required int governorateId,
     required String street,
     required String token,
-    required File image,
+    required File? image,
   }) {
     emit(SellerPhotoAndAddressLoadingState());
 
@@ -125,34 +127,47 @@ class SellerSignupCubit extends Cubit<SellerSignupStates> {
       token: token,
       url: PHOTOANDADDRESS,
       data: data,
-      images: [image],
+      images: [image!],
     ).then((value) {
       photoAndAddressModel = PhotoAndAddressModel.fromJson(value.data);
       debugPrint(value.data['message']);
       emit(SellerPhotoAndAddressSuccessState(photoAndAddressModel!));
     }).catchError((error) {
+      if (error is DioException && error.response?.statusCode == 422) {
+        emit(SellerPhotoAndAddressErrorState(
+            error.response!.data['data']['image'][0]));
+      }
       debugPrint(error.toString());
-      emit(SellerPhotoAndAddressErrorState(error.toString()));
+      // emit(SellerPhotoAndAddressErrorState(error.toString()));
     });
   }
 
   CertificatesModel? certificatesModel;
+
   void certificates({
     required String token,
-    required File healthCertificate,
-    required File commercialLicense,
+    required File? healthCertificate,
+    required File? commercialLicense,
   }) {
     emit(SellerCertificatesLoadingState());
 
-    DioHelper.postData(
+    DioHelper.postCertificates(
       token: token,
       url: sellerCertificates,
       data: {},
-      images: [healthCertificate, commercialLicense],
+      healthApprovalCertificate:healthCertificate,
+      commercialRestaurantLicenses: commercialLicense,
     ).then((value) {
       certificatesModel = CertificatesModel.fromJson(value.data);
       emit(SellerCertificatesSuccessState(certificatesModel!));
     }).catchError((error) {
+      if (error is DioException && error.response?.statusCode == 422) {
+        emit(SellerPhotoAndAddressErrorState(
+            error.response!.data['message']));
+      }else if (error is DioException && error.response?.statusCode == 429) {
+        emit(SellerPhotoAndAddressErrorState(
+            error.response!.data['message']));
+      }
       debugPrint(error.toString());
       emit(SellerCertificatesErrorState(error.toString()));
     });
@@ -164,17 +179,21 @@ class SellerSignupCubit extends Cubit<SellerSignupStates> {
     imagePick = File(image!.path);
     emit(SignupPickImageState());
   }
+
   File? healthCertificate;
   void pickHealthCertificate() async {
-    var image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    healthCertificate = File(image!.path);
-    emit(SignupPickImageState());
+    var healthCertificateImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    healthCertificate = File(healthCertificateImage!.path);
+    emit(SignupHealthCertificateState());
   }
+
   File? commercialLicense;
   void pickCommercialLicense() async {
-    var image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    commercialLicense = File(image!.path);
-    emit(SignupPickImageState());
+    var commercialLicenseImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    commercialLicense = File(commercialLicenseImage!.path);
+    emit(SignupCommercialLicenseState());
   }
 
   IconData suffixIcon = Icons.visibility;

@@ -94,6 +94,8 @@ class SignupCubit extends Cubit<SignupStates> {
         emit(VerificationOtpErrorState(error.response!.data['data']['otp'][0]));
       } else if (error is DioException && error.response?.statusCode == 401) {
         emit(VerificationOtpErrorState(error.response!.data['message']));
+      } else if (error is DioException && error.response?.statusCode == 401) {
+        emit(VerificationOtpErrorState(error.response!.data['message']));
       }
       debugPrint(error.toString());
       emit(VerificationErrorState(error.toString()));
@@ -120,7 +122,7 @@ class SignupCubit extends Cubit<SignupStates> {
       token: token,
       url: PHOTOANDADDRESS,
       data: data,
-      images: [image],
+      images: [image!],
     ).then((value) {
       photoAndAddressModel = PhotoAndAddressModel.fromJson(value.data);
       debugPrint(value.data['message']);

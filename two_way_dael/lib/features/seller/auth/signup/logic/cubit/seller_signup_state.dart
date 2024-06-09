@@ -99,3 +99,5 @@ final class GetCitiesErrorState extends SellerSignupStates {
 final class SiginupChangePasswordVisibilityState extends SellerSignupStates {}
 
 final class SignupPickImageState extends SellerSignupStates {}
+final class SignupCommercialLicenseState extends SellerSignupStates {}
+final class SignupHealthCertificateState extends SellerSignupStates {}

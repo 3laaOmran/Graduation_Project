@@ -82,8 +82,13 @@ class LoginCubit extends Cubit<LoginStates> {
       debugPrint(loginModel!.message);
       emit(PhoneForgetPasswordSuccessState(loginModel!));
     }).catchError((error) {
+      if (error is DioException && error.response?.statusCode == 422) {
+        emit(PhoneForgetPasswordErrorState(
+            error.response!.data['data']['phone'][0]));
+      } else if (error is DioException && error.response?.statusCode == 429) {
+        emit(PhoneForgetPasswordErrorState(error.response!.data['message']));
+      }
       debugPrint(error.toString());
-      emit(PhoneForgetPasswordErrorState(error.toString()));
     });
   }
 
@@ -104,8 +109,15 @@ class LoginCubit extends Cubit<LoginStates> {
       debugPrint(value.data['message']);
       emit(ConfirmPhoneNumberSuccessState(confirmPhoneModel!));
     }).catchError((error) {
+      if (error is DioException && error.response?.statusCode == 422) {
+        emit(ConfirmPhoneNumberErrorState(
+            error.response!.data['data']['otp'][0]));
+      } else if (error is DioException && error.response?.statusCode == 401) {
+        emit(ConfirmPhoneNumberErrorState(error.response!.data['message']));
+      } else if (error is DioException && error.response?.statusCode == 429) {
+        emit(ConfirmPhoneNumberErrorState(error.response!.data['message']));
+      }
       debugPrint(error.toString());
-      emit(ConfirmPhoneNumberErrorState(error.toString()));
     });
   }
 
@@ -127,8 +139,13 @@ class LoginCubit extends Cubit<LoginStates> {
       debugPrint(value.data['message']);
       emit(ChangePasswordSuccessState(confirmPhoneModel!));
     }).catchError((error) {
+      if (error is DioException && error.response?.statusCode == 422) {
+        emit(ChangePasswordErrorState(
+            error.response!.data['message']));
+      } else if (error is DioException && error.response?.statusCode == 429) {
+        emit(ChangePasswordErrorState(error.response!.data['message']));
+      }
       debugPrint(error.toString());
-      emit(ChangePasswordErrorState(error.toString()));
     });
   }
 }

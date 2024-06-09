@@ -105,8 +105,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 cubit.getSearchData(
                   name: searchTextController.text,
                   categryId: int.parse(categoryDropDownValue),
-                  minPrice: minPriceController.text,
-                  maxPrice: maxPriceController.text,
+                  minPrice: int.parse(minPriceController.text),
+                  maxPrice: int.parse(maxPriceController.text),
                   sortBy: sortwith,
                   sortWith: sortwith,
                 );

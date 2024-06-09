@@ -11,48 +11,53 @@ class ChooseAccountTypeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/images/main_background.png'),
-              fit: BoxFit.fill),
-        ),
-        child: Padding(
-          padding: EdgeInsetsDirectional.symmetric(horizontal: 20.w),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Choose Your Account Type',
-                style: TextStyles.font20blackbold,
-              ),
-              verticalSpace(50),
-              Row(
-                children: [
-                  Expanded(
-                    child: AppTextButton(
-                      buttonText: 'Customer',
-                      textStyle: TextStyles.font17WhiteBold,
-                      onPressed: () {
-                        context.pushNamed(Routes.loginScreen);
-                      },
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          height: double.infinity,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/images/main_background.png'),
+                fit: BoxFit.fill),
+          ),
+          child: Padding(
+            padding: EdgeInsetsDirectional.symmetric(horizontal: 20.w),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Choose Your Account Type',
+                  style: TextStyles.font20blackbold,
+                ),
+                verticalSpace(50),
+                Row(
+                  children: [
+                    Expanded(
+                      child: AppTextButton(
+                        buttonText: 'Customer',
+                        textStyle: TextStyles.font17WhiteBold,
+                        onPressed: () {
+                          context.pushNamedAndRemoveUntil(Routes.loginScreen,
+                              predicate: (route) => false);
+                        },
+                      ),
                     ),
-                  ),
-                  horizontalSpace(10),
-                  Expanded(
-                    child: AppTextButton(
-                      buttonText: 'Seller',
-                      textStyle: TextStyles.font17WhiteBold,
-                      onPressed: () {
-                        context.pushNamed(Routes.sellerLoginScreen);
-                      },
+                    horizontalSpace(10),
+                    Expanded(
+                      child: AppTextButton(
+                        buttonText: 'Seller',
+                        textStyle: TextStyles.font17WhiteBold,
+                        onPressed: () {
+                          context.pushNamedAndRemoveUntil(
+                              Routes.sellerLoginScreen,
+                              predicate: (route) => false);
+                        },
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

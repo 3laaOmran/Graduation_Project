@@ -26,7 +26,7 @@ class SignUpScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is SignupSuccessState) {
             if (state.signupModel.status == 201) {
-              context.pushNamed(Routes.otpScreen);
+              // context.pushNamedAndRemoveUntil(Routes.otpScreen,predicate: (route) => false);
               showSnackBar(context, message: state.signupModel.message!);
               // showToast(
               //     message: state.signupModel.message!,
@@ -48,102 +48,104 @@ class SignUpScreen extends StatelessWidget {
         },
         builder: (context, state) {
           var cubit = SignupCubit.get(context);
-          return Scaffold(
-            body: SafeArea(
-              child: Container(
-                height: double.infinity,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/main_background.png'),
-                    fit: BoxFit.fill,
+          return SafeArea(
+            child: Scaffold(
+              body: SafeArea(
+                child: Container(
+                  height: double.infinity,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/main_background.png'),
+                      fit: BoxFit.fill,
+                    ),
                   ),
-                ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 20.w, vertical: 20.h),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            verticalSpace(20),
-                            GestureDetector(
-                              onTap: () {
-                                context.pushNamed(Routes.loginScreen);
-                              },
-                              child: Image.asset(
-                                'assets/images/arrow.png',
-                                width: 60.w,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20.w, vertical: 20.h),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              verticalSpace(20),
+                              GestureDetector(
+                                onTap: () {
+                                  context.pushNamedAndRemoveUntil(Routes.loginScreen,predicate: (route) => false);
+                                },
+                                child: Image.asset(
+                                  'assets/images/arrow.png',
+                                  width: 60.w,
+                                ),
                               ),
-                            ),
-                            verticalSpace(20),
-                            Text(
-                              "Sign Up",
-                              style: TextStyle(
-                                fontSize: 30.sp,
-                                letterSpacing: 2,
-                                fontWeight: FontWeight.bold,
+                              verticalSpace(20),
+                              Text(
+                                "Sign Up",
+                                style: TextStyle(
+                                  fontSize: 30.sp,
+                                  letterSpacing: 2,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            const Text(
-                              "Create a new account",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            verticalSpace(30),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                AbsorbPointer(
-                                    absorbing: state is SignupLoadingState
-                                        ? true
-                                        : false,
-                                    child: const SignupForm()),
-                                verticalSpace(30),
-                              ],
-                            ),
-                            state is! SignupLoadingState
-                                ? AppTextButton(
-                                    textStyle: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
+                              const Text(
+                                "Create a new account",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              verticalSpace(30),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  AbsorbPointer(
+                                      absorbing: state is SignupLoadingState
+                                          ? true
+                                          : false,
+                                      child: const SignupForm()),
+                                  verticalSpace(30),
+                                ],
+                              ),
+                              state is! SignupLoadingState
+                                  ? AppTextButton(
+                                      textStyle: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                      ),
+                                      buttonText: "Sign Up",
+                                      buttonWidth: width,
+                                      onPressed: () {
+                                        if (cubit.formKey.currentState!
+                                            .validate()) {
+                                          cubit.userSignup(
+                                            email: cubit.emailController.text,
+                                            name: cubit.nameController.text,
+                                            phone: cubit.phoneController.text,
+                                            password:
+                                                cubit.passwordController.text,
+                                          );
+                                          // context.pushNamedAndRemoveUntil(
+                                          //     Routes.otpScreen,
+                                          //     predicate: (route) => false);
+                                        }
+                                      },
+                                    )
+                                  : const Center(
+                                      child: CircularProgressIndicator(
+                                        color: ColorManager.mainOrange,
+                                      ),
                                     ),
-                                    buttonText: "Sign Up",
-                                    buttonWidth: width,
-                                    onPressed: () {
-                                      if (cubit.formKey.currentState!
-                                          .validate()) {
-                                        cubit.userSignup(
-                                          email: cubit.emailController.text,
-                                          name: cubit.nameController.text,
-                                          phone: cubit.phoneController.text,
-                                          password:
-                                              cubit.passwordController.text,
-                                        );
-                                        // context.pushNamedAndRemoveUntil(
-                                        //     Routes.otpScreen,
-                                        //     predicate: (route) => false);
-                                      }
-                                    },
-                                  )
-                                : const Center(
-                                    child: CircularProgressIndicator(
-                                      color: ColorManager.mainOrange,
-                                    ),
-                                  ),
-                            verticalSpace(15),
-                            SignupAndLoginFooter(
-                              firstText: 'Already have an account ? ',
-                              secondText: '  Login',
-                              ontap: () {
-                                context.pushNamed(Routes.loginScreen);
-                              },
-                            ),
-                          ],
+                              verticalSpace(15),
+                              SignupAndLoginFooter(
+                                firstText: 'Already have an account ? ',
+                                secondText: '  Login',
+                                ontap: () {
+                                  context.pushNamedAndRemoveUntil(Routes.loginScreen,predicate: (route) => false);
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
