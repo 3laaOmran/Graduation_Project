@@ -10,40 +10,43 @@ import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/core/widgets/custom_drop_down_list.dart';
-import 'package:two_way_dael/core/widgets/show_snackbar.dart';
-import 'package:two_way_dael/features/customer/auth/signup/logic/cubit/siginup_cubit.dart';
+import 'package:two_way_dael/core/widgets/custom_text_form_field.dart';
+import 'package:two_way_dael/core/widgets/show_toast.dart';
+import 'package:two_way_dael/features/seller/auth/signup/logic/cubit/seller_signup_cubit.dart';
 
-class PhotoAndAddressScreen extends StatelessWidget {
-  const PhotoAndAddressScreen({super.key});
+class SellerPhotoAndAddressScreen extends StatelessWidget {
+  const SellerPhotoAndAddressScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SignupCubit()..getGovernorates(),
-      child: BlocConsumer<SignupCubit, SignupStates>(
+      create: (context) => SellerSignupCubit()..getGovernorates(),
+      child: BlocConsumer<SellerSignupCubit, SellerSignupStates>(
         listener: (context, state) {
-          if (state is PhotoAndAddressLoadingState) {
-            CashHelper.getData(key: 'token');
-          } else if (state is PhotoAndAddressSuccessState) {
+          if (state is SellerPhotoAndAddressLoadingState) {
+            CashHelper.getData(key: 'sellerRegisterToken');
+          } else if (state is SellerPhotoAndAddressSuccessState) {
             if (state.photoAndAddressModel.status == 200) {
-              // showSnackBar(context, message:  state.photoAndAddressModel.message!);
-              // showToast(
-              //     message: state.photoAndAddressModel.message!,
-              //     state: TostStates.SUCCESS);
-              context.pushNamedAndRemoveUntil(Routes.homeScreen,
+              showToast(
+                  message: state.photoAndAddressModel.message!,
+                  state: TostStates.SUCCESS);
+              context.pushNamedAndRemoveUntil(Routes.sellerCirtificates,
                   predicate: (route) => false);
-              CashHelper.saveData(key: 'token', value: registerToken)
-                  .then((value) {
-                token = registerToken;
-              });
+              // CashHelper.saveData(key: 'token', value: registerToken)
+              //     .then((value) {
+              //   // sellerToken = sellerRegisterToken;
+              // });
+            } else {
+              showToast(
+                  message: state.photoAndAddressModel.message!,
+                  state: TostStates.WARNING);
             }
-          } else if (state is PhotoAndAddressErrorState) {
-            showSnackBar(context, message: 'An Error Occurred');
-            // showToast(message: 'An Error Occurred', state: TostStates.ERROR);
+          } else if (state is SellerPhotoAndAddressErrorState) {
+            showToast(message: 'An Error Occurred', state: TostStates.ERROR);
           }
         },
         builder: (context, state) {
-          var cubit = SignupCubit.get(context);
+          var cubit = SellerSignupCubit.get(context);
           // var model = cubit.governoratesModel;
           return Container(
             decoration: const BoxDecoration(
@@ -60,16 +63,28 @@ class PhotoAndAddressScreen extends StatelessWidget {
                   width: double.infinity,
                   child: SingleChildScrollView(
                     child: AbsorbPointer(
-                      absorbing:
-                          state is PhotoAndAddressLoadingState ? true : false,
+                      absorbing: state is SellerPhotoAndAddressLoadingState
+                          ? true
+                          : false,
                       child: Form(
                         key: cubit.photoAndAddressFormKey,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             verticalSpace(100),
+                            // verticalSpace(70),
+                            // GestureDetector(
+                            //   onTap: () {
+                            //     context.pushNamed(Routes.sellerSignupScreen);
+                            //   },
+                            //   child: Image.asset(
+                            //     'assets/images/arrow.png',
+                            //     width: 60.w,
+                            //   ),
+                            // ),
+                            // verticalSpace(30),
                             Text(
-                              'Last Step',
+                              'Step 3',
                               style: Theme.of(context)
                                   .textTheme
                                   .headlineMedium
@@ -88,7 +103,7 @@ class PhotoAndAddressScreen extends StatelessWidget {
                             ),
                             verticalSpace(40),
                             Text(
-                              'Add Your Profile Photo',
+                              'Add Your Business Logo',
                               style: Theme.of(context)
                                   .textTheme
                                   .labelSmall
@@ -151,10 +166,22 @@ class PhotoAndAddressScreen extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            verticalSpace(50),
+                            verticalSpace(30),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                Text(
+                                  'Street',
+                                  style: TextStyles.font17BlackBold,
+                                ),
+                                verticalSpace(5),
+                                CustomTextFormField(
+                                  prefixIcon: const Icon(Icons.maps_home_work),
+                                  isObsecureText: false,
+                                  hintText: 'Street',
+                                  controller: cubit.streetController,
+                                ),
+                                verticalSpace(20),
                                 CustomDropDownList(
                                   selectedItems: (List<dynamic> selectedList) {
                                     for (var item in selectedList) {
@@ -171,8 +198,9 @@ class PhotoAndAddressScreen extends StatelessWidget {
 
                                         debugPrint(
                                             'widget.dropedList!.indexOf(item): ${cubit.governoratesList.indexOf(item)}');
-                                        SignupCubit.get(context).getCities(
-                                            cubit.selectedGovernorateId);
+                                        SellerSignupCubit.get(context)
+                                            .getCities(
+                                                cubit.selectedGovernorateId);
                                         cubit.cityController.text = '';
                                         cubit.selectedCityId = null;
                                       }
@@ -195,74 +223,79 @@ class PhotoAndAddressScreen extends StatelessWidget {
                                   hint: 'Governorate',
                                   isCitySelected: true,
                                 ),
+                                verticalSpace(20),
                                 cubit.selectedCities.isNotEmpty
-                                    ? Column(
-                                        children: [
-                                          verticalSpace(20),
-                                          CustomDropDownList(
-                                            selectedItems:
-                                                (List<dynamic> selectedList) {
-                                              for (var item in selectedList) {
-                                                if (item is SelectedListItem) {
-                                                  cubit.cityController.text =
-                                                      item.name;
-                                                  cubit.selectedCityId = cubit
-                                                          .selectedCities
-                                                          .indexOf(item) +
-                                                      1;
-                                                  debugPrint(
-                                                      'item.name: ${item.name}');
-                                                  debugPrint(
-                                                      'city id: ${cubit.selectedCityId}');
+                                    ? CustomDropDownList(
+                                        selectedItems:
+                                            (List<dynamic> selectedList) {
+                                          for (var item in selectedList) {
+                                            if (item is SelectedListItem) {
+                                              cubit.cityController.text =
+                                                  item.name;
+                                              cubit.selectedCityId = cubit
+                                                      .selectedCities
+                                                      .indexOf(item) +
+                                                  1;
+                                              debugPrint(
+                                                  'item.name: ${item.name}');
+                                              debugPrint(
+                                                  'city id: ${cubit.selectedCityId}');
 
-                                                  debugPrint(
-                                                      'widget.dropedList!.indexOf(item): ${cubit.selectedCities.indexOf(item)}');
-                                                }
-                                              }
-                                            },
-                                            validation: (value) {
-                                              if (value!.isEmpty) {
-                                                return 'City is required';
-                                              }
-                                              return null;
-                                            },
-                                            prefixIcon: const Icon(
-                                              Icons.location_on,
-                                              color: ColorManager.mainOrange,
-                                            ),
-                                            dropedList: cubit.selectedCities,
-                                            textEditingController:
-                                                cubit.cityController,
-                                            title: 'City',
-                                            hint: 'City',
-                                            isCitySelected: true,
-                                          ),
-                                        ],
+                                              debugPrint(
+                                                  'widget.dropedList!.indexOf(item): ${cubit.selectedCities.indexOf(item)}');
+                                            }
+                                          }
+                                        },
+                                        validation: (value) {
+                                          if (value!.isEmpty) {
+                                            return 'City is required';
+                                          }
+                                          return null;
+                                        },
+                                        prefixIcon: const Icon(
+                                          Icons.location_on,
+                                          color: ColorManager.mainOrange,
+                                        ),
+                                        dropedList: cubit.selectedCities,
+                                        textEditingController:
+                                            cubit.cityController,
+                                        title: 'City',
+                                        hint: 'City',
+                                        isCitySelected: true,
                                       )
                                     : Container(),
                               ],
                             ),
                             verticalSpace(50),
-                            AppTextButton(
-                              buttonText: 'Next',
-                              textStyle: TextStyles.font20Whitebold,
-                              onPressed: () {
-                                if (cubit.photoAndAddressFormKey.currentState!
-                                    .validate()) {
-                                  debugPrint(
-                                      'Selected Governorate ID: ${cubit.selectedGovernorateId}');
-                                  debugPrint(
-                                      'Selected City ID: ${cubit.selectedCityId}');
-                                  debugPrint('${cubit.imagePick}');
-                                  cubit.photoAndAddress(
-                                    cityId: cubit.selectedCityId!,
-                                    governorateId: cubit.selectedGovernorateId!,
-                                    token: registerToken!,
-                                    image: cubit.imagePick,
-                                  );
-                                }
-                              },
-                            ),
+                            state is! SellerPhotoAndAddressLoadingState
+                                ? AppTextButton(
+                                    buttonText: 'Next',
+                                    textStyle: TextStyles.font17WhiteBold,
+                                    onPressed: () {
+                                      if (cubit
+                                          .photoAndAddressFormKey.currentState!
+                                          .validate()) {
+                                        debugPrint(
+                                            'Selected Governorate ID: ${cubit.selectedGovernorateId}');
+                                        debugPrint(
+                                            'Selected City ID: ${cubit.selectedCityId}');
+                                        debugPrint('${cubit.imagePick}');
+                                        cubit.photoAndAddress(
+                                          cityId: cubit.selectedCityId!,
+                                          governorateId:
+                                              cubit.selectedGovernorateId!,
+                                          token: sellerRegisterToken!,
+                                          image: cubit.imagePick!,
+                                          street: cubit.streetController.text,
+                                        );
+                                      }
+                                    },
+                                  )
+                                : const Center(
+                                    child: CircularProgressIndicator(
+                                      color: ColorManager.mainOrange,
+                                    ),
+                                  ),
                             verticalSpace(20),
                           ],
                         ),

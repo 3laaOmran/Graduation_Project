@@ -8,48 +8,43 @@ import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/core/widgets/show_snackbar.dart';
 import 'package:two_way_dael/core/widgets/signup_and_login_footer.dart';
-import 'package:two_way_dael/features/customer/auth/login/logic/cubit/login_cubit.dart';
+import 'package:two_way_dael/features/seller/auth/login/logic/cubit/seller_login_cubit.dart';
 
 import '../../../../../../core/helpers/spacing.dart';
 import '../../../../../../core/routing/routes.dart';
 import '../../../../../../core/theming/colors.dart';
 import '../../../../../../core/widgets/resuable_text.dart';
-import '../widgets/email_and_password.dart';
+import '../widgets/seller_email_and_password.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class SellerLoginScreen extends StatelessWidget {
+  const SellerLoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height; //height of screen
     final width = MediaQuery.of(context).size.width;
     return BlocProvider(
-      create: (context) => LoginCubit(),
-      child: BlocConsumer<LoginCubit, LoginStates>(
+      create: (context) => SellerLoginCubit(),
+      child: BlocConsumer<SellerLoginCubit, SellerLoginStates>(
         listener: (context, state) {
-          if (state is LoginSuccessState) {
+          if (state is SellerLoginSuccessState) {
             if (state.loginModel.status == 200) {
-              showSnackBar(context, message: state.loginModel.message!);
               CashHelper.saveData(
-                      key: 'token', value: state.loginModel.data!.token)
+                      key: 'sellerToken', value: state.loginModel.data!.token)
                   .then((value) {
-                token = state.loginModel.data!.token;
-                context.pushNamedAndRemoveUntil(Routes.homeScreen,
+                sellerToken = state.loginModel.data!.token;
+                context.pushNamedAndRemoveUntil(Routes.sellerHomeScreen,
                     predicate: (route) => false);
               });
-            }
-          } else if (state is LoginUnauthorizedState) {
-            // ScaffoldMessenger.of(context).showSnackBar(
-            //   SnackBar(content: Text(state.error)),
-            // );
-            // if (state is LoginUnauthorizedState) {
-            // showToast(message: state.error, state: TostStates.ERROR);
-            // }
+            } 
+          } else if (state is SellerLoginUnauthorizedState) {
+            // showToast(
+            //     message: state.error, state: TostStates.ERROR);
             showSnackBar(context, message: state.error);
           }
         },
         builder: (context, state) {
-          var cubit = LoginCubit.get(context);
+          var cubit = SellerLoginCubit.get(context);
           return Scaffold(
             body: Container(
               height: double.infinity,
@@ -83,7 +78,7 @@ class LoginScreen extends StatelessWidget {
                               letterspacing: 2,
                               fontWeight: FontWeight.bold),
                           resuableText(
-                              text: "Welcome Back",
+                              text: "Welcome Back \nTo Your Business",
                               fontsize: 17.sp,
                               fontWeight: FontWeight.w400),
                           SizedBox(
@@ -93,8 +88,9 @@ class LoginScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               AbsorbPointer(
-                                  absorbing:
-                                      state is LoginLoadingState ? true : false,
+                                  absorbing: state is SellerLoginLoadingState
+                                      ? true
+                                      : false,
                                   child: const EmailAndPassword()),
                               SizedBox(
                                 height: height * 0.04,
@@ -103,8 +99,8 @@ class LoginScreen extends StatelessWidget {
                                 alignment: AlignmentDirectional.bottomEnd,
                                 child: GestureDetector(
                                   onTap: () {
-                                    context.pushNamed(
-                                        Routes.phoneForForgetPasswordScreen);
+                                    // context.pushNamed(
+                                    //     Routes.phoneForForgetPasswordScreen);
                                   },
                                   child: resuableText(
                                       text: "Forget Password?",
@@ -116,7 +112,7 @@ class LoginScreen extends StatelessWidget {
                             ],
                           ),
                           verticalSpace(12),
-                          state is! LoginLoadingState
+                          state is! SellerLoginLoadingState
                               ? AppTextButton(
                                   buttonText: "Log in",
                                   verticalPadding: 10,
@@ -142,7 +138,7 @@ class LoginScreen extends StatelessWidget {
                               firstText: "Don't have account ?? ",
                               secondText: "SignUp",
                               ontap: () {
-                                context.pushNamed(Routes.signupScreen);
+                                context.pushNamed(Routes.sellerSignupScreen);
                               }),
                         ],
                       ),

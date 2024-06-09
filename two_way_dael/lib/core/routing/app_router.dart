@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:two_way_dael/choose_account_type_screen.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/routing/routes.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
@@ -19,6 +20,12 @@ import 'package:two_way_dael/features/customer/home/ui/Modules/search_module.dar
 import 'package:two_way_dael/features/customer/home/ui/Modules/seller_details.dart';
 import 'package:two_way_dael/features/customer/home/ui/Modules/your_orders_screen.dart';
 import 'package:two_way_dael/features/customer/home/ui/widgets/change_password_screen.dart';
+import 'package:two_way_dael/features/seller/auth/login/ui/views/seller_login_screen.dart';
+import 'package:two_way_dael/features/seller/auth/signup/ui/views/seller_certificates.dart';
+import 'package:two_way_dael/features/seller/auth/signup/ui/views/seller_otp_screen.dart';
+import 'package:two_way_dael/features/seller/auth/signup/ui/views/seller_photo_and_address_screen.dart';
+import 'package:two_way_dael/features/seller/auth/signup/ui/views/seller_signup_screen.dart';
+import 'package:two_way_dael/features/seller/home/ui/views/seller_home_screen.dart';
 
 import '../../features/customer/auth/login/ui/views/login_screen.dart';
 import '../../features/customer/auth/signup/ui/views/signup_screen.dart';
@@ -68,6 +75,21 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => ContactUsScreen());
       case Routes.cartScreen:
         return MaterialPageRoute(builder: (_) => const CartScreen());
+      case Routes.chooseAccountTypeScreen:
+        return MaterialPageRoute(
+            builder: (_) => const ChooseAccountTypeScreen());
+      case Routes.sellerLoginScreen:
+        return MaterialPageRoute(builder: (_) => const SellerLoginScreen());
+      case Routes.sellerHomeScreen:
+        return MaterialPageRoute(builder: (_) => const SellerHomeScreen());
+      case Routes.sellerSignupScreen:
+        return MaterialPageRoute(builder: (_) => const SellerSignupScreen());
+      case Routes.sellerOtpScreen:
+        return MaterialPageRoute(builder: (_) => const SellerConfirmAccount());
+      case Routes.sellerPhotoAndAddressScreen:
+        return MaterialPageRoute(builder: (_) => const SellerPhotoAndAddressScreen());
+      case Routes.sellerCirtificates:
+        return MaterialPageRoute(builder: (_) => const SellerCertificates());
       default:
         return MaterialPageRoute(
             builder: (context) => Scaffold(
@@ -76,7 +98,8 @@ class AppRouter {
                     child: AlertDialog(
                       backgroundColor: Colors.white,
                       title: const Text('Exit'),
-                      content: const Text('Are you sure ?!!!!\nYou want to exit?'),
+                      content:
+                          const Text('Are you sure ?!!!!\nYou want to exit?'),
                       actions: [
                         AppTextButton(
                           buttonText: 'Yes',

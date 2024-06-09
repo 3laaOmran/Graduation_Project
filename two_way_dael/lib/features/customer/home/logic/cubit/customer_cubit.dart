@@ -128,10 +128,10 @@ class CustomerCubit extends Cubit<CustomerStates> {
       url: PRODUCTS,
     ).then((value) {
       productsModel = ProductsModel.fromJson(value.data);
-      print(value.data);
+      // print(value.data);
       emit(CustomerGetProductsSuccessState());
     }).catchError((error) {
-      print(error.toString());
+      debugPrint(error.toString());
       emit(CustomerGetProductsErrorState());
     });
   }

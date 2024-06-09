@@ -15,7 +15,7 @@ class AppRegex {
   }
 
   static bool isNameValid(String name) {
-    return RegExp(r'^([\u0600-\u06FF\s]{2,}|[a-zA-Z\s]{2,})$').hasMatch(name);
+    return RegExp(r'^([\u0600-\u06FF\s]{4,}|[a-zA-Z\s]{4,})$').hasMatch(name);
   }
 
   static bool hasLowerCase(String password) {

@@ -12,3 +12,8 @@ const CONFIRMPHONENUMBER = 'password/otp/customer';
 const CHANGEPASSWORD = 'password/change/customer';
 const SEARCH = 'products';
 const CATEGORIES = 'categories';
+//--------------------------------------
+const sellerLogin = 'auth/login/seller';
+const sellerSignup = 'auth/register/seller';
+const sellerVerification = 'auth/verify/seller';
+const sellerCertificates = 'auth/seller/certificates';

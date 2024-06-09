@@ -40,3 +40,14 @@ class PhotoAndAddressModel {
     message = json['message'];
   }
 }
+
+//*--------------------------------------
+class CertificatesModel {
+  int? status;
+  String? message;
+
+  CertificatesModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    message = json['message'];
+  }
+}

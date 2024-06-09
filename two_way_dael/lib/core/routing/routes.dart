@@ -18,5 +18,13 @@ class Routes {
   static const String changePasswordScreen = '/changePasswordScreen';
   static const String searchScreen = '/searchScreen';
   static const String cartScreen = '/cartScreen';
+  static const String chooseAccountTypeScreen = '/chooseAccountTypeScreen';
+  //------------------------------------------------------------------
+  static const String sellerLoginScreen = '/sellerLoginScreen';
+  static const String sellerSignupScreen = '/sellerSignupScreen';
+  static const String sellerOtpScreen = '/sellerOtpScreen';
+  static const String sellerPhotoAndAddressScreen = '/sellerPhotoAndAddressScreen';
+  static const String sellerCirtificates = '/sellerCirtificates';
+  static const String sellerHomeScreen = '/sellerHomeScreen';
 
 }

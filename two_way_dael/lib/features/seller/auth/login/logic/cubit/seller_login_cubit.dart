@@ -6,20 +6,22 @@ import 'package:two_way_dael/features/customer/auth/login/data/models/login_mode
 
 import '../../../../../../core/networking/dio_helper.dart';
 
-part 'login_state.dart';
 
-class LoginCubit extends Cubit<LoginStates> {
-  LoginCubit() : super(LoginInitialState());
-  static LoginCubit get(context) => BlocProvider.of(context);
+part 'seller_login_state.dart';
+
+class SellerLoginCubit extends Cubit<SellerLoginStates> {
+  SellerLoginCubit() : super(SellerLoginInitialState());
+
+  static SellerLoginCubit get(context) => BlocProvider.of(context);
 
   LoginModel? loginModel;
   void userLogin({
     required String email,
     required String password,
   }) {
-    emit(LoginLoadingState());
+    emit(SellerLoginLoadingState());
     DioHelper.postData(
-      url: LOGIN,
+      url: sellerLogin,
       data: {
         'email': email,
         'password': password,
@@ -29,16 +31,17 @@ class LoginCubit extends Cubit<LoginStates> {
       // print(value.data);
       loginModel = LoginModel.fromJson(value.data);
 
-      emit(LoginSuccessState(loginModel!));
+      emit(SellerLoginSuccessState(loginModel!));
     }).catchError((error) {
+      // debugPrint(error.toString());
       if (error is DioException && error.response?.statusCode == 401) {
         print('Unauthorized: ${error.response!.data['message']}');
-        emit(LoginUnauthorizedState(error.response!.data['message']));
+        emit(SellerLoginUnauthorizedState(error.response!.data['message']));
       } else if (error is DioException && error.response?.statusCode == 429) {
         print('Unauthorized: ${error.response!.data['message']}');
-        emit(LoginUnauthorizedState(error.response!.data['message']));
+        emit(SellerLoginUnauthorizedState(error.response!.data['message']));
       }
-      emit(LoginErrorState(error.toString()));
+      emit(SellerLoginErrorState(error.toString()));
     });
   }
 
@@ -55,7 +58,7 @@ class LoginCubit extends Cubit<LoginStates> {
   void changePasswordVisibility() {
     isObsecure = !isObsecure;
     suffixIcon = isObsecure ? Icons.visibility : Icons.visibility_off;
-    emit(LoginChangePasswordVisibilityState());
+    emit(SellerLoginChangePasswordVisibilityState());
   }
 
   IconData confirmSuffixIcon = Icons.visibility;
@@ -64,7 +67,7 @@ class LoginCubit extends Cubit<LoginStates> {
     confirmIsObsecure = !confirmIsObsecure;
     confirmSuffixIcon =
         confirmIsObsecure ? Icons.visibility : Icons.visibility_off;
-    emit(LoginChangePasswordVisibilityState());
+    emit(SellerLoginChangePasswordVisibilityState());
   }
 
   void checkPhoneNumber({

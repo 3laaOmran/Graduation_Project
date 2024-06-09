@@ -7,47 +7,49 @@ import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/core/widgets/show_snackbar.dart';
-import 'package:two_way_dael/features/customer/auth/signup/logic/cubit/siginup_cubit.dart';
+import 'package:two_way_dael/core/widgets/show_toast.dart';
+import 'package:two_way_dael/features/seller/auth/signup/logic/cubit/seller_signup_cubit.dart';
+import 'package:two_way_dael/features/seller/auth/signup/ui/widgets/seller_signup_form.dart';
 
 import '../../../../../../core/helpers/spacing.dart';
 import '../../../../../../core/routing/routes.dart';
 import '../../../../../../core/widgets/signup_and_login_footer.dart';
-import '../widgets/signup_form.dart';
 
-class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({super.key});
+class SellerSignupScreen extends StatelessWidget {
+  const SellerSignupScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return BlocProvider(
-      create: (context) => SignupCubit(),
-      child: BlocConsumer<SignupCubit, SignupStates>(
+      create: (context) => SellerSignupCubit(),
+      child: BlocConsumer<SellerSignupCubit, SellerSignupStates>(
         listener: (context, state) {
-          if (state is SignupSuccessState) {
+          if (state is SellerSignupSuccessState) {
             if (state.signupModel.status == 201) {
-              context.pushNamed(Routes.otpScreen);
-              showSnackBar(context, message: state.signupModel.message!);
-              // showToast(
-              //     message: state.signupModel.message!,
-              //     state: TostStates.SUCCESS);
+              // context.pushNamed(Routes.sellerHomeScreen);
+              showToast(
+                  message: state.signupModel.message!,
+                  state: TostStates.SUCCESS);
               CashHelper.saveData(
-                      key: 'registerToken',
+                      key: 'sellerRegisterToken',
                       value: state.signupModel.data!.token)
                   .then((value) {
-                registerToken = state.signupModel.data!.token;
-                // CashHelper.getData(key: 'token');
-                context.pushNamed(Routes.otpScreen);
+                sellerRegisterToken = state.signupModel.data!.token;
+                context.pushNamed(Routes.sellerOtpScreen);
               });
-            } 
-          } else if (state is SignupUsedEmailOrPhoneErrorState) {
+            } else {
+              showToast(
+                  message: state.signupModel.message!, state: TostStates.ERROR);
+            }
+          } else if (state is SellerSignupUsedEmailOrPhoneErrorState) {
             // showToast(
             //  message: state.error, state: TostStates.ERROR);
             showSnackBar(context, message: state.error);
           }
         },
         builder: (context, state) {
-          var cubit = SignupCubit.get(context);
+          var cubit = SellerSignupCubit.get(context);
           return Scaffold(
             body: SafeArea(
               child: Container(
@@ -71,7 +73,7 @@ class SignUpScreen extends StatelessWidget {
                             verticalSpace(20),
                             GestureDetector(
                               onTap: () {
-                                context.pushNamed(Routes.loginScreen);
+                                context.pushNamed(Routes.sellerLoginScreen);
                               },
                               child: Image.asset(
                                 'assets/images/arrow.png',
@@ -88,22 +90,23 @@ class SignUpScreen extends StatelessWidget {
                               ),
                             ),
                             const Text(
-                              "Create a new account",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              "Start Your Business",
+                              style: TextStyle(
+                                  fontSize: 17, fontWeight: FontWeight.bold),
                             ),
                             verticalSpace(30),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 AbsorbPointer(
-                                    absorbing: state is SignupLoadingState
+                                    absorbing: state is SellerSignupLoadingState
                                         ? true
                                         : false,
-                                    child: const SignupForm()),
+                                    child: const SellerSignupForm()),
                                 verticalSpace(30),
                               ],
                             ),
-                            state is! SignupLoadingState
+                            state is! SellerSignupLoadingState
                                 ? AppTextButton(
                                     textStyle: const TextStyle(
                                       color: Colors.white,
@@ -121,9 +124,6 @@ class SignUpScreen extends StatelessWidget {
                                           password:
                                               cubit.passwordController.text,
                                         );
-                                        // context.pushNamedAndRemoveUntil(
-                                        //     Routes.otpScreen,
-                                        //     predicate: (route) => false);
                                       }
                                     },
                                   )
@@ -137,7 +137,7 @@ class SignUpScreen extends StatelessWidget {
                               firstText: 'Already have an account ? ',
                               secondText: '  Login',
                               ontap: () {
-                                context.pushNamed(Routes.loginScreen);
+                                context.pushNamed(Routes.sellerLoginScreen);
                               },
                             ),
                           ],

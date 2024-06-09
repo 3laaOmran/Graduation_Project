@@ -18,6 +18,11 @@ final class LoginErrorState extends LoginStates {
 
   LoginErrorState(this.error);
 }
+final class LoginUnauthorizedState extends LoginStates {
+  final String error;
+
+  LoginUnauthorizedState(this.error);
+}
 final class PhoneForgetPasswordLoadingState extends LoginStates {}
 
 final class PhoneForgetPasswordSuccessState extends LoginStates {

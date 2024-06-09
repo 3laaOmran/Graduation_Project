@@ -7,40 +7,45 @@ import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/show_snackbar.dart';
+import 'package:two_way_dael/core/widgets/show_toast.dart';
 import 'package:two_way_dael/features/customer/auth/signup/logic/cubit/siginup_cubit.dart';
+import 'package:two_way_dael/features/seller/auth/signup/logic/cubit/seller_signup_cubit.dart';
 
 import '../../../../../../core/helpers/cash_helper.dart';
 import '../../../../../../core/helpers/spacing.dart';
 import '../../../../../../core/routing/routes.dart';
 import '../../../../../../core/widgets/custom_button.dart';
 
-class ConfirmAccount extends StatelessWidget {
-  const ConfirmAccount({super.key});
+class SellerConfirmAccount extends StatelessWidget {
+  const SellerConfirmAccount({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SignupCubit(),
-      child: BlocConsumer<SignupCubit, SignupStates>(
+      create: (context) => SellerSignupCubit(),
+      child: BlocConsumer<SellerSignupCubit, SellerSignupStates>(
         listener: (context, state) {
           if (state is VerificationLoadingState) {
-            CashHelper.getData(key: 'registerToken');
+            CashHelper.getData(key: 'sellerRegisterToken');
           }
-          if (state is VerificationSuccessState) {
+          if (state is SellerVerificationSuccessState) {
             if (state.verificationModel.status == 200) {
-              showSnackBar(context, message: state.verificationModel.message!);
-              // showToast(
-              //   message: state.verificationModel.message!,
-              //   state: TostStates.SUCCESS,
-              // );
-              context.pushNamed(Routes.photoAddressScreen);
-            } 
-          } else if (state is VerificationOtpErrorState) {
+              showToast(
+                message: state.verificationModel.message!,
+                state: TostStates.SUCCESS,
+              );
+              context.pushNamed(Routes.sellerPhotoAndAddressScreen);
+            }
+          } else if (state is SellerVerificationOtpErrorState) {
             showSnackBar(context, message: state.error);
+            // showToast(
+            //   message: 'Make sure your code is correct',
+            //   state: TostStates.ERROR,
+            // );
           }
         },
         builder: (context, state) {
-          var cubit = SignupCubit.get(context);
+          var cubit = SellerSignupCubit.get(context);
           var otpController = TextEditingController();
           // String? otpToken = token;
           final defaultPinTheme = PinTheme(
@@ -74,7 +79,7 @@ class ConfirmAccount extends StatelessWidget {
                         verticalSpace(20),
                         GestureDetector(
                           onTap: () {
-                            context.pushNamed(Routes.signupScreen);
+                            context.pushNamed(Routes.sellerSignupScreen);
                           },
                           child: Image.asset(
                             'assets/images/arrow.png',
@@ -171,7 +176,7 @@ class ConfirmAccount extends StatelessWidget {
                           ),
                         ),
                         verticalSpace(25),
-                        state is VerificationLoadingState
+                        state is SellerVerificationLoadingState
                             ? const Center(
                                 child: CircularProgressIndicator(
                                 color: ColorManager.mainOrange,
@@ -184,7 +189,7 @@ class ConfirmAccount extends StatelessWidget {
                                       .validate()) {
                                     cubit.otpVerification(
                                       otp: otpController.text,
-                                      token: registerToken!,
+                                      token: sellerRegisterToken!,
                                     );
                                   }
                                 },

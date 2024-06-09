@@ -17,12 +17,15 @@ void main() async {
   String widget;
   bool? onBoarding = CashHelper.getData(key: 'onBoarding');
   token = CashHelper.getData(key: 'token');
+  sellerToken = CashHelper.getData(key: 'sellerToken');
 
   if (onBoarding != null) {
     if (token != null) {
-      widget =  Routes.homeScreen;
+      widget = Routes.homeScreen;
+    } else if (sellerToken != null) {
+      widget = Routes.sellerHomeScreen;
     } else {
-      widget = Routes.loginScreen;
+      widget = Routes.chooseAccountTypeScreen;
     }
   } else {
     widget = Routes.onboardingScreen;

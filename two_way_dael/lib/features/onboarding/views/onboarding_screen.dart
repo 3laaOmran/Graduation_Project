@@ -24,7 +24,7 @@ class _OnboardingViewState extends State<OnboardingView> {
     CashHelper.saveData(key: 'onBoarding', value: true).then((value) {
       if (value) {
         context.pushNamedAndRemoveUntil(
-          Routes.loginScreen,
+          Routes.chooseAccountTypeScreen,
           predicate: (route) => false,
         );
       }

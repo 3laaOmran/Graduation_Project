@@ -74,7 +74,8 @@ class AccountSettings extends StatelessWidget {
               onPressed: () {
                 CashHelper.removeData(key: 'token').then((value) {
                   if (value) {
-                    context.pushNamedAndRemoveUntil(Routes.loginScreen,
+                    context.pushNamedAndRemoveUntil(
+                        Routes.chooseAccountTypeScreen,
                         predicate: ((route) => false));
                   }
                 });

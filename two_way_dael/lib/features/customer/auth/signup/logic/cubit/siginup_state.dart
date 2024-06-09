@@ -18,6 +18,12 @@ final class SignupErrorState extends SignupStates {
 
   SignupErrorState(this.error);
 }
+
+final class SignupUsedEmailOrPhoneErrorState extends SignupStates {
+  final String error;
+
+  SignupUsedEmailOrPhoneErrorState(this.error);
+}
 final class VerificationLoadingState extends SignupStates {}
 
 final class VerificationSuccessState extends SignupStates {
@@ -30,6 +36,11 @@ final class VerificationErrorState extends SignupStates {
   final String error;
 
   VerificationErrorState(this.error);
+}
+final class VerificationOtpErrorState extends SignupStates {
+  final String error;
+
+  VerificationOtpErrorState(this.error);
 }
 final class PhotoAndAddressLoadingState extends SignupStates {}
 

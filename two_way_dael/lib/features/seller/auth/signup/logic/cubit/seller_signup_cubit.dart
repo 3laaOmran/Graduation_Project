@@ -1,20 +1,22 @@
 import 'dart:io';
 
+import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:two_way_dael/core/networking/dio_helper.dart';
 import 'package:two_way_dael/core/networking/end_points.dart';
-import 'package:two_way_dael/features/customer/auth/signup/data/models/get_gov_and_city_model.dart';
 import 'package:two_way_dael/features/customer/auth/signup/data/models/signup_model.dart';
+import '../../../../../../core/networking/dio_helper.dart';
+import '../../../../../customer/auth/signup/data/models/get_gov_and_city_model.dart';
 
-part 'siginup_state.dart';
+part 'seller_signup_state.dart';
 
-class SignupCubit extends Cubit<SignupStates> {
-  SignupCubit() : super(SignupInitialState());
-  static SignupCubit get(context) => BlocProvider.of(context);
+class SellerSignupCubit extends Cubit<SellerSignupStates> {
+  SellerSignupCubit() : super(SellerSignupInitialState());
+
+  static SellerSignupCubit get(context) => BlocProvider.of(context);
 
   final formKey = GlobalKey<FormState>();
   final otpFormKey = GlobalKey<FormState>();
@@ -27,6 +29,7 @@ class SignupCubit extends Cubit<SignupStates> {
 
   var governorateController = TextEditingController();
   var cityController = TextEditingController();
+  var streetController = TextEditingController();
 
   SignupModel? signupModel;
   void userSignup({
@@ -35,9 +38,9 @@ class SignupCubit extends Cubit<SignupStates> {
     required String phone,
     required String password,
   }) {
-    emit(SignupLoadingState());
+    emit(SellerSignupLoadingState());
     DioHelper.postData(
-      url: REGISTER,
+      url: sellerSignup,
       data: {
         'name': name,
         'email': email,
@@ -46,7 +49,7 @@ class SignupCubit extends Cubit<SignupStates> {
       },
     ).then((value) {
       signupModel = SignupModel.fromJson(value.data);
-      emit(SignupSuccessState(signupModel!));
+      emit(SellerSignupSuccessState(signupModel!));
     }).catchError((error) {
       if (error is DioException && error.response?.statusCode == 422) {
         final responseData = error.response!.data['data'];
@@ -63,13 +66,13 @@ class SignupCubit extends Cubit<SignupStates> {
         }
 
         print('Error: $errorMessage');
-        emit(SignupUsedEmailOrPhoneErrorState(errorMessage));
+        emit(SellerSignupUsedEmailOrPhoneErrorState(errorMessage));
       } else if (error is DioException && error.response?.statusCode == 429) {
         print('Unauthorized: ${error.response!.data['message']}');
-        emit(SignupUsedEmailOrPhoneErrorState(error.response!.data['message']));
+        emit(SellerSignupUsedEmailOrPhoneErrorState(error.response!.data['message']));
       }
-      emit(SignupErrorState(error.toString()));
       debugPrint('errorState: ${error.toString()}');
+      emit(SellerSignupErrorState(error.toString()));
     });
   }
 
@@ -78,25 +81,25 @@ class SignupCubit extends Cubit<SignupStates> {
     required String otp,
     required String token,
   }) {
-    emit(VerificationLoadingState());
+    emit(SellerVerificationLoadingState());
     DioHelper.postData(
       token: token,
-      url: VERIFICATION,
+      url: sellerVerification,
       data: {
         'otp': otp,
       },
     ).then((value) {
       verificationModel = VerificationModel.fromJson(value.data);
       debugPrint(value.data['message']);
-      emit(VerificationSuccessState(verificationModel!));
+      emit(SellerVerificationSuccessState(verificationModel!));
     }).catchError((error) {
       if (error is DioException && error.response?.statusCode == 422) {
-        emit(VerificationOtpErrorState(error.response!.data['data']['otp'][0]));
+        emit(SellerVerificationOtpErrorState(error.response!.data['data']['otp'][0]));
       } else if (error is DioException && error.response?.statusCode == 401) {
-        emit(VerificationOtpErrorState(error.response!.data['message']));
+        emit(SellerVerificationOtpErrorState(error.response!.data['message']));
       }
       debugPrint(error.toString());
-      emit(VerificationErrorState(error.toString()));
+      emit(SellerVerificationErrorState(error.toString()));
     });
   }
 
@@ -106,14 +109,16 @@ class SignupCubit extends Cubit<SignupStates> {
   void photoAndAddress({
     required int cityId,
     required int governorateId,
+    required String street,
     required String token,
-    File? image,
+    required File image,
   }) {
-    emit(PhotoAndAddressLoadingState());
+    emit(SellerPhotoAndAddressLoadingState());
 
     Map<String, dynamic> data = {
       'city_id': cityId,
       'governorate_id': governorateId,
+      'street': street,
     };
 
     DioHelper.postData(
@@ -124,10 +129,32 @@ class SignupCubit extends Cubit<SignupStates> {
     ).then((value) {
       photoAndAddressModel = PhotoAndAddressModel.fromJson(value.data);
       debugPrint(value.data['message']);
-      emit(PhotoAndAddressSuccessState(photoAndAddressModel!));
+      emit(SellerPhotoAndAddressSuccessState(photoAndAddressModel!));
     }).catchError((error) {
       debugPrint(error.toString());
-      emit(PhotoAndAddressErrorState(error.toString()));
+      emit(SellerPhotoAndAddressErrorState(error.toString()));
+    });
+  }
+
+  CertificatesModel? certificatesModel;
+  void certificates({
+    required String token,
+    required File healthCertificate,
+    required File commercialLicense,
+  }) {
+    emit(SellerCertificatesLoadingState());
+
+    DioHelper.postData(
+      token: token,
+      url: sellerCertificates,
+      data: {},
+      images: [healthCertificate, commercialLicense],
+    ).then((value) {
+      certificatesModel = CertificatesModel.fromJson(value.data);
+      emit(SellerCertificatesSuccessState(certificatesModel!));
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(SellerCertificatesErrorState(error.toString()));
     });
   }
 
@@ -135,6 +162,18 @@ class SignupCubit extends Cubit<SignupStates> {
   void pickImage() async {
     var image = await ImagePicker().pickImage(source: ImageSource.gallery);
     imagePick = File(image!.path);
+    emit(SignupPickImageState());
+  }
+  File? healthCertificate;
+  void pickHealthCertificate() async {
+    var image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    healthCertificate = File(image!.path);
+    emit(SignupPickImageState());
+  }
+  File? commercialLicense;
+  void pickCommercialLicense() async {
+    var image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    commercialLicense = File(image!.path);
     emit(SignupPickImageState());
   }
 

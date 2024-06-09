@@ -67,11 +67,12 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                   children: [
                                     CircleAvatar(
                                       radius: 80.0,
-                                      backgroundImage: image == null
+                                      backgroundImage: image ==
+                                              'http://2waydeal.online/uploads/default.png'
                                           ? const AssetImage(
                                                   'assets/images/default_profile.png')
                                               as ImageProvider
-                                          : NetworkImage(image),
+                                          : NetworkImage(image!),
                                     ),
                                     Positioned(
                                       bottom: 0,

@@ -37,11 +37,12 @@ String? phoneNumberValidation(value) {
     return null;
   }
 }
+
 String? nameValidation(value) {
   if (value == null || value.isEmpty) {
     return 'Please Enter Your Name';
   } else if (!AppRegex.isNameValid(value)) {
-    return 'Please Enter a Valid Name';
+    return 'Please enter a valid name with \nat least 4 characters';
   } else {
     return null;
   }
