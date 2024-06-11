@@ -4,9 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:two_way_dael/core/helpers/cash_helper.dart';
+import 'package:two_way_dael/core/helpers/extensions.dart';
+import 'package:two_way_dael/core/routing/routes.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/widgets/resuable_text.dart';
 import 'package:two_way_dael/features/seller/home/ui/widgets/const.dart';
+
+import '../../../../../core/widgets/custom_button.dart';
 
 class ProfileSellerScreen extends StatefulWidget {
   const ProfileSellerScreen({super.key});
@@ -207,6 +212,23 @@ class _ProfileSellerScreenState extends State<ProfileSellerScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  AppTextButton(
+              buttonText: 'Logout',
+              textStyle: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+              onPressed: () {
+                CashHelper.removeData(key: 'sellerToken').then((value) {
+                  if (value) {
+                    context.pushNamedAndRemoveUntil(
+                        Routes.chooseAccountTypeScreen,
+                        predicate: ((route) => false));
+                  }
+                });
+              },
+            ),
                   resuableText(text: "Phone", fontsize: 20.sp),
                   // CustomTextFormField(
                   //     hintText: "1274055875",

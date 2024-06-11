@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:two_way_dael/core/helpers/extensions.dart';
+import 'package:two_way_dael/core/helpers/spacing.dart';
+import 'package:two_way_dael/core/routing/routes.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
+import 'package:two_way_dael/core/widgets/custom_icon_button.dart';
 import 'package:two_way_dael/core/widgets/resuable_text.dart';
 import 'package:two_way_dael/features/seller/home/ui/widgets/const.dart';
 
-class SecondScreen extends StatefulWidget {
-  const SecondScreen({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
-  @override
-  State<SecondScreen> createState() => _SecondScreenState();
-}
-
-class _SecondScreenState extends State<SecondScreen> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -20,26 +19,63 @@ class _SecondScreenState extends State<SecondScreen> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 35,
-                  backgroundImage: AssetImage(images["logo"]!),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    resuableText(
-                        text: "Restaurant",
-                        fontsize: 24.sp,
-                        fontWeight: FontWeight.bold),
-                    resuableText(
-                        text: "Seller Id:2135456844",
-                        color: Colors.grey[600],
-                        fontsize: 12.5.sp),
-                  ],
-                )
-              ],
+            verticalSpace(20),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(right: 10.w),
+                    child: const CircleAvatar(
+                      radius: 30.0,
+                      backgroundColor: Colors.white,
+                      child: Image(
+                        image: AssetImage(
+                          'assets/images/two_way_deal_icon.png',
+                        ),
+                        width: 45,
+                      ),
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      resuableText(
+                          text: "Seller Name",
+                          fontsize: 24.sp,
+                          fontWeight: FontWeight.bold),
+                      resuableText(
+                          text: "Rate",
+                          color: Colors.grey[600],
+                          fontsize: 12.5.sp),
+                    ],
+                  ),
+                  const Spacer(),
+                  Stack(
+                    alignment: AlignmentDirectional.topEnd,
+                    children: [
+                      customIconButton(
+                        onPressed: () {
+                          context.pushNamed(Routes.sellerNotificationsScreen);
+                        },
+                        icon: Icons.notifications,
+                        toolTip: 'Notifications',
+                        size: 30.0,
+                      ),
+                      Container(
+                        padding: const EdgeInsetsDirectional.only(
+                          top: 11.0,
+                          end: 14.0,
+                        ),
+                        child: const CircleAvatar(
+                          radius: 3.5,
+                          backgroundColor: ColorManager.mainOrange,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
             Stack(
               children: [
@@ -49,9 +85,8 @@ class _SecondScreenState extends State<SecondScreen> {
                       gradient: LinearGradient(
                           colors: [
                             ColorManager.mainOrange,
-                            Colors.orangeAccent, 
+                            Colors.orangeAccent,
                           ],
-
                           begin: FractionalOffset(0.0, 0.0),
                           end: FractionalOffset(1.0, 0.0),
                           stops: [0.0, 1.0],
@@ -94,9 +129,7 @@ class _SecondScreenState extends State<SecondScreen> {
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(40)),
                             child: InkWell(
-                              onTap: () {
-                               
-                              },
+                              onTap: () {},
                               child: resuableText(
                                   text: "Withdraw",
                                   fontsize: 12.sp,
@@ -108,7 +141,6 @@ class _SecondScreenState extends State<SecondScreen> {
                     ],
                   ),
                 ),
-                
                 Positioned(
                   top: height * 0.15,
                   child: Container(

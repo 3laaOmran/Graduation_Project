@@ -27,5 +27,6 @@ class Routes {
   static const String sellerPhotoAndAddressScreen = '/sellerPhotoAndAddressScreen';
   static const String sellerCirtificates = '/sellerCirtificates';
   static const String sellerHomeScreen = '/sellerHomeScreen';
+  static const String sellerNotificationsScreen = '/sellerNotificationsScreen';
 
 }
