@@ -26,11 +26,11 @@ class PhotoAndAddressScreen extends StatelessWidget {
             CashHelper.getData(key: 'token');
           } else if (state is PhotoAndAddressSuccessState) {
             if (state.photoAndAddressModel.status == 200) {
-              // showSnackBar(context, message:  state.photoAndAddressModel.message!);
+              showSnackBar(context, message:  state.photoAndAddressModel.message!);
               // showToast(
               //     message: state.photoAndAddressModel.message!,
               //     state: TostStates.SUCCESS);
-              context.pushNamedAndRemoveUntil(Routes.homeScreen,
+              context.pushNamedAndRemoveUntil(Routes.customerwelcomeScreen,
                   predicate: (route) => false);
               CashHelper.saveData(key: 'token', value: registerToken)
                   .then((value) {
@@ -38,7 +38,7 @@ class PhotoAndAddressScreen extends StatelessWidget {
               });
             }
           } else if (state is PhotoAndAddressErrorState) {
-            showSnackBar(context, message: 'An Error Occurred');
+            showSnackBar(context, message: state.error);
             // showToast(message: 'An Error Occurred', state: TostStates.ERROR);
           }
         },
@@ -120,11 +120,14 @@ class PhotoAndAddressScreen extends StatelessWidget {
                                                 : DecorationImage(
                                                     image: FileImage(
                                                         cubit.imagePick!)),
-                                            borderRadius: const BorderRadius.all(
-                                                Radius.circular(25.0)),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(25.0)),
                                             border: Border.all(
-                                                color: Colors.grey, width: 1.0)),
-                                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                                                color: Colors.grey,
+                                                width: 1.0)),
+                                        clipBehavior:
+                                            Clip.antiAliasWithSaveLayer,
                                       ),
                                     ),
                                     Container(
@@ -157,7 +160,8 @@ class PhotoAndAddressScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CustomDropDownList(
-                                    selectedItems: (List<dynamic> selectedList) {
+                                    selectedItems:
+                                        (List<dynamic> selectedList) {
                                       for (var item in selectedList) {
                                         if (item is SelectedListItem) {
                                           cubit.governorateController.text =
@@ -169,7 +173,7 @@ class PhotoAndAddressScreen extends StatelessWidget {
                                           debugPrint('item.name: ${item.name}');
                                           debugPrint(
                                               'gov id: ${cubit.selectedGovernorateId}');
-            
+
                                           debugPrint(
                                               'widget.dropedList!.indexOf(item): ${cubit.governoratesList.indexOf(item)}');
                                           SignupCubit.get(context).getCities(
@@ -204,7 +208,8 @@ class PhotoAndAddressScreen extends StatelessWidget {
                                               selectedItems:
                                                   (List<dynamic> selectedList) {
                                                 for (var item in selectedList) {
-                                                  if (item is SelectedListItem) {
+                                                  if (item
+                                                      is SelectedListItem) {
                                                     cubit.cityController.text =
                                                         item.name;
                                                     cubit.selectedCityId = cubit
@@ -215,7 +220,7 @@ class PhotoAndAddressScreen extends StatelessWidget {
                                                         'item.name: ${item.name}');
                                                     debugPrint(
                                                         'city id: ${cubit.selectedCityId}');
-            
+
                                                     debugPrint(
                                                         'widget.dropedList!.indexOf(item): ${cubit.selectedCities.indexOf(item)}');
                                                   }
@@ -244,26 +249,34 @@ class PhotoAndAddressScreen extends StatelessWidget {
                                 ],
                               ),
                               verticalSpace(50),
-                              AppTextButton(
-                                buttonText: 'Next',
-                                textStyle: TextStyles.font20Whitebold,
-                                onPressed: () {
-                                  if (cubit.photoAndAddressFormKey.currentState!
-                                      .validate()) {
-                                    debugPrint(
-                                        'Selected Governorate ID: ${cubit.selectedGovernorateId}');
-                                    debugPrint(
-                                        'Selected City ID: ${cubit.selectedCityId}');
-                                    debugPrint('${cubit.imagePick}');
-                                    cubit.photoAndAddress(
-                                      cityId: cubit.selectedCityId!,
-                                      governorateId: cubit.selectedGovernorateId!,
-                                      token: registerToken!,
-                                      image: cubit.imagePick,
-                                    );
-                                  }
-                                },
-                              ),
+                              state is! PhotoAndAddressLoadingState
+                                  ? AppTextButton(
+                                      buttonText: 'Next',
+                                      textStyle: TextStyles.font20Whitebold,
+                                      onPressed: () {
+                                        if (cubit.photoAndAddressFormKey
+                                            .currentState!
+                                            .validate()) {
+                                          debugPrint(
+                                              'Selected Governorate ID: ${cubit.selectedGovernorateId}');
+                                          debugPrint(
+                                              'Selected City ID: ${cubit.selectedCityId}');
+                                          debugPrint('${cubit.imagePick}');
+                                          cubit.photoAndAddress(
+                                            cityId: cubit.selectedCityId!,
+                                            governorateId:
+                                                cubit.selectedGovernorateId!,
+                                            token: registerToken!,
+                                            image: cubit.imagePick,
+                                          );
+                                        }
+                                      },
+                                    )
+                                  : const Center(
+                                      child: CircularProgressIndicator(
+                                        color: ColorManager.mainOrange,
+                                      ),
+                                    ),
                               verticalSpace(20),
                             ],
                           ),

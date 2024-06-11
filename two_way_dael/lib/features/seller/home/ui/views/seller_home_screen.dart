@@ -5,6 +5,7 @@ import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/routing/routes.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
+import 'package:two_way_dael/features/seller/home/ui/views/home_screen.dart';
 
 class SellerHomeScreen extends StatelessWidget {
   const SellerHomeScreen({super.key});
@@ -39,6 +40,19 @@ class SellerHomeScreen extends StatelessWidget {
                         predicate: ((route) => false));
                   }
                 });
+              },
+            ),
+            verticalSpace(50),
+            AppTextButton(
+              buttonText: 'homeScreen',
+              textStyle: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+              onPressed: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => HomeScreen()));
               },
             ),
           ],

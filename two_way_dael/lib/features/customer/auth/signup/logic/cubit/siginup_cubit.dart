@@ -59,7 +59,7 @@ class SignupCubit extends Cubit<SignupStates> {
         } else if (emailError != null && phoneError == null) {
           errorMessage = emailError;
         } else if (emailError != null && phoneError != null) {
-          errorMessage = '$emailError \n\n $phoneError';
+          errorMessage = '$emailError \n $phoneError';
         }
 
         print('Error: $errorMessage');
@@ -122,7 +122,7 @@ class SignupCubit extends Cubit<SignupStates> {
       token: token,
       url: PHOTOANDADDRESS,
       data: data,
-      images: [image!],
+      image: image,
     ).then((value) {
       photoAndAddressModel = PhotoAndAddressModel.fromJson(value.data);
       debugPrint(value.data['message']);
@@ -132,6 +132,32 @@ class SignupCubit extends Cubit<SignupStates> {
       emit(PhotoAndAddressErrorState(error.toString()));
     });
   }
+  //   required int cityId,
+  //   required int governorateId,
+  //   required String token,
+  //   File? image,
+  // }) {
+  //   emit(PhotoAndAddressLoadingState());
+
+  //   Map<String, dynamic> data = {
+  //     'city_id': cityId,
+  //     'governorate_id': governorateId,
+  //   };
+
+  //   DioHelper.postData(
+  //     token: token,
+  //     url: PHOTOANDADDRESS,
+  //     data: data,
+  //     image: image,
+  //   ).then((value) {
+  //     photoAndAddressModel = PhotoAndAddressModel.fromJson(value.data);
+  //     // debugPrint(value.data['message']);
+  //     emit(PhotoAndAddressSuccessState(photoAndAddressModel!));
+  //   }).catchError((error) {
+  //     debugPrint(error.toString());
+  //     emit(PhotoAndAddressErrorState(error.toString()));
+  //   });
+  // }
 
   File? imagePick;
   void pickImage() async {

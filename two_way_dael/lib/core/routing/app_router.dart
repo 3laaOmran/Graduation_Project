@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:two_way_dael/choose_account_type_screen.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
@@ -11,6 +10,7 @@ import 'package:two_way_dael/features/customer/auth/login/ui/views/forget_passwo
 import 'package:two_way_dael/features/customer/auth/login/ui/views/phone_for_forget_password.dart';
 import 'package:two_way_dael/features/customer/auth/signup/ui/views/otp_screen.dart';
 import 'package:two_way_dael/features/customer/auth/signup/ui/views/photo_and_address_screen.dart';
+import 'package:two_way_dael/features/customer/auth/signup/ui/views/customer_welcome_screen.dart';
 import 'package:two_way_dael/features/customer/home/ui/Modules/about_app.dart';
 import 'package:two_way_dael/features/customer/home/ui/Modules/cart_screen.dart';
 import 'package:two_way_dael/features/customer/home/ui/Modules/contact_us_screen.dart';
@@ -26,7 +26,6 @@ import 'package:two_way_dael/features/seller/auth/signup/ui/views/seller_otp_scr
 import 'package:two_way_dael/features/seller/auth/signup/ui/views/seller_photo_and_address_screen.dart';
 import 'package:two_way_dael/features/seller/auth/signup/ui/views/seller_signup_screen.dart';
 import 'package:two_way_dael/features/seller/home/ui/views/seller_home_screen.dart';
-
 import '../../features/customer/auth/login/ui/views/login_screen.dart';
 import '../../features/customer/auth/signup/ui/views/signup_screen.dart';
 import '../../features/customer/home/ui/views/home_screen.dart';
@@ -75,6 +74,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => ContactUsScreen());
       case Routes.cartScreen:
         return MaterialPageRoute(builder: (_) => const CartScreen());
+      case Routes.customerwelcomeScreen:
+        return MaterialPageRoute(builder: (_) => const CustomerWelcomeScreen());
       case Routes.chooseAccountTypeScreen:
         return MaterialPageRoute(
             builder: (_) => const ChooseAccountTypeScreen());

@@ -115,12 +115,11 @@ class CustomerHomeScreen extends StatelessWidget {
                             },
                             child: Stack(
                               alignment: cubit.cartProducts.isNotEmpty
-                                  ? Alignment.topRight
+                                  ? Alignment.center
                                   : Alignment.center,
                               children: [
                                 const Image(
-                                  image: AssetImage(
-                                      'assets/images/moved_cart.gif'),
+                                  image: AssetImage('assets/images/cart.png'),
                                   width: 35,
                                 ),
                                 cubit.cartProducts.isNotEmpty

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +61,7 @@ class SellerSignupCubit extends Cubit<SellerSignupStates> {
         } else if (emailError != null && phoneError == null) {
           errorMessage = emailError;
         } else if (emailError != null && phoneError != null) {
-          errorMessage = '$emailError \n\n $phoneError';
+          errorMessage = '$emailError \n $phoneError';
         }
 
         print('Error: $errorMessage');
@@ -125,9 +124,9 @@ class SellerSignupCubit extends Cubit<SellerSignupStates> {
 
     DioHelper.postData(
       token: token,
-      url: PHOTOANDADDRESS,
+      url: sellerPhotoAndAddress,
       data: data,
-      images: [image!],
+      image: image,
     ).then((value) {
       photoAndAddressModel = PhotoAndAddressModel.fromJson(value.data);
       debugPrint(value.data['message']);

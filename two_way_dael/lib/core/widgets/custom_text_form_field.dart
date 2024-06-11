@@ -18,6 +18,7 @@ class CustomTextFormField extends StatelessWidget {
   final bool isObsecureText;
   final IconData? sufixIcon;
   final Function(String)? onFieldSubmitted;
+  final Function(String)? onChanged;
   final Function()? suffixOnPressed;
   final Color? backgroundColor;
   final BorderRadius? borderRadius;
@@ -46,11 +47,12 @@ class CustomTextFormField extends StatelessWidget {
       this.onFieldSubmitted,
       this.suffixIconSize,
       this.maxLines,
-      this.enabled});
+      this.enabled, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onChanged: onChanged,
       enabled: enabled,
       maxLines: isObsecureText ? 1 : maxLines,
       onFieldSubmitted: onFieldSubmitted,

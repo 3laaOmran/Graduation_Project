@@ -18,6 +18,7 @@ class Routes {
   static const String changePasswordScreen = '/changePasswordScreen';
   static const String searchScreen = '/searchScreen';
   static const String cartScreen = '/cartScreen';
+  static const String customerwelcomeScreen = '/customerwelcomeScreen';
   static const String chooseAccountTypeScreen = '/chooseAccountTypeScreen';
   //------------------------------------------------------------------
   static const String sellerLoginScreen = '/sellerLoginScreen';

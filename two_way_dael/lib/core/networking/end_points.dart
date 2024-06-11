@@ -17,3 +17,4 @@ const sellerLogin = 'auth/login/seller';
 const sellerSignup = 'auth/register/seller';
 const sellerVerification = 'auth/verify/seller';
 const sellerCertificates = 'auth/seller/certificates';
+const sellerPhotoAndAddress = 'auth/address/seller';

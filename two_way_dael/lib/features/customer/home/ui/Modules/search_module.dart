@@ -105,8 +105,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 cubit.getSearchData(
                   name: searchTextController.text,
                   categryId: int.parse(categoryDropDownValue),
-                  minPrice: int.parse(minPriceController.text),
-                  maxPrice: int.parse(maxPriceController.text),
+                  minPrice: minPriceController.text,
+                  maxPrice: maxPriceController.text,
                   sortBy: sortwith,
                   sortWith: sortwith,
                 );
@@ -141,6 +141,14 @@ class _SearchScreenState extends State<SearchScreen> {
                             setState(() {
                               categoryDropDownValue = newValue!;
                               debugPrint(newValue);
+                              cubit.getSearchData(
+                                name: searchTextController.text,
+                                categryId: int.parse(newValue),
+                                minPrice: minPriceController.text,
+                                maxPrice: maxPriceController.text,
+                                sortBy: sortwith,
+                                sortWith: sortwith,
+                              );
                             });
                           },
                         ),
@@ -155,6 +163,16 @@ class _SearchScreenState extends State<SearchScreen> {
                               style: TextStyles.font14BlackBold,
                             ),
                             CustomTextFormField(
+                              onChanged: (value) {
+                                cubit.getSearchData(
+                                  name: searchTextController.text,
+                                  categryId: int.parse(categoryDropDownValue),
+                                  minPrice: value,
+                                  maxPrice: maxPriceController.text,
+                                  sortBy: sortwith,
+                                  sortWith: sortwith,
+                                );
+                              },
                               controller: minPriceController,
                               borderRadius: BorderRadius.circular(10),
                               keyboardType: TextInputType.number,
@@ -177,6 +195,16 @@ class _SearchScreenState extends State<SearchScreen> {
                               style: TextStyles.font14BlackBold,
                             ),
                             CustomTextFormField(
+                              onChanged: (value) {
+                                cubit.getSearchData(
+                                  name: searchTextController.text,
+                                  categryId: int.parse(categoryDropDownValue),
+                                  minPrice: maxPriceController.text,
+                                  maxPrice: value,
+                                  sortBy: sortwith,
+                                  sortWith: sortwith,
+                                );
+                              },
                               controller: maxPriceController,
                               borderRadius: BorderRadius.circular(10),
                               contentPadding: EdgeInsets.symmetric(
@@ -219,6 +247,14 @@ class _SearchScreenState extends State<SearchScreen> {
                                         ? sortWithAscUsed = true
                                         : sortWithAscUsed = false;
                                   });
+                                  cubit.getSearchData(
+                                    name: searchTextController.text,
+                                    categryId: int.parse(categoryDropDownValue),
+                                    minPrice: minPriceController.text,
+                                    maxPrice: maxPriceController.text,
+                                    sortBy: 'price',
+                                    sortWith: sortwith,
+                                  );
                                 },
                                 bgColor: sortByPriceUsed
                                     ? ColorManager.notificationColor
@@ -241,6 +277,14 @@ class _SearchScreenState extends State<SearchScreen> {
                                         ? sortWithAscUsed = true
                                         : sortWithAscUsed = false;
                                   });
+                                  cubit.getSearchData(
+                                    name: searchTextController.text,
+                                    categryId: int.parse(categoryDropDownValue),
+                                    minPrice: minPriceController.text,
+                                    maxPrice: maxPriceController.text,
+                                    sortBy: 'created_at',
+                                    sortWith: sortwith,
+                                  );
                                 },
                                 bgColor: sortByDateUsed
                                     ? ColorManager.notificationColor
@@ -272,6 +316,14 @@ class _SearchScreenState extends State<SearchScreen> {
                                     sortWithAscUsed = !sortWithAscUsed;
                                     sortWithDescUsed = false;
                                   });
+                                  cubit.getSearchData(
+                                    name: searchTextController.text,
+                                    categryId: int.parse(categoryDropDownValue),
+                                    minPrice: minPriceController.text,
+                                    maxPrice: maxPriceController.text,
+                                    sortBy: sortby,
+                                    sortWith: 'asc',
+                                  );
                                 },
                                 bgColor: sortWithAscUsed
                                     ? ColorManager.notificationColor
@@ -291,6 +343,14 @@ class _SearchScreenState extends State<SearchScreen> {
                                     sortWithDescUsed = !sortWithDescUsed;
                                     sortWithAscUsed = false;
                                   });
+                                  cubit.getSearchData(
+                                    name: searchTextController.text,
+                                    categryId: int.parse(categoryDropDownValue),
+                                    minPrice: minPriceController.text,
+                                    maxPrice: maxPriceController.text,
+                                    sortBy: sortby,
+                                    sortWith: 'desc',
+                                  );
                                 },
                                 bgColor: sortWithDescUsed
                                     ? ColorManager.notificationColor
