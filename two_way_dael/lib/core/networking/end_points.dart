@@ -18,3 +18,4 @@ const sellerSignup = 'auth/register/seller';
 const sellerVerification = 'auth/verify/seller';
 const sellerCertificates = 'auth/seller/certificates';
 const sellerPhotoAndAddress = 'auth/address/seller';
+const sellerdata = 'seller';

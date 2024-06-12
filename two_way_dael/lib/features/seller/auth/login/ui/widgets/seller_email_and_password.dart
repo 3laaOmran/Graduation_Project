@@ -32,6 +32,7 @@ class EmailAndPassword extends StatelessWidget {
               verticalSpace(20),
               resuableText(text: "Password", fontsize: 17.sp),
               CustomTextFormField(
+                // validator: passwordValidation,
                 onFieldSubmitted: (value) {
                   if (cubit.formKey.currentState!.validate()) {
                     cubit.userLogin(

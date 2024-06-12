@@ -91,6 +91,11 @@ class TextStyles {
     color: Colors.white,
     fontWeight: FontWeightHelper.bold,
   );
+  static TextStyle font17MainOrangeBold = TextStyle(
+    fontSize: 17.sp,
+    color: ColorManager.mainOrange,
+    fontWeight: FontWeightHelper.bold,
+  );
   static TextStyle font15BlackBold = TextStyle(
     fontSize: 15.sp,
     color: Colors.black,

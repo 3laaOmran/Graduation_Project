@@ -21,8 +21,8 @@ class _BuildCategoryItemState extends State<BuildCategoryItem> {
         });
       },
       child: Container(
-        width: 53.0,
-        height: 23.0,
+        width: 60.0,
+        height: 30.0,
         decoration: BoxDecoration(
           color: istapped ? ColorManager.mainOrange : Colors.white,
           borderRadius: const BorderRadius.all(Radius.circular(10.0)),
@@ -37,7 +37,7 @@ class _BuildCategoryItemState extends State<BuildCategoryItem> {
             widget.text,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
-                  fontSize: 10.0,
+                  fontSize: 13.0,
                   color: istapped ? Colors.white : ColorManager.mainOrange,
                 ),
           ),

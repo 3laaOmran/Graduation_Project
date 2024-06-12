@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/routing/routes.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
+import 'package:two_way_dael/core/theming/styles.dart';
+import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/core/widgets/custom_icon_button.dart';
 import 'package:two_way_dael/core/widgets/resuable_text.dart';
-import 'package:two_way_dael/features/seller/home/ui/widgets/const.dart';
+import 'package:two_way_dael/features/seller/home/logic/cubit/seller_cubit.dart';
+import 'package:two_way_dael/features/seller/home/ui/widgets/build_seller_product_item.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -15,40 +20,83 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return SizedBox(
-      child: SingleChildScrollView(
-        child: Column(
+    return BlocConsumer<SellerCubit, SellerStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        var cubit = SellerCubit.get(context);
+        var model = cubit.sellerDataModel;
+
+        if (model == null || model.data == null) {
+          return const Center(
+              child: CircularProgressIndicator(
+            color: ColorManager.mainOrange,
+          ));
+        }
+
+        var name = model.data!.name;
+        var balance = model.data!.balance;
+        var image = model.data!.image;
+        var rate = double.tryParse('${model.data!.rate}') ?? 0.0;
+
+        return Column(
           children: [
             verticalSpace(20),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
               child: Row(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.only(right: 10.w),
-                    child: const CircleAvatar(
-                      radius: 30.0,
-                      backgroundColor: Colors.white,
-                      child: Image(
-                        image: AssetImage(
-                          'assets/images/two_way_deal_icon.png',
+                  InkWell(
+                    onTap: () {
+                      cubit.changeBottomNav(cubit.currentIndex + 1);
+                      if (cubit.currentIndex != 1) {
+                        cubit.currentIndex = 2;
+                      }
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 10.w),
+                      child: CircleAvatar(
+                        radius: 30.0,
+                        backgroundImage: NetworkImage(
+                          image!,
                         ),
-                        width: 45,
+                        backgroundColor: Colors.white,
                       ),
                     ),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      resuableText(
-                          text: "Seller Name",
-                          fontsize: 24.sp,
-                          fontWeight: FontWeight.bold),
-                      resuableText(
-                          text: "Rate",
-                          color: Colors.grey[600],
-                          fontsize: 12.5.sp),
-                    ],
+                  InkWell(
+                    onTap: () {
+                      cubit.changeBottomNav(cubit.currentIndex + 1);
+                      if (cubit.currentIndex != 1) {
+                        cubit.currentIndex = 2;
+                      }
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        resuableText(
+                            text: name ?? 'Welcome',
+                            fontsize: 16.sp,
+                            fontWeight: FontWeight.bold),
+                        Row(
+                          children: [
+                            RatingBarIndicator(
+                              rating: rate,
+                              itemCount: 5,
+                              itemSize: 20.0,
+                              itemBuilder: (context, _) => const Icon(
+                                Icons.star,
+                                color: ColorManager.mainOrange,
+                              ),
+                            ),
+                            horizontalSpace(5),
+                            Text(
+                              '$rate Stars',
+                              style: TextStyles.font13GreyBold,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                   const Spacer(),
                   Stack(
@@ -77,240 +125,143 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Stack(
-              children: [
-                Container(
-                  height: height * 0.8,
-                  decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [
-                            ColorManager.mainOrange,
-                            Colors.orangeAccent,
-                          ],
-                          begin: FractionalOffset(0.0, 0.0),
-                          end: FractionalOffset(1.0, 0.0),
-                          stops: [0.0, 1.0],
-                          tileMode: TileMode.clamp),
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20))),
-                  margin: EdgeInsets.symmetric(horizontal: 20.w),
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 22.h,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          resuableText(
-                              text: "Your sales",
-                              fontsize: 15.sp,
-                              color: Colors.white),
-                          resuableText(
-                              text: "Add balance",
-                              fontsize: 15.sp,
-                              color: Colors.white),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          resuableText(
-                              text: "148,911",
-                              fontsize: 25.sp,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                          Container(
-                            alignment: Alignment.center,
-                            width: 100.w,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(40)),
-                            child: InkWell(
-                              onTap: () {},
-                              child: resuableText(
-                                  text: "Withdraw",
-                                  fontsize: 12.sp,
-                                  color: ColorManager.mainOrange),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                Positioned(
-                  top: height * 0.15,
-                  child: Container(
-                    alignment: Alignment.topLeft,
-                    width: width,
-                    // height: height * 0.7,
+            Expanded(
+              child: Stack(
+                children: [
+                  Container(
+                    height: height * 0.8,
                     decoration: const BoxDecoration(
-                        color: Color(0XFFff751a), //Color(0XFFff751a)
+                        gradient: LinearGradient(
+                            colors: [
+                              ColorManager.mainOrange,
+                              Colors.orangeAccent,
+                            ],
+                            begin: FractionalOffset(0.0, 0.0),
+                            end: FractionalOffset(1.0, 0.0),
+                            stops: [0.0, 1.0],
+                            tileMode: TileMode.clamp),
                         borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(80),
-                            topRight: Radius.circular(80))),
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20))),
+                    margin: EdgeInsets.symmetric(horizontal: 20.w),
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        SizedBox(height: height * 0.05),
-                        Container(
-                          margin: EdgeInsets.only(left: width * 0.05),
-                          alignment: Alignment.topLeft,
-                          child: resuableText(
-                              text: "Best Seller",
-                              fontsize: 25.sp,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
+                        verticalSpace(22),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  resuableText(
+                                    text: "Your sales",
+                                    fontsize: 15.sp,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  verticalSpace(5),
+                                  resuableText(
+                                    text: balance!,
+                                    fontsize: 20.sp,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  resuableText(
+                                    text: "Add balance",
+                                    fontsize: 15.sp,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  AppTextButton(
+                                    backgroundColor: Colors.white,
+                                    buttonHeight: 20,
+                                    buttonText: 'Withdraw',
+                                    textStyle: TextStyles.font17MainOrangeBold
+                                        .copyWith(fontSize: 15),
+                                    onPressed: () {},
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        Container(
-                          margin: EdgeInsets.only(right: 20.w, left: 20.w),
-                          height: height * 0.22,
-                          child: ListView.builder(
-                              itemCount: slider.length,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Column(
-                                  children: [
-                                    Container(
-                                        margin: EdgeInsets.only(
-                                            left: 20.w, right: 20.w),
-                                        width: width * 0.35,
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(20)),
-                                        child: Column(
-                                          children: [
-                                            Image.asset(
-                                              slider[index],
-                                              fit: BoxFit.fitWidth,
-                                            ),
-                                            resuableText(
-                                                text: "Chicken Soup",
-                                                fontsize: 15.sp),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: [
-                                                resuableText(
-                                                    text: "58 eg",
-                                                    fontsize: 10.sp),
-                                                InkWell(
-                                                  onTap: () {},
-                                                  child:
-                                                      const Icon(Icons.cancel),
-                                                ),
-                                                InkWell(
-                                                  onTap: () {},
-                                                  child: const Icon(
-                                                    Icons.add_circle,
-                                                    color:
-                                                        ColorManager.mainOrange,
-                                                  ),
-                                                )
-                                              ],
-                                            )
-                                          ],
-                                        )),
-                                  ],
-                                );
-                              }),
-                        ),
-                        SizedBox(
-                          height: height * 0.01,
-                        ),
-                        Divider(
-                          endIndent: width * 0.07,
-                          indent: width * 0.06,
-                          color: Colors.white,
-                          thickness: 2,
-                        ),
-                        SizedBox(
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(left: 24.w),
-                                  alignment: Alignment.topLeft,
-                                  child: resuableText(
-                                      text: "Offers",
-                                      fontsize: 24.sp,
-                                      color: Colors.white),
-                                ),
-                                Container(
-                                  margin:
-                                      EdgeInsets.only(right: 20.w, left: 20.w),
-                                  height: height * 0.23,
-                                  child: ListView.builder(
-                                      itemCount: slider.length,
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (context, index) {
-                                        return Column(
-                                          children: [
-                                            Container(
-                                                margin: EdgeInsets.only(
-                                                    left: 20.w, right: 20.w),
-                                                width: width * 0.35,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20)),
-                                                child: Column(
-                                                  children: [
-                                                    Image.asset(
-                                                      slider[index],
-                                                      fit: BoxFit.fitWidth,
-                                                    ),
-                                                    resuableText(
-                                                        text: "Chicken Soup",
-                                                        fontsize: 15.sp),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceAround,
-                                                      children: [
-                                                        resuableText(
-                                                            text: "58 eg",
-                                                            fontsize: 10.sp),
-                                                        InkWell(
-                                                          onTap: () {},
-                                                          child: const Icon(
-                                                              Icons.cancel),
-                                                        ),
-                                                        InkWell(
-                                                          onTap: () {},
-                                                          child: const Icon(
-                                                            Icons.add_circle,
-                                                            color: ColorManager
-                                                                .mainOrange,
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ],
-                                                )),
-                                          ],
-                                        );
-                                      }),
-                                ),
-                                SizedBox(
-                                  height: height * 0.5,
-                                )
-                              ]),
+                        verticalSpace(15),
+                        AppTextButton(
+                          backgroundColor: Colors.white,
+                          buttonText: 'Publish New Product',
+                          textStyle: TextStyles.font17MainOrangeBold,
+                          onPressed: () {
+                            context.pushNamed(Routes.sellerAddNewProduct);
+                          },
                         ),
                       ],
                     ),
                   ),
-                ),
-              ],
+                  Positioned(
+                    top: height * 0.22,
+                    bottom: 0,
+                    child: Container(
+                      alignment: Alignment.topLeft,
+                      width: width,
+                      height: height,
+                      decoration: const BoxDecoration(
+                          color: Color(0XFFff751a),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(80),
+                              topRight: Radius.circular(80))),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          verticalSpace(10),
+                          // SizedBox(height: height * 0.05),
+                          Container(
+                            // margin: EdgeInsets.only(left: width * 0.05),
+                            // alignment: Alignment.topLeft,
+                            child: resuableText(
+                                text: "Best Seller",
+                                fontsize: 25.sp,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          verticalSpace(10),
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20.w),
+                              child: GridView.builder(
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10,
+                                  childAspectRatio: 1 / 1.4,
+                                ),
+                                itemCount: 20,
+                                itemBuilder: (context, index) => InkWell(
+                                  onTap: () {},
+                                  child: buildSellerProductItem(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
-        ),
-      ),
+        );
+      },
     );
   }
 }

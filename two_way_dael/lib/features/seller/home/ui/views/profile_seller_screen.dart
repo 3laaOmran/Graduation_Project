@@ -1,17 +1,18 @@
-import 'dart:io';
-
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:two_way_dael/core/helpers/cash_helper.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
+import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/routing/routes.dart';
-import 'package:two_way_dael/core/theming/colors.dart';
-import 'package:two_way_dael/core/widgets/resuable_text.dart';
-import 'package:two_way_dael/features/seller/home/ui/widgets/const.dart';
+import 'package:two_way_dael/features/seller/home/logic/cubit/seller_cubit.dart';
+import 'package:two_way_dael/features/seller/home/ui/widgets/seller_account_settings.dart';
+import 'package:two_way_dael/features/seller/home/ui/widgets/seller_change_logo.dart';
+import 'package:two_way_dael/features/seller/home/ui/widgets/seller_edit_info.dart';
 
-import '../../../../../core/widgets/custom_button.dart';
+import '../../../../../core/theming/colors.dart';
+import '../../../../../core/widgets/custom_icon_button.dart';
 
 class ProfileSellerScreen extends StatefulWidget {
   const ProfileSellerScreen({super.key});
@@ -21,289 +22,197 @@ class ProfileSellerScreen extends StatefulWidget {
 }
 
 class _ProfileSellerScreenState extends State<ProfileSellerScreen> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
-  TextEditingController addressController = TextEditingController();
-  TextEditingController dateController = TextEditingController();
-  TextEditingController totalAmountController = TextEditingController();
-  GlobalKey<FormState> formKey =
-      GlobalKey<FormState>(debugLabel: "profileScreenKey");
-
-  final ImagePicker picker = ImagePicker();
-  File? image;
-  @override
-  void dispose() {
-    super.dispose();
-    emailController.dispose();
-    passwordController.dispose();
-    phoneController.dispose();
-    addressController.dispose();
-    dateController.dispose();
-    totalAmountController.dispose();
-  }
-
-  uploadImagefromCameraorGallary(ImageSource source) async {
-    var pickedimage = await picker.pickImage(source: source);
-    if (pickedimage != null) {
-      setState(() {
-        image = File(pickedimage.path);
-      });
-    }
-  }
-
-  // dynamic openBottomSheet(BuildContext context) {
-  //   return showAdaptiveActionSheet(
-  //     context: context,
-  //     androidBorderRadius: 30,
-  //     actions: <BottomSheetAction>[
-  //       BottomSheetAction(
-  //           title: const Text('Camera'),
-  //           onPressed: (context) {
-  //             uploadImagefromCameraorGallary(ImageSource.camera);
-  //           }),
-  //       BottomSheetAction(
-  //           title: const Text('Gallery'),
-  //           onPressed: (context) {
-  //             uploadImagefromCameraorGallary(ImageSource.gallery);
-  //           }),
-  //     ],
-  //     cancelAction: CancelAction(
-  //         title: const Text(
-  //             'Cancel')), // onPressed parameter is optional by default will dismiss the ActionSheet
-  //   );
-  // }
+  Widget currentWidget = const SellerAccountSettings();
+  IconData? icon;
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-
-    return SingleChildScrollView(
-      child: SizedBox(
-        child: Column(
-          children: [
-            Container(
-              child: Column(
+    return BlocConsumer<SellerCubit, SellerStates>(
+      listener: (context, state) {
+        // if (state is GetUserDataLoadingState) {}
+      },
+      builder: (context, state) {
+        var cubit = SellerCubit.get(context);
+        var model = cubit.sellerDataModel;
+        cubit.nameController.text = model!.data!.name!;
+        var image = model.data!.image;
+        var rate = double.parse('${model.data!.rate}');
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Stack(
+                alignment: AlignmentDirectional.topEnd,
                 children: [
-                  Stack(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 30.0, bottom: 20),
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: ClipOval(
-                            child: CircleAvatar(
-                              radius: width * 0.2,
-                              backgroundColor: Color.alphaBlend(
-                                  ColorManager.mainOrange, Colors.orangeAccent),
-                              backgroundImage: image == null
-                                  ? null
-                                  : FileImage(
-                                      image!,
-                                    ),
-                              child: image == null
-                                  ? Icon(
-                                      Icons.add_photo_alternate,
-                                      color: Colors.white,
-                                      size: width * .2,
-                                    )
-                                  : null,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        right: 120,
-                        bottom: 20,
-                        child: ClipOval(
-                          child: GestureDetector(
-                            onTap: () {
-                              // openBottomSheet(context);
-                            },
-                            child: Container(
-                              color: Colors.white,
-                              width: 35.w,
-                              height: 40.h,
-                              child: Icon(
-                                Icons.camera_alt_rounded,
-                                color: mixedColor,
-                                size: 35,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  resuableText(
-                      text: "Restaurant",
-                      fontsize: 24.sp,
-                      fontWeight: FontWeight.bold),
-                  RatingBarIndicator(
-                      rating: 2.5,
-                      itemCount: 5,
-                      itemSize: 25.0,
-                      itemBuilder: (context, _) => Icon(
-                            Icons.star,
-                            color: mixedColor,
-                          ))
-                ],
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 10.h),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 22.h,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      resuableText(
-                          text: "Your sales",
-                          fontsize: 15.sp,
-                          color: ColorManager.mainOrange),
-                      resuableText(
-                          text: "Add balance",
-                          fontsize: 15.sp,
-                          color: Colors.white),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      resuableText(
-                          text: "148,911",
-                          fontsize: 25.sp,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                      Container(
-                        alignment: Alignment.center,
-                        width: 100.w,
-                        height: height * 0.05,
-                        decoration: BoxDecoration(
-                            color: ColorManager.mainOrange,
-                            borderRadius: BorderRadius.circular(40)),
-                        child: InkWell(
-                          onTap: () {},
-                          child: resuableText(
-                              text: "Withdraw",
-                              fontsize: 12.sp,
-                              color: Colors.white),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            Divider(
-              color: ColorManager.mainOrange,
-              indent: 18.w,
-              endIndent: 18.w,
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 10.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppTextButton(
-              buttonText: 'Logout',
-              textStyle: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-              onPressed: () {
-                CashHelper.removeData(key: 'sellerToken').then((value) {
-                  if (value) {
-                    context.pushNamedAndRemoveUntil(
-                        Routes.chooseAccountTypeScreen,
-                        predicate: ((route) => false));
-                  }
-                });
-              },
-            ),
-                  resuableText(text: "Phone", fontsize: 20.sp),
-                  // CustomTextFormField(
-                  //     hintText: "1274055875",
-                  //     controller: phoneController,
-                  //     issecurse: false,
-                  //     icon: Icons.phone,
-                  //     enable: true,
-                  //     typefield: "phone"),
-                  // resuableText(text: "Email", fontsize: 20.sp),
-                  // CustomTextFormField(
-                  //     fillcolor: ColorManager.mainOrange.withOpacity(0.3),
-                  //     hintText: "Omar@gmail.com",
-                  //     controller: emailController,
-                  //     issecurse: false,
-                  //     icon: Icons.email,
-                  //     enable: false,
-                  //     typefield: "email"),
-                  SizedBox(
-                    height: height * 0.02,
-                  ),
-                  resuableText(text: "Certificates", fontsize: 20.sp),
-                  /**
-                   * TODO:implement Certificate when connect with back-end
-                   */
-
-                  SizedBox(
-                    height: height * 0.02,
-                  ),
-                  resuableText(text: "Address", fontsize: 20.sp),
-                  // CustomTextFormField(
-                  //     hintText: "5 St Alexandria",
-                  //     controller: addressController,
-                  //     issecurse: false,
-                  //     icon: Icons.location_on_rounded,
-                  //     enable: false,
-                  //     fillcolor: ColorManager.mainOrange.withOpacity(0.3),
-                  //     typefield: "address"),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  //     CustomTextFormField(
-                  //         hintText: "29/8",
-                  //         controller: dateController,
-                  //         issecurse: false,
-                  //         icon: Icons.date_range_outlined,
-                  //         enable: false,
-                  //         fillcolor: ColorManager.mainOrange.withOpacity(0.3),
-                  //         typefield: "data"),
-                  //     CustomTextFormField(
-                  //         hintText: "21000",
-                  //         controller: totalAmountController,
-                  //         issecurse: false,
-                  //         icon: Icons.attach_money_outlined,
-                  //         enable: false,
-                  //         fillcolor: ColorManager.mainOrange.withOpacity(0.3),
-                  //         typefield: "money"),
-                  //   ],
+                  // const Image(
+                  //   image: AssetImage(
+                  //     'assets/images/profile_bg.png',
+                  //   ),
+                  //   width: double.infinity,
+                  //   height: 320,
+                  //   fit: BoxFit.cover,
                   // ),
-                  // CustomTextFormField(
-                  //     hintText: "Alexandria",
-                  //     controller: passwordController,
-                  //     issecurse: false,
-                  //     icon: Icons.location_city_sharp,
-                  //     enable: false,
-                  //     fillcolor: ColorManager.mainOrange.withOpacity(0.3),
-                  //     typefield: "city"),
-                  SizedBox(
-                    height: height * 0.2,
+                  Center(
+                    child: Column(
+                      children: [
+                        verticalSpace(50),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              currentWidget = const SellerChangeLogo();
+                              icon = Icons.arrow_back;
+                            });
+                          },
+                          child: Stack(
+                            children: [
+                              CircleAvatar(
+                                radius: 100.0,
+                                backgroundImage: image ==
+                                        'http://2waydeal.online/uploads/default.png'
+                                    ? const AssetImage(
+                                            'assets/images/default_profile.png')
+                                        as ImageProvider
+                                    : NetworkImage(image!),
+                              ),
+                              const Positioned(
+                                bottom: 0,
+                                right: 13,
+                                child: CircleAvatar(
+                                  radius: 10,
+                                  backgroundColor: Colors.transparent,
+                                  child: Icon(
+                                    Icons.edit_square,
+                                    color: Colors.grey,
+                                    size: 15,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        verticalSpace(20),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              currentWidget = const SellerEditInfo();
+                              icon = Icons.arrow_back;
+                            });
+                            // cubit.getGovernorates();
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    cubit.nameController.text,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall
+                                        ?.copyWith(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20.0),
+                                  ),
+                                  horizontalSpace(8),
+                                  const Icon(
+                                    Icons.edit_square,
+                                    size: 12,
+                                    color: Colors.grey,
+                                  )
+                                ],
+                              ),
+                              verticalSpace(5),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  RatingBarIndicator(
+                                    rating: rate,
+                                    itemCount: 5,
+                                    itemSize: 30.0,
+                                    itemBuilder: (context, _) => const Icon(
+                                      Icons.star,
+                                      color: ColorManager.mainOrange,
+                                    ),
+                                  ),
+                                  verticalSpace(20),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    top: 20.h,
+                    right: 10.w,
+                    child: Stack(
+                      alignment: AlignmentDirectional.topEnd,
+                      children: [
+                        customIconButton(
+                          toolTip: 'Notifications',
+                          onPressed: () {
+                            context.pushNamed(Routes.sellerNotificationsScreen);
+                          },
+                          icon: Icons.notifications,
+                          color: Colors.black,
+                          size: 30.0,
+                        ),
+                        Container(
+                          padding: const EdgeInsetsDirectional.only(
+                            top: 11.0,
+                            end: 12.0,
+                          ),
+                          child: const CircleAvatar(
+                            radius: 4.5,
+                            backgroundColor: Colors.white,
+                            child: CircleAvatar(
+                              radius: 3.5,
+                              backgroundColor: ColorManager.mainOrange,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    child: customIconButton(
+                      toolTip: 'back',
+                      onPressed: () {
+                        setState(() {
+                          currentWidget = const SellerAccountSettings();
+                          icon = null;
+                        });
+                      },
+                      icon: icon,
+                      color: Colors.black,
+                    ),
                   ),
                 ],
               ),
-            )
-          ],
-        ),
-      ),
+              PageTransitionSwitcher(
+                duration: const Duration(milliseconds: 900),
+                transitionBuilder: (Widget child,
+                    Animation<double> primaryAnimation,
+                    Animation<double> secondaryAnimation) {
+                  return SharedAxisTransition(
+                    animation: primaryAnimation,
+                    secondaryAnimation: secondaryAnimation,
+                    transitionType: SharedAxisTransitionType.vertical,
+                    child: child,
+                  );
+                },
+                child: currentWidget,
+              ),
+            ],
+          ),
+        );
+        // : ProfileSkeltonLoading();
+      },
     );
   }
 }

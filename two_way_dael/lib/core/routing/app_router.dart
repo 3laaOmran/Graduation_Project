@@ -25,6 +25,7 @@ import 'package:two_way_dael/features/seller/auth/signup/ui/views/seller_certifi
 import 'package:two_way_dael/features/seller/auth/signup/ui/views/seller_otp_screen.dart';
 import 'package:two_way_dael/features/seller/auth/signup/ui/views/seller_photo_and_address_screen.dart';
 import 'package:two_way_dael/features/seller/auth/signup/ui/views/seller_signup_screen.dart';
+import 'package:two_way_dael/features/seller/home/ui/views/add_product.dart';
 import 'package:two_way_dael/features/seller/home/ui/views/seller_home_screen.dart';
 import 'package:two_way_dael/features/seller/home/ui/views/seller_notifications_module.dart';
 import '../../features/customer/auth/login/ui/views/login_screen.dart';
@@ -94,6 +95,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const SellerCertificates());
       case Routes.sellerNotificationsScreen:
         return MaterialPageRoute(builder: (_) => const SellerNotificationsModule());
+      case Routes.sellerAddNewProduct:
+        return MaterialPageRoute(builder: (_) => const AddProduct());
       default:
         return MaterialPageRoute(
             builder: (context) => Scaffold(

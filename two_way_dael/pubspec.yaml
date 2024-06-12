@@ -39,6 +39,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.5
+  adaptive_action_sheet: ^2.0.3
   flutter_native_splash: ^2.4.0
   flutter_offline: ^3.0.1
   flutter_rating_bar: ^4.0.1

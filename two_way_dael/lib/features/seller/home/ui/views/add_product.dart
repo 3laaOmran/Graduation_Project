@@ -1,12 +1,17 @@
 import 'dart:io';
 
+import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:two_way_dael/core/helpers/extensions.dart';
+import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
+import 'package:two_way_dael/core/theming/styles.dart';
+import 'package:two_way_dael/core/widgets/custom_button.dart';
+import 'package:two_way_dael/core/widgets/custom_text_form_field.dart';
 import 'package:two_way_dael/core/widgets/resuable_text.dart';
-import 'package:two_way_dael/features/seller/home/ui/widgets/const.dart';
-import 'package:two_way_dael/features/seller/home/ui/widgets/notification_widget.dart';
+import '../../../../customer/home/ui/widgets/build_ctegory_item.dart';
 
 class AddProduct extends StatefulWidget {
   const AddProduct({super.key});
@@ -20,7 +25,6 @@ class _AddProductState extends State<AddProduct> {
   TextEditingController discountController = TextEditingController();
   TextEditingController productDescriptionController = TextEditingController();
   TextEditingController priceController = TextEditingController();
-  TextEditingController benfitsController = TextEditingController();
 
   File? imagePick1;
   File? imagePick2;
@@ -43,27 +47,27 @@ class _AddProductState extends State<AddProduct> {
     }
   }
 
-  // dynamic openBottomSheet(BuildContext context, int numberImage) {
-  //   return showAdaptiveActionSheet(
-  //     context: context,
-  //     androidBorderRadius: 30,
-  //     actions: <BottomSheetAction>[
-  //       BottomSheetAction(
-  //           title: const Text('Camera'),
-  //           onPressed: (context) {
-  //             uploadImagefromCameraorGallary(ImageSource.camera, numberImage);
-  //           }),
-  //       BottomSheetAction(
-  //           title: const Text('Gallery'),
-  //           onPressed: (context) {
-  //             uploadImagefromCameraorGallary(ImageSource.gallery, numberImage);
-  //           }),
-  //     ],
-  //     cancelAction: CancelAction(
-  //         title: const Text(
-  //             'Cancel')), // onPressed parameter is optional by default will dismiss the ActionSheet
-  //   );
-  // }
+  dynamic openBottomSheet(BuildContext context, int numberImage) {
+    return showAdaptiveActionSheet(
+      context: context,
+      androidBorderRadius: 30,
+      actions: <BottomSheetAction>[
+        BottomSheetAction(
+            title: const Text('Camera'),
+            onPressed: (context) {
+              uploadImagefromCameraorGallary(ImageSource.camera, numberImage);
+            }),
+        BottomSheetAction(
+            title: const Text('Gallery'),
+            onPressed: (context) {
+              uploadImagefromCameraorGallary(ImageSource.gallery, numberImage);
+            }),
+      ],
+      cancelAction: CancelAction(
+          title: const Text(
+              'Cancel')), // onPressed parameter is optional by default will dismiss the ActionSheet
+    );
+  }
 
   @override
   void dispose() {
@@ -72,7 +76,6 @@ class _AddProductState extends State<AddProduct> {
     productDescriptionController.dispose();
     discountController.dispose();
     productNameController.dispose();
-    benfitsController.dispose();
     priceController.dispose();
   }
 
@@ -81,385 +84,234 @@ class _AddProductState extends State<AddProduct> {
     return Scaffold(
       backgroundColor: ColorManager.mainOrange,
       appBar: AppBar(
+        toolbarHeight: 80,
         backgroundColor: ColorManager.mainOrange,
         leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.arrow_back_ios, color: Colors.white)),
-        actions: [
-         
-          notificationButton(2),
-        ],
+          onPressed: () {
+            context.pop();
+          },
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+        ),
+        centerTitle: true,
+        title: resuableText(
+            text: "Add new Product ",
+            color: Colors.white,
+            fontsize: 20.sp,
+            fontWeight: FontWeight.bold),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 14.w),
-              child: resuableText(
-                  text: "Add new Product ",
+        child: Padding(
+          padding: const EdgeInsets.only(left: 15, right: 15, bottom: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 10.w),
+                decoration: BoxDecoration(
                   color: Colors.white,
-                  fontsize: 20.sp,
-                  fontWeight: FontWeight.bold),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 15.w),
-              padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 10.w),
-              width: 450.w,
-              height: 700.h,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: SingleChildScrollView(
+                  borderRadius: BorderRadius.circular(20),
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     resuableText(
                         text: "Add Product Images",
-                        fontsize: 20.sp,
+                        fontsize: 17.sp,
                         fontWeight: FontWeight.bold),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Stack(
-                          alignment: AlignmentDirectional.bottomEnd,
-                          children: [
-                            Container(
-                              width: 180.w,
-                              height: 170.0,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  image: imagePick1 == null
-                                      ? DecorationImage(
-                                          image: AssetImage(
-                                              images["background_img_picker"]!),
-                                          fit: BoxFit.none)
-                                      : DecorationImage(
-                                          image: FileImage(imagePick1!)),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(25.0)),
-                                  border: Border.all(
-                                      color: Colors.grey, width: 1.0)),
-                              clipBehavior: Clip.antiAliasWithSaveLayer,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(25.0)),
-                                  border: Border.all(
-                                      color: ColorManager.mainOrange,
-                                      width: 1.0)),
-                              child: CircleAvatar(
-                                radius: 17.0,
-                                backgroundColor: Colors.white,
-                                child: IconButton(
-                                  onPressed: () {
-                                    // openBottomSheet(context, 1);
-                                  },
-                                  icon: const Icon(
-                                    Icons.add,
-                                    size: 20.0,
-                                    color: ColorManager.mainOrange,
-                                  ),
+                        buildPickImage(
+                          onPressed: () {
+                            openBottomSheet(context, 1);
+                          },
+                          image: imagePick1 == null
+                              ? const DecorationImage(
+                                  image: AssetImage(
+                                      'assets/images/image_picker_background.png'),
+                                )
+                              : DecorationImage(
+                                  image: FileImage(imagePick1!),
+                                  fit: BoxFit.cover,
                                 ),
-                              ),
-                            ),
-                          ],
                         ),
                         Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Stack(
-                              alignment: AlignmentDirectional.bottomEnd,
-                              children: [
-                                Container(
-                                  width: 130.w,
-                                  height: 80.0,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      image: imagePick2 == null
-                                          ? DecorationImage(
-                                              image: AssetImage(images[
-                                                  "background_img_picker"]!),
-                                              fit: BoxFit.none)
-                                          : DecorationImage(
-                                              image: FileImage(imagePick2!)),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(25.0)),
-                                      border: Border.all(
-                                          color: Colors.grey, width: 1.0)),
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(25.0)),
-                                      border: Border.all(
-                                          color: ColorManager.mainOrange,
-                                          width: 1.0)),
-                                  child: CircleAvatar(
-                                    radius: 17.0,
-                                    backgroundColor: Colors.white,
-                                    child: IconButton(
-                                      onPressed: () {
-                                        // openBottomSheet(context, 2);
-                                      },
-                                      icon: const Icon(
-                                        Icons.add,
-                                        size: 20.0,
-                                        color: ColorManager.mainOrange,
-                                      ),
+                            buildPickImage(
+                              width: 125.w,
+                              height: 95.h,
+                              onPressed: () {
+                                openBottomSheet(context, 2);
+                              },
+                              image: imagePick2 == null
+                                  ? const DecorationImage(
+                                      image: AssetImage(
+                                          'assets/images/image_picker_background.png'),
+                                    )
+                                  : DecorationImage(
+                                      image: FileImage(imagePick2!),
+                                      fit: BoxFit.cover,
                                     ),
-                                  ),
-                                ),
-                              ],
                             ),
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            Stack(
-                              alignment: AlignmentDirectional.bottomEnd,
-                              children: [
-                                Container(
-                                  width: 130.w,
-                                  height: 80.0,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      image: imagePick3 == null
-                                          ? DecorationImage(
-                                              image: AssetImage(images[
-                                                  "background_img_picker"]!),
-                                              fit: BoxFit.none)
-                                          : DecorationImage(
-                                              image: FileImage(imagePick3!)),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(25.0)),
-                                      border: Border.all(
-                                          color: Colors.grey, width: 1.0)),
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(25.0)),
-                                      border: Border.all(
-                                          color: ColorManager.mainOrange,
-                                          width: 1.0)),
-                                  child: CircleAvatar(
-                                    radius: 17.0,
-                                    backgroundColor: Colors.white,
-                                    child: IconButton(
-                                      onPressed: () {
-                                        // openBottomSheet(context, 3);
-                                      },
-                                      icon: const Icon(
-                                        Icons.add,
-                                        size: 20.0,
-                                        color: ColorManager.mainOrange,
-                                      ),
+                            buildPickImage(
+                              width: 125.w,
+                              height: 95.h,
+                              onPressed: () {
+                                openBottomSheet(context, 3);
+                              },
+                              image: imagePick3 == null
+                                  ? const DecorationImage(
+                                      image: AssetImage(
+                                          'assets/images/image_picker_background.png'),
+                                    )
+                                  : DecorationImage(
+                                      image: FileImage(imagePick3!),
+                                      fit: BoxFit.cover,
                                     ),
-                                  ),
-                                ),
-                              ],
                             ),
                           ],
                         )
                       ],
                     ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
+                    verticalSpace(15),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        resuableText(
-                            text: "Product Name",
-                            fontsize: 14.sp,
-                            fontWeight: FontWeight.bold),
-                        resuableText(
-                            text: "Discount",
-                            fontsize: 14.sp,
-                            fontWeight: FontWeight.bold),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomTextFormFieldForAddProduct(
-                          typefield: "name",
-                          controller: productNameController,
-                          hinttext: "Chicken Soup",
-                          width: 220.w,
-                          height: 50.h,
-                        ),
-                        CustomTextFormFieldForAddProduct(
-                          typefield: "discount",
-                          controller: discountController,
-                          hinttext: "\t\t\t\t\t\t\t%",
-                          width: 95.w,
-                          height: 50.h,
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              resuableText(
+                                  text: "Add Name",
+                                  fontsize: 14.sp,
+                                  fontWeight: FontWeight.bold),
+                              CustomTextFormField(
+                                controller: productNameController,
+                                isObsecureText: false,
+                                hintText: 'ProductName',
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
+                    verticalSpace(15),
                     resuableText(
-                        text: "Product Description",
+                        text: "Add Description",
                         fontsize: 14.sp,
                         fontWeight: FontWeight.bold),
-                    CustomTextFormFieldForAddProduct(
-                      typefield: "description",
+                    CustomTextFormField(
                       controller: productDescriptionController,
-                      hinttext:
-                          "lormlormlormlormlormlormlormlormlormlormlormlormlormlormlormlormlorm",
-                      width: 300.w,
-                      height: 150.h,
+                      isObsecureText: false,
+                      hintText: 'Product Description',
+                      maxLines: 4,
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
+                    verticalSpace(15),
                     resuableText(
-                        text: "Category",
+                        text: "Choose Category",
                         fontsize: 14.sp,
                         fontWeight: FontWeight.bold),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          customChooseTypeOfProduct("Food"),
-                          customChooseTypeOfProduct("Drink"),
-                          customChooseTypeOfProduct("Soup"),
-                          customChooseTypeOfProduct("Pizza"),
-                          customChooseTypeOfProduct("Burgar"),
-                          customChooseTypeOfProduct("Burgar"),
-                          customChooseTypeOfProduct("Burgar"),
-                        ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: SizedBox(
+                          height: 25,
+                          child: Row(
+                            children: [
+                              const BuildCategoryItem(text: 'All'),
+                              horizontalSpace(10),
+                              const BuildCategoryItem(text: 'Food'),
+                              horizontalSpace(10),
+                              const BuildCategoryItem(text: 'Drink'),
+                              horizontalSpace(10),
+                              const BuildCategoryItem(text: 'Soup'),
+                              horizontalSpace(10),
+                              const BuildCategoryItem(text: 'Pizza'),
+                              horizontalSpace(10),
+                              const BuildCategoryItem(text: 'Burger'),
+                              horizontalSpace(10),
+                              const BuildCategoryItem(text: 'Soda'),
+                              horizontalSpace(10),
+                              const BuildCategoryItem(text: 'Others'),
+                              horizontalSpace(10),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                     SizedBox(
                       height: 15.h,
                     ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          Column(
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "Price",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14.sp),
+                              resuableText(
+                                  text: "Price",
+                                  fontsize: 14.sp,
+                                  fontWeight: FontWeight.bold),
+                              CustomTextFormField(
+                                controller: priceController,
+                                keyboardType: TextInputType.number,
+                                isObsecureText: false,
+                                hintText: 'Price',
                               ),
-                              CustomTextFormFieldForAddProduct(
-                                  controller: priceController,
-                                  hinttext: "58",
-                                  width: 130.w,
-                                  height: 50.h,
-                                  typefield: "price")
                             ],
                           ),
-                          SizedBox(
-                            width: 15.w,
-                          ),
-                          Column(
+                        ),
+                        horizontalSpace(10),
+                        Expanded(
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "Your benefits",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14.sp),
+                              resuableText(
+                                  text: "Discount",
+                                  fontsize: 14.sp,
+                                  fontWeight: FontWeight.bold),
+                              CustomTextFormField(
+                                controller: discountController,
+                                keyboardType: TextInputType.number,
+                                isObsecureText: false,
+                                hintText: 'Disc',
                               ),
-                              CustomTextFormFieldForAddProduct(
-                                  controller: benfitsController,
-                                  hinttext: "58",
-                                  width: 130.w,
-                                  height: 40.h,
-                                  typefield: "benfits")
                             ],
                           ),
-                          IconButton(
-                              onPressed: () {}, icon: const Icon(Icons.cancel)),
-                          TextButton(
-                            onPressed: () {},
-                            style: TextButton.styleFrom(
-                                backgroundColor: ColorManager.mainOrange),
-                            child: const Text(
-                              "Save",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          )
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      height: 50.h,
+                    verticalSpace(20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Expanded(
+                          child: AppTextButton(
+                            textStyle: TextStyles.font17WhiteBold,
+                            buttonText: 'cancel',
+                            onPressed: () {
+                              context.pop();
+                            },
+                          ),
+                        ),
+                        horizontalSpace(10),
+                        Expanded(
+                          child: AppTextButton(
+                            textStyle: TextStyles.font17WhiteBold,
+                            buttonText: 'Publish',
+                            onPressed: () {},
+                          ),
+                        ),
+                      ],
                     )
                   ],
                 ),
               ),
-            ),
-            SizedBox(
-              height: 200.h,
-            )
-          ],
+            ],
+          ),
         ),
-      ),
-    );
-  }
-}
-
-class CustomTextFormFieldForAddProduct extends StatefulWidget {
-  final TextEditingController? controller;
-  final String? hinttext;
-  final String? typefield;
-  final double? width;
-  final double? height;
-
-  const CustomTextFormFieldForAddProduct(
-      {super.key,
-      required this.controller,
-      required this.hinttext,
-      required this.width,
-      required this.height,
-      required this.typefield});
-
-  @override
-  State<CustomTextFormFieldForAddProduct> createState() =>
-      _CustomTextFormFieldForAddProductState();
-}
-
-class _CustomTextFormFieldForAddProductState
-    extends State<CustomTextFormFieldForAddProduct> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: widget.width,
-      height: widget.height,
-      child: TextFormField(
-        maxLines: widget.typefield == "description" ? 3 : 1,
-        controller: widget.controller,
-        decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-            hintText: widget.hinttext,
-            hintStyle: const TextStyle(color: Colors.grey),
-            contentPadding: const EdgeInsets.symmetric(
-                vertical: 8.0, horizontal: 10), // Adjust vertical padding
-
-            suffix: widget.typefield == "price" || widget.typefield == "benfits"
-                ? const Text(
-                    "|egp",
-                    style: TextStyle(color: Colors.black),
-                  )
-                : null),
       ),
     );
   }
@@ -476,6 +328,61 @@ Widget customChooseTypeOfProduct(String? text) {
             side: const BorderSide(color: ColorManager.mainOrange)),
         child: Text(text!),
       ),
+    ),
+  );
+}
+
+Widget buildPickImage({
+  required DecorationImage image,
+  required void Function() onPressed,
+  double? width,
+  double? height,
+}) {
+  return SizedBox(
+    width: width ?? 190.w,
+    height: height ?? 190.h,
+    child: Stack(
+      alignment: AlignmentDirectional.bottomEnd,
+      children: [
+        Positioned(
+          top: 0,
+          left: 0,
+          child: Container(
+            width: width != null ? width - 10 : 180.w,
+            height: height != null ? height - 10 : 180.h,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                image: image,
+                borderRadius: const BorderRadius.all(Radius.circular(25.0)),
+                border: Border.all(
+                  color: Colors.grey,
+                  width: 1.0,
+                )),
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+          ),
+        ),
+        Positioned(
+          right: 0,
+          bottom: 0,
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(25.0)),
+                border: Border.all(color: ColorManager.mainOrange, width: 1.0)),
+            child: CircleAvatar(
+              radius: 17.0,
+              backgroundColor: Colors.white,
+              child: IconButton(
+                onPressed: onPressed,
+                icon: const Icon(
+                  Icons.add,
+                  size: 20.0,
+                  color: ColorManager.mainOrange,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     ),
   );
 }

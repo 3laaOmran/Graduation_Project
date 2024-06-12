@@ -59,7 +59,10 @@ class SellerHomeScreen extends StatelessWidget {
                     },
                     items: const [
                       BottomNavigationBarItem(
-                        icon: Icon(Icons.list_alt_rounded),
+                        icon: Icon(
+                          Icons.list_alt_rounded,
+                          size: 30,
+                        ),
                         label: 'Products',
                       ),
                       BottomNavigationBarItem(
