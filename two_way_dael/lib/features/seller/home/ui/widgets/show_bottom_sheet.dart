@@ -5,7 +5,7 @@ import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/features/customer/home/logic/cubit/customer_cubit.dart';
 import 'package:two_way_dael/features/customer/home/logic/cubit/customer_states.dart';
-import 'package:two_way_dael/features/customer/home/ui/widgets/build_charity_item.dart';
+import 'package:two_way_dael/features/seller/home/ui/widgets/build_charity_item.dart';
 
 import '../../../../../core/theming/colors.dart';
 import '../../../../../core/theming/styles.dart';

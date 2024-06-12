@@ -44,6 +44,16 @@ class SellerAccountSettings extends StatelessWidget {
             verticalSpace(20),
             InkWell(
               onTap: () {
+                context.pushNamed(Routes.sellerDonationScreen);
+              },
+              child: buildAccountSettingsItem(
+                image: 'assets/images/favorites.png',
+                text: 'Donate Now',
+              ),
+            ),
+            verticalSpace(20),
+            InkWell(
+              onTap: () {
                 context.pushNamed(Routes.contactUsScreen);
               },
               child: buildAccountSettingsItem(

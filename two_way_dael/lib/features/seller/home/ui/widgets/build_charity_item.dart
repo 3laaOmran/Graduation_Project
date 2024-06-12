@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
-import 'package:two_way_dael/features/customer/home/logic/cubit/customer_cubit.dart';
-import 'package:two_way_dael/features/customer/home/logic/cubit/customer_states.dart';
-import 'package:two_way_dael/features/customer/home/ui/widgets/show_bottom_sheet.dart';
+import 'package:two_way_dael/features/seller/home/logic/cubit/seller_cubit.dart';
+import 'package:two_way_dael/features/seller/home/ui/widgets/show_bottom_sheet.dart';
 
 class BuildCharityItem extends StatefulWidget {
   const BuildCharityItem({super.key, required this.charityItemModel});
@@ -19,7 +18,7 @@ class _BuildCharityItemState extends State<BuildCharityItem> {
   bool? isSelected = false;
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CustomerCubit, CustomerStates>(
+    return BlocConsumer<SellerCubit, SellerStates>(
       listener: (context, state) {},
       builder: (context, state) {
         return InkWell(

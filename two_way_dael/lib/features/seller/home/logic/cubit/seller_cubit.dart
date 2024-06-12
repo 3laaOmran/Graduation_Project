@@ -9,6 +9,7 @@ import 'package:two_way_dael/features/seller/home/data/models/seller_data_model.
 import 'package:two_way_dael/features/seller/home/ui/views/mian_seller_screen.dart';
 import 'package:two_way_dael/features/seller/home/ui/views/profile_seller_screen.dart';
 import 'package:two_way_dael/features/seller/home/ui/views/seller_notifications_module.dart';
+import 'package:two_way_dael/features/seller/home/ui/widgets/build_charity_item.dart';
 
 import '../../../../../core/networking/dio_helper.dart';
 import '../../ui/views/seller_products_screen.dart';
@@ -33,7 +34,6 @@ class SellerCubit extends Cubit<SellerStates> {
     emit(SellerChangeBottomNavState());
   }
 
-  
   final formKey = GlobalKey<FormState>();
   var nameController = TextEditingController();
   var emailController = TextEditingController();
@@ -129,6 +129,50 @@ class SellerCubit extends Cubit<SellerStates> {
       message:
           ' Alaa Meawd OmranAlaa Meawd OmranAlaa Meawd OmranAlaa Meawd OmranAlaa Meawd Omran',
       image: 'assets/images/default_profile.png',
+    ),
+  ];
+  List<Widget> charities = [
+    BuildCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/MisrElkhair.png',
+        name: 'Misr EL-Khair',
+        value: 796,
+      ),
+    ),
+    BuildCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/FoodBank.png',
+        name: 'Egyption Food Bank ',
+        value: 152,
+      ),
+    ),
+    BuildCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/AhlMasr.png',
+        name: 'Ahl Masr Foundation',
+        value: 150,
+      ),
+    ),
+    BuildCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/Orman.png',
+        name: 'Al Orman Association',
+        value: 888,
+      ),
+    ),
+    BuildCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/57357.png',
+        name: '57357',
+        value: 888,
+      ),
+    ),
+    BuildCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/MisrElkhair.png',
+        name: 'Misr EL-Khair',
+        value: 796,
+      ),
     ),
   ];
 }

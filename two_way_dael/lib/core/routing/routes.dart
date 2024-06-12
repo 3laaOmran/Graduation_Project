@@ -3,13 +3,13 @@ class Routes {
   static const String loginScreen = '/loginScreen';
   static const String forgetPasswordScreen = '/forgetPasswordScreen';
   static const String forgetPasswordOtpScreen = '/forgetPasswordOtpScreen';
-  static const String phoneForForgetPasswordScreen = '/phoneForForgetPasswordScreen';
+  static const String phoneForForgetPasswordScreen =
+      '/phoneForForgetPasswordScreen';
   static const String signupScreen = '/signupScreen';
   static const String homeScreen = '/homeScreen';
   static const String otpScreen = '/otpScreen';
   static const String photoAddressScreen = '/photoAddressScreen';
   static const String notificationsScreen = '/notificationsScreen';
-  static const String donationScreen = '/donationScreen';
   static const String contactUsScreen = '/contactUsScreen';
   static const String aboutAppScreen = '/aboutAppScreen';
   static const String yourOrdersScreen = '/yourOrdersScreen';
@@ -24,10 +24,11 @@ class Routes {
   static const String sellerLoginScreen = '/sellerLoginScreen';
   static const String sellerSignupScreen = '/sellerSignupScreen';
   static const String sellerOtpScreen = '/sellerOtpScreen';
-  static const String sellerPhotoAndAddressScreen = '/sellerPhotoAndAddressScreen';
+  static const String sellerPhotoAndAddressScreen =
+      '/sellerPhotoAndAddressScreen';
   static const String sellerCirtificates = '/sellerCirtificates';
   static const String sellerHomeScreen = '/sellerHomeScreen';
   static const String sellerNotificationsScreen = '/sellerNotificationsScreen';
   static const String sellerAddNewProduct = '/sellerAddNewProduct';
-
+  static const String sellerDonationScreen = '/sellerDonationScreen';
 }
