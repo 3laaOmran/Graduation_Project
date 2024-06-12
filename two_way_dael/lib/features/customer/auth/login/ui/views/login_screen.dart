@@ -7,6 +7,7 @@ import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/core/widgets/show_snackbar.dart';
+import 'package:two_way_dael/core/widgets/show_toast.dart';
 import 'package:two_way_dael/core/widgets/signup_and_login_footer.dart';
 import 'package:two_way_dael/features/customer/auth/login/logic/cubit/login_cubit.dart';
 
@@ -29,7 +30,10 @@ class LoginScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is LoginSuccessState) {
             if (state.loginModel.status == 200) {
-              showSnackBar(context, message: state.loginModel.message!);
+              showToast(
+                  message: state.loginModel.message!,
+                  state: TostStates.SUCCESS);
+              // showSnackBar(context, message: state.loginModel.message!);
               CashHelper.saveData(
                       key: 'token', value: state.loginModel.data!.token)
                   .then((value) {
