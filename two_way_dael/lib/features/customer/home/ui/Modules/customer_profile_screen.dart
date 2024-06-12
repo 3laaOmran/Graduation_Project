@@ -44,18 +44,18 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                     Stack(
                       alignment: AlignmentDirectional.topEnd,
                       children: [
-                        const Image(
-                          image: AssetImage(
-                            'assets/images/profile_bg.png',
-                          ),
-                          width: double.infinity,
-                          height: 280,
-                          fit: BoxFit.cover,
-                        ),
+                        // const Image(
+                        //   image: AssetImage(
+                        //     'assets/images/profile_bg.png',
+                        //   ),
+                        //   width: double.infinity,
+                        //   height: 280,
+                        //   fit: BoxFit.cover,
+                        // ),
                         Center(
                           child: Column(
                             children: [
-                              verticalSpace(38),
+                              verticalSpace(50),
                               GestureDetector(
                                 onTap: () {
                                   setState(() {
@@ -66,7 +66,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                 child: Stack(
                                   children: [
                                     CircleAvatar(
-                                      radius: 80.0,
+                                      radius: 100.0,
                                       backgroundImage: image ==
                                               'http://2waydeal.online/uploads/default.png'
                                           ? const AssetImage(
@@ -74,15 +74,15 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                               as ImageProvider
                                           : NetworkImage(image!),
                                     ),
-                                    Positioned(
+                                    const Positioned(
                                       bottom: 0,
-                                      right: 13,
+                                      right: 15,
                                       child: CircleAvatar(
                                         radius: 10,
                                         backgroundColor: Colors.transparent,
                                         child: Icon(
                                           Icons.edit_square,
-                                          color: Colors.grey[300],
+                                          color: Colors.grey,
                                           size: 15,
                                         ),
                                       ),
@@ -112,15 +112,15 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                               .textTheme
                                               .headlineSmall
                                               ?.copyWith(
-                                                  color: Colors.white,
+                                                  color: Colors.black,
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 20.0),
                                         ),
                                         horizontalSpace(8),
-                                        Icon(
+                                        const Icon(
                                           Icons.edit_square,
                                           size: 12,
-                                          color: Colors.grey[300],
+                                          color: Colors.grey,
                                         )
                                       ],
                                     ),
@@ -130,10 +130,11 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                           .textTheme
                                           .headlineSmall
                                           ?.copyWith(
-                                              color: Colors.white,
+                                              color: Colors.black,
                                               fontWeight: FontWeight.bold,
                                               fontSize: 11.0),
                                     ),
+                                    verticalSpace(30),
                                   ],
                                 ),
                               ),
@@ -151,7 +152,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                   context.pushNamed(Routes.notificationsScreen);
                                 },
                                 icon: Icons.notifications,
-                                color: Colors.white,
+                                color: Colors.black,
                                 size: 30.0,
                               ),
                               Container(
@@ -183,7 +184,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                               });
                             },
                             icon: icon,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         ),
                       ],
@@ -205,7 +206,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                   ],
                 ),
               )
-            : ProfileSkeltonLoading();
+            : const ProfileSkeltonLoading();
       },
     );
   }

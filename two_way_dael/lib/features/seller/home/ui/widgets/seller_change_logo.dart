@@ -70,9 +70,9 @@ class _SellerChangeLogoState extends State<SellerChangeLogo> {
                                       image: FileImage(imagePick!),
                                       fit: BoxFit.cover,
                                     )
-                                  : image != null
+                                  : image != 'http://2waydeal.online/uploads/default.png'
                                       ? DecorationImage(
-                                          image: NetworkImage(image))
+                                          image: NetworkImage(image!))
                                       : const DecorationImage(
                                           image: AssetImage(
                                               'assets/images/default_profile.png')),

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:two_way_dael/choose_account_type_screen.dart';
+import 'package:two_way_dael/core/constants/constants.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/routing/routes.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
@@ -90,11 +91,13 @@ class AppRouter {
       case Routes.sellerOtpScreen:
         return MaterialPageRoute(builder: (_) => const SellerConfirmAccount());
       case Routes.sellerPhotoAndAddressScreen:
-        return MaterialPageRoute(builder: (_) => const SellerPhotoAndAddressScreen());
+        return MaterialPageRoute(
+            builder: (_) => const SellerPhotoAndAddressScreen());
       case Routes.sellerCirtificates:
         return MaterialPageRoute(builder: (_) => const SellerCertificates());
       case Routes.sellerNotificationsScreen:
-        return MaterialPageRoute(builder: (_) => const SellerNotificationsModule());
+        return MaterialPageRoute(
+            builder: (_) => const SellerNotificationsModule());
       case Routes.sellerAddNewProduct:
         return MaterialPageRoute(builder: (_) => const AddProduct());
       default:
@@ -121,7 +124,14 @@ class AppRouter {
                           buttonText: 'No',
                           textStyle: TextStyles.font12White,
                           onPressed: () {
-                            context.pushReplacementNamed(Routes.homeScreen);
+                            token != null
+                                ? context
+                                    .pushReplacementNamed(Routes.homeScreen)
+                                : sellerToken != null
+                                    ? context.pushReplacementNamed(
+                                        Routes.sellerHomeScreen)
+                                    : context.pushReplacementNamed(
+                                        Routes.chooseAccountTypeScreen);
                           },
                           buttonWidth: 30,
                           buttonHeight: 15,

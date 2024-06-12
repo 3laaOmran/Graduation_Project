@@ -56,9 +56,13 @@ class HomeScreen extends StatelessWidget {
                       padding: EdgeInsets.only(right: 10.w),
                       child: CircleAvatar(
                         radius: 30.0,
-                        backgroundImage: NetworkImage(
-                          image!,
-                        ),
+                        backgroundImage: image !=
+                                'http://2waydeal.online/uploads/default.png'
+                            ? NetworkImage(
+                                image!,
+                              )
+                            : const AssetImage('assets/images/default_profile.png')
+                                as ImageProvider,
                         backgroundColor: Colors.white,
                       ),
                     ),

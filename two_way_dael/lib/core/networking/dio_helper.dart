@@ -155,21 +155,28 @@ class DioHelper {
         data: formData,
       );
       return response;
-    } on DioException catch (e) {
+    }on DioException catch (e) {
       if (e.response != null) {
         // The server responded with an error code
-        final statusCode = e.response?.statusCode;
-        final errorData = e.response?.data;
-
-        debugPrint('Status code: $statusCode');
-        debugPrint('Message: ${errorData['message']}');
-
-        if (statusCode == 401 || statusCode == 429 || statusCode == 422) {
-          // Handle specific status codes if needed
+        if (e.response?.statusCode == 401) {
+          // Handle 401 Unauthorized status code
+          final errorData = e.response?.data;
+          debugPrint('Status code: ${e.response?.statusCode}');
+          debugPrint('Message: ${errorData['message']}');
+        } else if (e.response?.statusCode == 429) {
+          // Handle 429 Too Many Requests status code
+          final errorData = e.response?.data;
+          debugPrint('Status code: ${e.response?.statusCode}');
+          debugPrint('Message: ${errorData['message']}');
+        } else if (e.response?.statusCode == 422) {
+          // Handle 422 Unprocessable Entity status code
+          final errorData = e.response?.data;
+          debugPrint('Status code: ${e.response?.statusCode}');
+          debugPrint('Message: ${errorData['message']}');
         } else {
           // Handle other status codes
-          debugPrint('Unexpected status code: $statusCode');
-          debugPrint('Response data: $errorData');
+          debugPrint('Unexpected status code: ${e.response?.statusCode}');
+          debugPrint('Response data: ${e.response?.data}');
         }
       } else {
         // Something happened in setting up or sending the request that triggered an Error

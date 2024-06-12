@@ -25,6 +25,8 @@ class _AddProductState extends State<AddProduct> {
   TextEditingController discountController = TextEditingController();
   TextEditingController productDescriptionController = TextEditingController();
   TextEditingController priceController = TextEditingController();
+  TextEditingController expirydateController = TextEditingController();
+  TextEditingController quantityController = TextEditingController();
 
   File? imagePick1;
   File? imagePick2;
@@ -241,9 +243,7 @@ class _AddProductState extends State<AddProduct> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
+                    verticalSpace(15),
                     Row(
                       children: [
                         Expanded(
@@ -277,6 +277,46 @@ class _AddProductState extends State<AddProduct> {
                                 keyboardType: TextInputType.number,
                                 isObsecureText: false,
                                 hintText: 'Disc',
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    verticalSpace(20),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              resuableText(
+                                  text: "Expiry Date",
+                                  fontsize: 14.sp,
+                                  fontWeight: FontWeight.bold),
+                              CustomTextFormField(
+                                controller: expirydateController,
+                                keyboardType: TextInputType.datetime,
+                                isObsecureText: false,
+                                hintText: 'Expiry Date',
+                              ),
+                            ],
+                          ),
+                        ),
+                        horizontalSpace(10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              resuableText(
+                                  text: "Quantity",
+                                  fontsize: 14.sp,
+                                  fontWeight: FontWeight.bold),
+                              CustomTextFormField(
+                                controller: quantityController,
+                                keyboardType: TextInputType.number,
+                                isObsecureText: false,
+                                hintText: 'Quantity',
                               ),
                             ],
                           ),
