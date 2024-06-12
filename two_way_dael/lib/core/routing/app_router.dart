@@ -28,6 +28,7 @@ import 'package:two_way_dael/features/seller/auth/signup/ui/views/seller_photo_a
 import 'package:two_way_dael/features/seller/auth/signup/ui/views/seller_signup_screen.dart';
 import 'package:two_way_dael/features/seller/home/ui/views/add_product.dart';
 import 'package:two_way_dael/features/seller/home/ui/views/donation_module.dart';
+import 'package:two_way_dael/features/seller/home/ui/views/new_orders.dart';
 import 'package:two_way_dael/features/seller/home/ui/views/seller_home_screen.dart';
 import 'package:two_way_dael/features/seller/home/ui/views/seller_notifications_module.dart';
 import '../../features/customer/auth/login/ui/views/login_screen.dart';
@@ -103,6 +104,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const AddProduct());
       case Routes.sellerDonationScreen:
         return MaterialPageRoute(builder: (_) => const SellerDonationScreen());
+      case Routes.sellerNewOrdersScreen:
+        return MaterialPageRoute(builder: (_) => const NewOrdersScreen());
       default:
         return MaterialPageRoute(
             builder: (context) => Scaffold(

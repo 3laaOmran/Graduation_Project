@@ -31,4 +31,5 @@ class Routes {
   static const String sellerNotificationsScreen = '/sellerNotificationsScreen';
   static const String sellerAddNewProduct = '/sellerAddNewProduct';
   static const String sellerDonationScreen = '/sellerDonationScreen';
+  static const String sellerNewOrdersScreen = '/sellerNewOrdersScreen';
 }

@@ -25,7 +25,9 @@ class SellerAccountSettings extends StatelessWidget {
             ),
             verticalSpace(20),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                context.pushNamed(Routes.sellerNewOrdersScreen);
+              },
               child: buildAccountSettingsItem(
                 image: 'assets/images/orders_list.png',
                 text: 'New Orders',
