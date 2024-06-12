@@ -3,7 +3,6 @@ class ProductDetails {
   String? message;
   Data? data;
 
-
   ProductDetails.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
@@ -14,7 +13,6 @@ class ProductDetails {
 class Data {
   Product? product;
   List<Product>? similarProducts;
-
 
   Data.fromJson(Map<String, dynamic> json) {
     product =
@@ -45,17 +43,19 @@ class Product {
   Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    price = json['price'];
+    // Check if price is int or double and assign accordingly
+    price = (json['price'] is int)
+        ? (json['price'] as int).toDouble()
+        : json['price'];
     discount = json['discount'];
     netPrice = json['net_price'];
-    images = json['images'].cast<String>();
+    images = json['images']?.cast<String>();
     description = json['description'];
     availableFor = json['available_for'];
     expireDate = json['expire_date'];
     availableQuantity = json['available_quantity'];
-    category = json['category'] != null
-        ? Category.fromJson(json['category'])
-        : null;
+    category =
+        json['category'] != null ? Category.fromJson(json['category']) : null;
     store = json['store'] != null ? Category.fromJson(json['store']) : null;
   }
 }
@@ -63,7 +63,6 @@ class Product {
 class Category {
   int? id;
   String? name;
-
 
   Category.fromJson(Map<String, dynamic> json) {
     id = json['id'];
