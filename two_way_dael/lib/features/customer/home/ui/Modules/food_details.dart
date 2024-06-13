@@ -6,7 +6,7 @@ import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/routing/routes.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
-import 'package:two_way_dael/core/widgets/components.dart';
+import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/core/widgets/custom_icon_button.dart';
 import 'package:two_way_dael/core/widgets/show_toast.dart';
 import 'package:two_way_dael/features/customer/home/data/models/product_details_model.dart';
@@ -24,13 +24,6 @@ class FoodDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<CustomerCubit, CustomerStates>(
       listener: (context, state) {
-        if (state is CustomerAddToCartState) {
-          showToast(
-            message:
-                'Added Successfully\nGo to your cart to complete check out',
-            state: TostStates.SUCCESS,
-          );
-        }
       },
       builder: (context, state) {
         var cubit = CustomerCubit.get(context);
@@ -238,10 +231,10 @@ class FoodDetails extends StatelessWidget {
                         ],
                       ),
                       verticalSpace(20),
-                      cartButton(
-                        text: 'Add to cart',
-                        function: () {
-                          // Find the corresponding Products instance
+                      AppTextButton(
+                        textStyle: TextStyles.font20Whitebold,
+                        buttonText: 'Add to cart',
+                        onPressed: () {
                           Products? productToAdd;
                           final productsList =
                               cubit.productsModel!.data!.products!;
@@ -261,11 +254,8 @@ class FoodDetails extends StatelessWidget {
                             );
                           }
                         },
-                        context: context,
                       ),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
+                      verticalSpace(20),
                       Text(
                         'other customers also order these',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(

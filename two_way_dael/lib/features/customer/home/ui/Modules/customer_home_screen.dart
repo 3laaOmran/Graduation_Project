@@ -18,10 +18,21 @@ import '../../../../../core/helpers/spacing.dart';
 import '../../../../../core/theming/colors.dart';
 import '../../../../../core/widgets/custom_icon_button.dart';
 
-class CustomerHomeScreen extends StatelessWidget {
-  CustomerHomeScreen({super.key});
+class CustomerHomeScreen extends StatefulWidget {
+  const CustomerHomeScreen({super.key});
 
+  @override
+  State<CustomerHomeScreen> createState() => _CustomerHomeScreenState();
+}
+
+class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
   final TextEditingController controller = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    CustomerCubit.get(context)
+        .loadCart(); // Load cart once when screen initializes
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -150,11 +161,12 @@ class CustomerHomeScreen extends StatelessWidget {
                             ),
                             cubit.cartProducts.isNotEmpty
                                 ? CircleAvatar(
-                                    radius: 8,
+                                    radius: 8.5.w,
                                     backgroundColor: ColorManager.mainOrange,
                                     child: Text(
                                       '${cubit.cartProducts.length}',
-                                      style: TextStyles.font12White,
+                                      style: TextStyles.font12White.copyWith(
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   )
                                 : Container(),

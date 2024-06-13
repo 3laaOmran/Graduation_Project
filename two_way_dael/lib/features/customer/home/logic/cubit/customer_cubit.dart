@@ -1,7 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
 import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:two_way_dael/core/constants/constants.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
@@ -13,7 +15,6 @@ import 'package:two_way_dael/features/customer/home/logic/cubit/customer_states.
 import 'package:two_way_dael/features/customer/home/ui/Modules/customer_home_screen.dart';
 import 'package:two_way_dael/features/customer/home/ui/Modules/customer_profile_screen.dart';
 import 'package:two_way_dael/features/customer/home/ui/Modules/notifications_module.dart';
-
 import '../../../../../core/networking/dio_helper.dart';
 import '../../../../../core/networking/end_points.dart';
 import '../../data/models/categoties_model.dart';
@@ -27,7 +28,7 @@ class CustomerCubit extends Cubit<CustomerStates> {
   int currentIndex = 0;
 
   List<Widget> bottomScreens = [
-    CustomerHomeScreen(),
+    const CustomerHomeScreen(),
     const CustomerProfileScreen(),
   ];
 
@@ -36,89 +37,110 @@ class CustomerCubit extends Cubit<CustomerStates> {
     emit(ChangeBottomNavState());
   }
 
-  // int itemQuantity = 1;
-  // double itemPrice = 75;
-  // double totalPrice = 75;
-
-  // void minus() {
-  //   if (itemQuantity > 1) {
-  //     itemQuantity--;
-  //     totalPrice -= itemPrice;
-  //     emit(ItemQuantityMinusState(itemQuantity, totalPrice, itemPrice));
-  //   }
-  // }
-
-  // void plus() {
-  //   totalPrice += itemPrice;
-  //   itemQuantity++;
-  //   emit(ItemQuantityPlusState(itemQuantity, totalPrice, itemPrice));
-  // }
-
-  // void updatePrices(int index) {
-  //   itemPrice = productsModel?.data?.products?[index].price;
-  //   totalPrice = productsModel?.data?.products?[index].price;
-  // }
-
-  int itemQuantity = 1;
-  double? totalPrice;
-  
-
-  void minus() {
-    if (itemQuantity > 1) {
-      itemQuantity--;
-      // totalPrice = totalPrice! - itemPrice!;
-      emit(ItemQuantityMinusState());
-    }
-  }
-
-  void plus() {
-    // double itemPrice = productsModel!.data!.products![index].price!;
-    itemQuantity++;
-    // itemPrice += itemPrice;
-    // if (itemPrice != null || totalPrice != null) {
-    //   totalPrice = totalPrice! + itemPrice!;
-    // }
-    emit(ItemQuantityPlusState());
-  }
-
-  List<Products> cartProducts = [];
-
-  void addToCart(Products product) {
-    if (!cartProducts.contains(product)) {
-      cartProducts.add(product);
-      emit(CustomerAddToCartState());
-    }
-  }
-
   void toggleCart(Products product) {
     if (cartProducts.contains(product)) {
       cartProducts.remove(product);
+      saveCart();
       emit(CustomerRemoveFromCartState());
     } else {
       cartProducts.add(product);
+      saveCart();
       emit(CustomerAddToCartState());
     }
-    // emit(CustomerCartUpdated());
   }
 
   bool isInCart(Products product) {
     return cartProducts.contains(product);
   }
 
-  // void removeFromCart(product) {
-  //   cartProducts.remove(product);
-  //   emit(CustomerRemoveFromCartState());
-  // }
-  void removeFromCart(Products product) {
-    if (cartProducts.contains(product)) {
-      cartProducts.remove(product);
-      emit(CustomerRemoveFromCartState());
+  List<Products> cartProducts = [];
+  double totalPrice = 0;
+
+  Future<void> saveCart() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> cartJson =
+        cartProducts.map((product) => json.encode(product.toJson())).toList();
+    await prefs.setStringList('cartProducts', cartJson);
+    await prefs.setDouble('totalPrice', totalPrice);
+  }
+
+  Future<void> loadCart() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? cartJson = prefs.getStringList('cartProducts');
+    if (cartJson != null) {
+      cartProducts =
+          cartJson.map((item) => Products.fromJson(json.decode(item))).toList();
+    }
+    totalPrice = prefs.getDouble('totalPrice') ?? 0;
+    emit(CustomerCartLoadedState(cartProducts, totalPrice));
+  }
+
+  void minus(Products product) {
+    int index = cartProducts.indexOf(product);
+    if (index != -1 && cartProducts[index].quantity > 1) {
+      cartProducts[index].quantity--;
+      updateTotalPrice();
+      emit(ItemQuantityMinusState());
+      saveCart();
     }
   }
 
-  void clearCart(product) {
+  void plus(Products product) {
+    int index = cartProducts.indexOf(product);
+    if (index != -1) {
+      cartProducts[index].quantity++;
+      updateTotalPrice();
+      emit(ItemQuantityPlusState());
+      saveCart();
+    }
+  }
+
+  void updateCartItemQuantity(int index, int newQuantity) {
+    if (newQuantity > 0) {
+      cartProducts[index].quantity = newQuantity;
+      updateTotalPrice();
+      emit(ItemQuantityUpdatedState(newQuantity));
+      saveCart();
+    }
+  }
+
+  double getTotalPrice() {
+    double total = 0;
+    for (var item in cartProducts) {
+      total += item.price! * item.quantity;
+    }
+    return total;
+  }
+
+  void updateTotalPrice() {
+    totalPrice = getTotalPrice();
+    emit(CustomerUpdateTotalPriceState(totalPrice));
+    saveCart();
+  }
+
+  void addToCart(Products product) {
+    if (!cartProducts.contains(product)) {
+      cartProducts.add(product);
+      updateTotalPrice();
+      emit(CustomerAddToCartState());
+      saveCart();
+    }
+  }
+
+  void removeFromCart(Products product) {
+    if (cartProducts.contains(product)) {
+      cartProducts.remove(product);
+      updateTotalPrice();
+      emit(CustomerRemoveFromCartState());
+      saveCart();
+    }
+  }
+
+  void clearCart() {
     cartProducts.clear();
+    updateTotalPrice();
     emit(CustomerClearCartState());
+    saveCart();
   }
 
   ProductsModel? productsModel;

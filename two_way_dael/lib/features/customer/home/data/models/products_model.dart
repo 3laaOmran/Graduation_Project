@@ -24,6 +24,7 @@ class Data {
     }
   }
 }
+
 class Products {
   int? id;
   String? name;
@@ -31,14 +32,29 @@ class Products {
   String? discount;
   String? netPrice;
   List<String>? images;
+  int quantity = 1; // Add this field
 
+  Products({
+    this.name,
+    this.price,
+    this.images,
+    this.quantity = 1, // Default quantity to 1
+  });
   Products.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    price = (json['price'] as num?)?.toDouble();  // Convert to double if it's an int
+    price =
+        (json['price'] as num?)?.toDouble(); // Convert to double if it's an int
     discount = json['discount'];
     netPrice = json['net_price'];
     images = json['images'] != null ? json['images'].cast<String>() : [];
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['price'] = price;
+    data['images'] = images;
+    return data;
   }
 }
 

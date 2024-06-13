@@ -2,9 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:two_way_dael/core/helpers/cash_helper.dart';
 import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
-
+import 'package:two_way_dael/core/widgets/custom_button.dart';
 import '../../../../../core/theming/colors.dart';
 import '../../logic/cubit/customer_cubit.dart';
 import '../../logic/cubit/customer_states.dart';
@@ -20,6 +21,8 @@ class CartScreen extends StatelessWidget {
         final cubit = CustomerCubit.get(context);
         return Scaffold(
           appBar: AppBar(
+            scrolledUnderElevation: 0.0,
+            toolbarHeight: 80,
             title: Text(
               'My Cart',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -29,12 +32,11 @@ class CartScreen extends StatelessWidget {
             ),
             actions: [
               Padding(
-                padding: const EdgeInsets.only(
-                  right: 20,
-                ),
+                padding: const EdgeInsets.only(right: 20),
                 child: InkWell(
                   onTap: () {
-                    cubit.clearCart(cubit.cartProducts);
+                    cubit.clearCart();
+                    CashHelper.removeData(key: 'totalPrice');
                   },
                   child: const Image(
                     image: AssetImage('assets/images/delete.png'),
@@ -53,16 +55,67 @@ class CartScreen extends StatelessWidget {
                       'Empty Cart\nGo add some products',
                       style: TextStyles.font17BlackBold.copyWith(height: 2),
                       textAlign: TextAlign.center,
-                    )
+                    ),
                   ],
                 )
-              : ListView.separated(
-                  itemBuilder: (context, index) =>
-                      itemBottomSheet(context, index),
-                  separatorBuilder: (context, index) => const SizedBox(
-                    height: 2.0,
-                  ),
-                  itemCount: cubit.cartProducts.length,
+              : Column(
+                  children: [
+                    Expanded(
+                      child: ListView.separated(
+                        padding: EdgeInsets.only(bottom: 20.h, top: 10.h),
+                        itemBuilder: (context, index) =>
+                            itemBottomSheet(context, index),
+                        separatorBuilder: (context, index) => SizedBox(
+                          height: 20.0.h,
+                        ),
+                        itemCount: cubit.cartProducts.length,
+                      ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      height: 170.0.h,
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                textBaseline: TextBaseline.alphabetic,
+                                crossAxisAlignment: CrossAxisAlignment.baseline,
+                                children: [
+                                  Text(
+                                    'Total Price:',
+                                    style: TextStyles.font30blackbold
+                                        .copyWith(fontSize: 28),
+                                  ),
+                                  horizontalSpace(10),
+                                  Text(
+                                    cubit.getTotalPrice().toStringAsFixed(2),
+                                    style: TextStyles.font30MainOrangeBold,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  horizontalSpace(10),
+                                  Text(
+                                    'EGP',
+                                    style: TextStyles.font17BlackBold,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            AppTextButton(
+                              textStyle: TextStyles.font17WhiteBold,
+                              buttonText: 'Check Out',
+                              onPressed: () {},
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
         );
       },
@@ -71,68 +124,72 @@ class CartScreen extends StatelessWidget {
 
   Widget itemBottomSheet(BuildContext context, int index) {
     final cubit = CustomerCubit.get(context);
+
     final product = cubit.cartProducts[index];
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsetsDirectional.only(start: 14.0),
-              child: Card(
-                clipBehavior: Clip.antiAliasWithSaveLayer,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              height: 85.0.h,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
                 color: Colors.white,
-                elevation: 10.0,
-                child: Container(
-                  width: 300,
-                  height: 85.0,
-                  color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Row(
-                      children: [
-                        Card(
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          child: SizedBox(
-                            height: 68.0,
-                            width: 65.0,
-                            child: CachedNetworkImage(
-                              imageUrl: product.images!.isNotEmpty
-                                  ? product.images![0]
-                                  : '',
-                              fit: BoxFit.cover,
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                            ),
-                          ),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.grey,
+                    blurRadius: 15,
+                    offset: Offset(8, 8),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 7),
+                child: Row(
+                  children: [
+                    Card(
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      child: SizedBox(
+                        height: 68.0.h,
+                        width: 65.0.w,
+                        child: CachedNetworkImage(
+                          imageUrl: product.images!.isNotEmpty
+                              ? product.images![0]
+                              : '',
+                          fit: BoxFit.cover,
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
                         ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  product.name ?? '',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black,
-                                        fontSize: 13.0,
-                                      ),
+                      ),
+                    ),
+                    horizontalSpace(10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            product.name ?? '',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 17.0,
                                 ),
+                          ),
+                          Expanded(
+                            child: Row(
+                              children: [
                                 Expanded(
                                   child: Row(
-                                    // crossAxisAlignment:
-                                    //     CrossAxisAlignment.baseline,
-                                    // textBaseline: TextBaseline.alphabetic,
                                     children: [
                                       InkWell(
                                         onTap: () {
-                                          cubit.minus();
+                                          cubit.minus(product);
                                         },
                                         child: Container(
                                           width: 30.0.w,
@@ -140,13 +197,13 @@ class CartScreen extends StatelessWidget {
                                           decoration: BoxDecoration(
                                             color: Colors.white,
                                             border: Border.all(
-                                              width: 1.5,
+                                              width: 1.5.w,
                                               color: ColorManager.gray,
                                             ),
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                           ),
-                                          child: Icon(
+                                          child: const Icon(
                                             Icons.remove,
                                             size: 15,
                                           ),
@@ -154,7 +211,7 @@ class CartScreen extends StatelessWidget {
                                       ),
                                       horizontalSpace(5),
                                       Text(
-                                        '${cubit.itemQuantity}',
+                                        '${product.quantity}',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyMedium
@@ -167,8 +224,7 @@ class CartScreen extends StatelessWidget {
                                       horizontalSpace(5),
                                       InkWell(
                                         onTap: () {
-                                          cubit.plus();
-                                          debugPrint('${cubit.itemQuantity}');
+                                          cubit.plus(product);
                                         },
                                         child: Container(
                                           width: 30.0.w,
@@ -176,32 +232,40 @@ class CartScreen extends StatelessWidget {
                                           decoration: BoxDecoration(
                                             color: Colors.white,
                                             border: Border.all(
-                                              width: 1.5,
+                                              width: 1.5.w,
                                               color: ColorManager.gray,
                                             ),
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                           ),
-                                          child: Icon(
+                                          child: const Icon(
                                             Icons.add,
                                             size: 15,
                                           ),
                                         ),
                                       ),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Row(
+                                    children: [
                                       const Spacer(),
                                       Text(
-                                        '${product.price}',
+                                        '${product.price! * product.quantity}',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyMedium
                                             ?.copyWith(
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.grey[800],
-                                              fontSize: 13.0,
-                                            ),
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.grey[800],
+                                                fontSize: 13.0,
+                                                overflow:
+                                                    TextOverflow.ellipsis),
                                       ),
+                                      horizontalSpace(5),
                                       Text(
-                                        'egp',
+                                        'EGP',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyMedium
@@ -211,32 +275,36 @@ class CartScreen extends StatelessWidget {
                                               fontSize: 10.0,
                                             ),
                                       ),
+                                      horizontalSpace(10)
                                     ],
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ),
-            InkWell(
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: InkWell(
               onTap: () {
                 cubit.removeFromCart(product);
               },
               child: const Icon(
                 Icons.delete_outlined,
-                size: 30.0,
+                size: 35.0,
                 color: ColorManager.mainOrange,
               ),
             ),
-          ],
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 }
