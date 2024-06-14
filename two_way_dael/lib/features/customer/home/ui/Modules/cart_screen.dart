@@ -89,12 +89,12 @@ class CartScreen extends StatelessWidget {
                                   Text(
                                     'Total Price:',
                                     style: TextStyles.font30blackbold
-                                        .copyWith(fontSize: 28),
+                                        .copyWith(fontSize: 25),
                                   ),
                                   horizontalSpace(10),
                                   Text(
                                     cubit.getTotalPrice().toStringAsFixed(2),
-                                    style: TextStyles.font30MainOrangeBold,
+                                    style: TextStyles.font28MainOrangeBold,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   horizontalSpace(10),
@@ -252,7 +252,7 @@ class CartScreen extends StatelessWidget {
                                     children: [
                                       const Spacer(),
                                       Text(
-                                        '${product.price! * product.quantity}',
+                                        (double.parse(product.netPrice!) * product.quantity).toStringAsFixed(2),
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyMedium

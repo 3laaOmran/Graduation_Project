@@ -107,7 +107,7 @@ class CustomerCubit extends Cubit<CustomerStates> {
   double getTotalPrice() {
     double total = 0;
     for (var item in cartProducts) {
-      total += item.price! * item.quantity;
+      total += double.parse(item.netPrice!) * item.quantity;
     }
     return total;
   }
@@ -118,14 +118,14 @@ class CustomerCubit extends Cubit<CustomerStates> {
     saveCart();
   }
 
-  void addToCart(Products product) {
-    if (!cartProducts.contains(product)) {
-      cartProducts.add(product);
-      updateTotalPrice();
-      emit(CustomerAddToCartState());
-      saveCart();
-    }
-  }
+  // void addToCart(Products product) {
+  //   if (!cartProducts.contains(product)) {
+  //     cartProducts.add(product);
+  //     updateTotalPrice();
+  //     emit(CustomerAddToCartState());
+  //     saveCart();
+  //   }
+  // }
 
   void removeFromCart(Products product) {
     if (cartProducts.contains(product)) {

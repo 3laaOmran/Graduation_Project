@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,19 +15,51 @@ import 'package:two_way_dael/features/customer/home/data/models/products_model.d
 import 'package:two_way_dael/features/customer/home/logic/cubit/customer_cubit.dart';
 import 'package:two_way_dael/features/customer/home/logic/cubit/customer_states.dart';
 
-class FoodDetails extends StatelessWidget {
+class FoodDetails extends StatefulWidget {
   final Product product;
-  FoodDetails({super.key, required this.product});
+  const FoodDetails({super.key, required this.product});
 
+  @override
+  _FoodDetailsState createState() => _FoodDetailsState();
+}
+
+class _FoodDetailsState extends State<FoodDetails> {
   final bottomSheetKey = GlobalKey<ScaffoldState>();
+  bool _hasNavigated = false;
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CustomerCubit, CustomerStates>(
       listener: (context, state) {
+        if (state is GetProductDetailsSuccessState && !_hasNavigated) {
+          final newProduct =
+              CustomerCubit.get(context).productDetails?.data?.product;
+          if (newProduct != null) {
+            setState(() {
+              _hasNavigated = true;
+            });
+            Navigator.of(context)
+                .push(MaterialPageRoute(
+              builder: (context) => FoodDetails(product: newProduct),
+            ))
+                .then((_) {
+              setState(() {
+                _hasNavigated = false;
+              });
+            });
+          }
+        }
       },
       builder: (context, state) {
         var cubit = CustomerCubit.get(context);
+        Products? productToAdd;
+        final productsList = cubit.productsModel?.data?.products ?? [];
+        for (var item in productsList) {
+          if (item.id == widget.product.id) {
+            productToAdd = item;
+            break;
+          }
+        }
         return Scaffold(
           floatingActionButton: cubit.cartProducts.isNotEmpty
               ? Padding(
@@ -60,24 +93,26 @@ class FoodDetails extends StatelessWidget {
                   icon: Icons.arrow_back,
                   color: ColorManager.mainOrange,
                 ),
-                actions: [
-                  customIconButton(
-                      onPressed: () {},
-                      icon: Icons.more_vert,
-                      color: ColorManager.mainOrange,
-                      toolTip: 'more'),
+                actions: const [
+                  // customIconButton(
+                  //   onPressed: () {
+                  //   },
+                  //   icon: Icons.more_vert,
+                  //   color: ColorManager.mainOrange,
+                  //   toolTip: 'more',
+                  // ),
+                  ReportMenu(),
                 ],
                 centerTitle: true,
-                expandedHeight: 380,
-                toolbarHeight: 60,
+                expandedHeight: 380.h,
+                toolbarHeight: 80.h,
                 pinned: true,
                 stretch: true,
                 backgroundColor: Colors.white,
                 flexibleSpace: FlexibleSpaceBar(
                   centerTitle: true,
                   title: Text(
-                    // 'ProductDetails',
-                    product.name!,
+                    widget.product.category!.name ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
@@ -85,197 +120,62 @@ class FoodDetails extends StatelessWidget {
                     ),
                   ),
                   background: Hero(
-                    tag: 1,
-                    child: Image.network(
-                      product.images![1],
-                      fit: BoxFit.cover,
-                    ),
-                    // CarouselSlider(
-                    //   items: [
-                    //     Image.network(
-                    //       product.images![0],
-                    //       fit: BoxFit.contain,
-                    //     ),
-                    //     Image.network(
-                    //       product.images![1],
-                    //       fit: BoxFit.contain,
-                    //     ),
-                    //   ],
-                    //   options: CarouselOptions(
-                    //     // height: 200.0,
-                    //     initialPage: 0,
-                    //     viewportFraction: 1.0,
-                    //     enableInfiniteScroll: true,
-                    //     enlargeCenterPage: false,
-                    //     autoPlay: true,
-                    //     autoPlayCurve: Curves.fastEaseInToSlowEaseOut,
-                    //     autoPlayInterval: const Duration(seconds: 5),
-                    //     autoPlayAnimationDuration: const Duration(seconds: 1),
-                    //     reverse: false,
-                    //     scrollDirection: Axis.horizontal,
-                    //   ),
-                    // )
-                  ),
+                      tag: widget.product.id!,
+                      child: CarouselSlider(
+                        items: [
+                          Image.network(
+                            widget.product.images![0],
+                            fit: BoxFit.cover,
+                          ),
+                          Image.network(
+                            widget.product.images![1],
+                            fit: BoxFit.cover,
+                          ),
+                        ],
+                        options: CarouselOptions(
+                          height: 380.0.h,
+                          initialPage: 0,
+                          viewportFraction: 1.0,
+                          enableInfiniteScroll: true,
+                          enlargeCenterPage: false,
+                          // autoPlay: true,
+                          // autoPlayCurve: Curves.fastEaseInToSlowEaseOut,
+                          // autoPlayInterval: const Duration(seconds: 5),
+                          // autoPlayAnimationDuration: const Duration(seconds: 1),
+                          reverse: false,
+                          scrollDirection: Axis.horizontal,
+                        ),
+                      )
+                      // child: Image.network(
+                      //   widget.product.images?.isNotEmpty == true
+                      //       ? widget.product.images![0]
+                      //       : 'assets/images/no_product_image.png',
+                      //   fit: BoxFit.cover,
+                      // ),
+                      ),
                 ),
               ),
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: EdgeInsets.only(left: 20.0.w, right: 20.0.w),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Column(
-                            children: [
-                              Text(
-                                product.name!,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineSmall
-                                    ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 27.0),
-                              ),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.baseline,
-                                textBaseline: TextBaseline.alphabetic,
-                                children: [
-                                  Text(
-                                    '${product.price!}',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.black,
-                                            fontSize: 24.0),
-                                  ),
-                                  Text(
-                                    'egp',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.black,
-                                            fontSize: 12.0),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          const Spacer(),
-                          InkWell(
-                            onTap: () {
-                              context.pushNamed(Routes.sellerDeatailsScreen);
-                            },
-                            child: Column(
-                              children: [
-                                const CircleAvatar(
-                                  radius: 40,
-                                  backgroundImage: AssetImage(
-                                      'assets/images/default_profile.png'),
-                                ),
-                                Text(
-                                  product.store!.name!,
-                                  style: TextStyles.font15BlackBold,
-                                ),
-                                verticalSpace(5),
-                                Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.star,
-                                      color: ColorManager.mainOrange,
-                                      size: 19.0,
-                                    ),
-                                    Text(
-                                      '5.0 (23 Reviews)',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.w100,
-                                              color: Colors.grey[700],
-                                              fontSize: 11.0),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                      verticalSpace(20),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Description',
-                            style: TextStyles.font17BlackBold,
-                          ),
-                          verticalSpace(10),
-                          Text(
-                            product.description!,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.grey[800],
-                                    fontSize: 14.0),
-                          ),
-                        ],
-                      ),
+                      buildProductHeader(context),
+                      verticalSpace(10),
+                      buildProductDescription(context),
                       verticalSpace(20),
                       AppTextButton(
                         textStyle: TextStyles.font20Whitebold,
-                        buttonText: 'Add to cart',
+                        buttonText: !cubit.isInCart(productToAdd!)
+                            ? 'Add to cart'
+                            : 'Remove From Cart',
                         onPressed: () {
-                          Products? productToAdd;
-                          final productsList =
-                              cubit.productsModel!.data!.products!;
-                          for (var item in productsList) {
-                            if (item.id == product.id) {
-                              productToAdd = item;
-                              break;
-                            }
-                          }
-
-                          if (productToAdd != null) {
-                            cubit.addToCart(productToAdd);
-                          } else {
-                            showToast(
-                              message: 'Product not found in list',
-                              state: TostStates.ERROR,
-                            );
-                          }
+                          cubit.toggleCart(productToAdd!);
                         },
                       ),
                       verticalSpace(20),
-                      Text(
-                        'other customers also order these',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey[800],
-                            fontSize: 15.0),
-                      ),
-                      const SizedBox(
-                        height: 15.0,
-                      ),
-                      ListView.separated(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) =>
-                            buildOtherItems(context),
-                        separatorBuilder: (context, index) => const SizedBox(
-                          height: 5.0,
-                        ),
-                        itemCount: 10,
-                      ),
+                      buildOtherProductsSection(context, cubit),
                     ],
                   ),
                 ),
@@ -287,148 +187,286 @@ class FoodDetails extends StatelessWidget {
     );
   }
 
-  //------------------------------------------------------------------------------
-
-  Widget buildOtherItems(context) => Card(
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        color: Colors.white,
-        elevation: 10.0,
-        child: Container(
-          width: double.infinity,
-          height: 80.0,
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Row(
+  Widget buildProductHeader(BuildContext context) {
+    return Row(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.product.name ?? '',
+              style: TextStyles.font25blackbold,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            verticalSpace(10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
               children: [
-                const Card(
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  child: SizedBox(
-                    height: 68.0,
-                    width: 65.0,
-                    child: Image(
-                      image: NetworkImage(
-                          'https://img.freepik.com/premium-photo/classic-italian-pasta-penne-alla-arrabiata-with-freshly-cheese-dark-table-top-view-generative-ai_47243-2129.jpg?w=740'),
-                      fit: BoxFit.cover,
-                    ),
+                Text(
+                  widget.product.netPrice ?? '',
+                  style: TextStyles.font20blackbold,
+                ),
+                horizontalSpace(8),
+                Text(
+                  '${widget.product.price ?? ''}',
+                  style: TextStyles.font20blackbold.copyWith(
+                    decoration: TextDecoration.lineThrough,
+                    decorationThickness: 2.0,
                   ),
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsetsDirectional.only(top: 5.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.baseline,
-                              textBaseline: TextBaseline.alphabetic,
-                              children: [
-                                Text(
-                                  'Pasta',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.black,
-                                          fontSize: 13.0),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  '75 ',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.grey[800],
-                                          fontSize: 13.0),
-                                ),
-                                Text(
-                                  'egp',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.grey[800],
-                                          fontSize: 7.0),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Row(
-                            children: [
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.star,
-                                    color: ColorManager.mainOrange,
-                                    size: 18.0,
-                                  ),
-                                  const Icon(
-                                    Icons.star,
-                                    color: ColorManager.mainOrange,
-                                    size: 18.0,
-                                  ),
-                                  const Icon(
-                                    Icons.star,
-                                    color: ColorManager.mainOrange,
-                                    size: 18.0,
-                                  ),
-                                  const Icon(
-                                    Icons.star,
-                                    color: ColorManager.mainOrange,
-                                    size: 18.0,
-                                  ),
-                                  const Icon(
-                                    Icons.star_half,
-                                    color: ColorManager.mainOrange,
-                                    size: 18.0,
-                                  ),
-                                  Text(
-                                    '(12)',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.grey[600],
-                                            fontSize: 10.0),
-                                  ),
-                                ],
-                              ),
-                              const Spacer(),
-                              CircleAvatar(
-                                radius: 13.0,
-                                backgroundColor: ColorManager.mainOrange,
-                                child: IconButton(
-                                  padding: const EdgeInsetsDirectional.only(
-                                      end: 2.0, start: 4.0),
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.shopping_cart_outlined,
-                                    size: 17.0,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                horizontalSpace(5),
+                Text(
+                  ' EGP',
+                  style: TextStyles.font14BlackBold,
                 ),
               ],
             ),
+            widget.product.expireDate != null
+                ? Column(
+                    children: [
+                      verticalSpace(10),
+                      Text(
+                        'ExpiryDate:\n${widget.product.expireDate}',
+                        style: TextStyles.font15BlackBold,
+                      ),
+                    ],
+                  )
+                : Container(),
+          ],
+        ),
+        const Spacer(),
+        InkWell(
+          onTap: () {
+            context.pushNamed(Routes.sellerDeatailsScreen);
+          },
+          child: Column(
+            children: [
+              const CircleAvatar(
+                radius: 40,
+                backgroundImage:
+                    AssetImage('assets/images/default_profile.png'),
+              ),
+              SizedBox(
+                width: 150.0.w,
+                child: Text(
+                  widget.product.store?.name ?? '',
+                  style: TextStyles.font15BlackBold,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              verticalSpace(5),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.star,
+                    color: ColorManager.mainOrange,
+                    size: 19.0,
+                  ),
+                  Text(
+                    ' 5.0 (23 Reviews)',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w100,
+                          color: Colors.grey[700],
+                          fontSize: 11.0,
+                        ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget buildProductDescription(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Available Quantity: ${widget.product.availableQuantity}',
+          style: TextStyles.font15BlackBold,
+        ),
+        verticalSpace(10),
+        Text(
+          'Available For: ${widget.product.availableFor}',
+          style: TextStyles.font15BlackBold,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+        verticalSpace(10),
+        Text(
+          'Description',
+          style: TextStyles.font17BlackBold,
+        ),
+        verticalSpace(10),
+        Text(
+          widget.product.description ?? '',
+          style: TextStyles.font15GrayRegular,
+        ),
+      ],
+    );
+  }
+
+  Widget buildOtherProductsSection(BuildContext context, CustomerCubit cubit) {
+    final similarProducts = cubit.productDetails?.data?.similarProducts ?? [];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Other customers also order these',
+          style: TextStyles.font17BlackBold,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 10.0),
+          child: ListView.separated(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              final similarProduct = similarProducts[index];
+              return InkWell(
+                onTap: () {
+                  if (!_hasNavigated) {
+                    setState(() {
+                      _hasNavigated = true;
+                    });
+                    cubit.getProductDetails(id: similarProduct.id!);
+                  }
+                },
+                child: buildOtherItems(context, similarProduct),
+              );
+            },
+            separatorBuilder: (context, index) => const SizedBox(height: 5.0),
+            itemCount: similarProducts.length,
           ),
         ),
-      );
+      ],
+    );
+  }
 
-  //-----------------------------------------------------------------------------------------
+  Widget buildOtherItems(BuildContext context, Products product) {
+    return Card(
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      color: Colors.white,
+      elevation: 10.0,
+      child: Container(
+        width: double.infinity,
+        height: 100.0.h,
+        color: Colors.white,
+        padding: EdgeInsets.symmetric(horizontal: 6.0.w, vertical: 6.0.h),
+        child: Row(
+          children: [
+            Card(
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              child: SizedBox(
+                height: 90.0.h,
+                width: 75.0.w,
+                child: product.images?.isNotEmpty == true
+                    ? Image.network(
+                        product.images![0],
+                        fit: BoxFit.cover,
+                      )
+                    : const Image(
+                        image: AssetImage('assets/images/no_product_image.png'),
+                        fit: BoxFit.cover,
+                      ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.only(top: 5.0),
+                        child: Text(
+                          product.name ?? '',
+                          style: TextStyles.font17BlackBold,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Text(
+                            '${product.netPrice}',
+                            style: TextStyles.font15GrayRegular,
+                          ),
+                          horizontalSpace(5),
+                          Text(
+                            'EGP',
+                            style: TextStyles.font13GreyBold,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                CustomerCubit.get(context).toggleCart(product);
+              },
+              child: CircleAvatar(
+                radius: 20.0.w,
+                backgroundColor: CustomerCubit.get(context).isInCart(product)
+                    ? ColorManager.mainOrange
+                    : ColorManager.gray,
+                child: Padding(
+                  padding: EdgeInsets.only(right: 4.w, left: 4.w),
+                  child: Image(
+                    image: const AssetImage('assets/images/white_cart.png'),
+                    width: 30.w,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ReportMenu extends StatelessWidget {
+  const ReportMenu({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<String>(
+      icon: const Icon(
+        Icons.more_vert,
+        color: ColorManager.mainOrange,
+      ),
+      tooltip: 'more',
+      onSelected: (String result) {
+        if (result == 'report') {
+          debugPrint('Report selected');
+        }
+      },
+      color: Colors.white,
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+        PopupMenuItem<String>(
+          value: 'report',
+          child: Text(
+            'Report',
+            style: TextStyles.font17BlackBold,
+          ),
+          onTap: () {
+            // context.pushNamed(Routes.contactUsScreen);
+            showToast(
+                message: 'Reported Successfully', state: TostStates.SUCCESS);
+          },
+        ),
+      ],
+    );
+  }
 }

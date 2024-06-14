@@ -96,8 +96,8 @@ class TextStyles {
     color: ColorManager.mainOrange,
     fontWeight: FontWeightHelper.bold,
   );
-  static TextStyle font30MainOrangeBold = TextStyle(
-    fontSize: 30.sp,
+  static TextStyle font28MainOrangeBold = TextStyle(
+    fontSize: 28.sp,
     color: ColorManager.mainOrange,
     fontWeight: FontWeightHelper.bold,
   );

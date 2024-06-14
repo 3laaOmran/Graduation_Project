@@ -31,14 +31,35 @@ Widget buildItem(context, Products model) =>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                        image: NetworkImage(model.images![1]),
-                        fit: BoxFit.cover),
-                  ),
+                child: Stack(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        image: DecorationImage(
+                            image: NetworkImage(model.images![1]),
+                            fit: BoxFit.cover),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 20.h,
+                      child: Container(
+                        width: 70.w,
+                        height: 20.h,
+                        decoration: const BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(15),
+                                bottomRight: Radius.circular(15))),
+                        child: Text(
+                          '${model.discount!} off',
+                          style: TextStyles.font12White,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               verticalSpace(10),
@@ -50,7 +71,7 @@ Widget buildItem(context, Products model) =>
               Row(
                 children: [
                   Text(
-                    '${model.price!} egp',
+                    '${model.netPrice!} egp',
                     style: TextStyles.font13GreyBold,
                   ),
                   const Spacer(),

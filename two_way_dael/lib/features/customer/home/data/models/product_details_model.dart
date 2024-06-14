@@ -1,3 +1,5 @@
+import 'package:two_way_dael/features/customer/home/data/models/products_model.dart';
+
 class ProductDetails {
   int? status;
   String? message;
@@ -12,15 +14,15 @@ class ProductDetails {
 
 class Data {
   Product? product;
-  List<Product>? similarProducts;
+  List<Products>? similarProducts;
 
   Data.fromJson(Map<String, dynamic> json) {
     product =
         json['product'] != null ? Product.fromJson(json['product']) : null;
     if (json['similar_products'] != null) {
-      similarProducts = <Product>[];
+      similarProducts = <Products>[];
       json['similar_products'].forEach((v) {
-        similarProducts!.add(Product.fromJson(v));
+        similarProducts!.add(Products.fromJson(v));
       });
     }
   }
@@ -69,3 +71,35 @@ class Category {
     name = json['name'];
   }
 }
+
+// class SimilarProductsModel {
+//   int? status;
+//   String? message;
+//   Product? product;
+//   List<Products>? similarProducts;
+
+//   SimilarProductsModel.fromJson(Map<String, dynamic> json) {
+//     status = json['status'];
+//     message = json['message'];
+//     product = json['data']['product'] != null ? Product.fromJson(json['data']['product']) : null;
+//     if (json['data']['similar_products'] != null) {
+//       similarProducts = <Products>[];
+//       json['data']['similar_products'].forEach((v) {
+//         similarProducts!.add(Products.fromJson(v));
+//       });
+//     }
+//   }
+
+  // Map<String, dynamic> toJson() {
+  //   final Map<String, dynamic> data = <String, dynamic>{};
+  //   data['status'] = status;
+  //   data['message'] = message;
+  //   if (product != null) {
+  //     data['product'] = product!.toJson();
+  //   }
+  //   if (similarProducts != null) {
+  //     data['similar_products'] = similarProducts!.map((v) => v.toJson()).toList();
+  //   }
+  //   return data;
+  // }
+  // }

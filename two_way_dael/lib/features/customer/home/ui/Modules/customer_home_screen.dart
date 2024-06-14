@@ -82,7 +82,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                 SliverAppBar(
                   scrolledUnderElevation: 0.0,
                   backgroundColor: Colors.white,
-                  toolbarHeight: 80.h,
+                  toolbarHeight: 70.h,
                   automaticallyImplyLeading: false,
                   pinned: true,
                   title: Row(
@@ -95,7 +95,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                           }
                         },
                         child: CircleAvatar(
-                          radius: 30.0.w,
+                          radius: 25.0.w,
                           backgroundColor: Colors.white,
                           backgroundImage: image! ==
                                   'http://2waydeal.online/uploads/default.png'
