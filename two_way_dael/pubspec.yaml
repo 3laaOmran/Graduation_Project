@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  adaptive_action_sheet: ^2.0.3
   animated_text_kit: ^4.2.2
   animations: ^2.0.11
   bloc: ^8.1.4
@@ -39,13 +40,13 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.5
-  adaptive_action_sheet: ^2.0.3
   flutter_native_splash: ^2.4.0
   flutter_offline: ^3.0.1
   flutter_rating_bar: ^4.0.1
   flutter_screenutil: ^5.9.0
   fluttertoast: ^8.2.5
   image_picker: ^1.1.1
+  intl: ^0.19.0
   number_pagination: ^1.0.6
   pinput: ^4.0.0
   shared_preferences: ^2.2.3

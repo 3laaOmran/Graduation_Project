@@ -28,7 +28,7 @@ class Data {
 class Products {
   int? id;
   String? name;
-  double? price;
+  String? price;
   String? discount;
   String? netPrice;
   List<String>? images;
@@ -44,7 +44,7 @@ class Products {
     id = json['id'];
     name = json['name'];
     price =
-        (json['price'] as num?)?.toDouble(); // Convert to double if it's an int
+        (json['price'] ); 
     discount = json['discount'];
     netPrice = json['net_price'];
     images = json['images'] != null ? json['images'].cast<String>() : [];

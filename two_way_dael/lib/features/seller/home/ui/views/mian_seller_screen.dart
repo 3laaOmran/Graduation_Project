@@ -28,9 +28,10 @@ class HomeScreen extends StatelessWidget {
 
         if (model == null || model.data == null) {
           return const Center(
-              child: CircularProgressIndicator(
-            color: ColorManager.mainOrange,
-          ));
+            child: CircularProgressIndicator(
+              color: ColorManager.mainOrange,
+            ),
+          );
         }
 
         var name = model.data!.name;
@@ -61,7 +62,8 @@ class HomeScreen extends StatelessWidget {
                             ? NetworkImage(
                                 image!,
                               )
-                            : const AssetImage('assets/images/default_profile.png')
+                            : const AssetImage(
+                                    'assets/images/default_profile.png')
                                 as ImageProvider,
                         backgroundColor: Colors.white,
                       ),
@@ -77,10 +79,15 @@ class HomeScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        resuableText(
-                            text: name ?? 'Welcome',
-                            fontsize: 16.sp,
-                            fontWeight: FontWeight.bold),
+                        SizedBox(
+                          width: 190.w,
+                          child: Text(
+                            name ?? 'Welcome',
+                            style: TextStyles.font17BlackBold,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                         Row(
                           children: [
                             RatingBarIndicator(
@@ -102,29 +109,34 @@ class HomeScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Spacer(),
-                  Stack(
-                    alignment: AlignmentDirectional.topEnd,
-                    children: [
-                      customIconButton(
-                        onPressed: () {
-                          context.pushNamed(Routes.sellerNotificationsScreen);
-                        },
-                        icon: Icons.notifications,
-                        toolTip: 'Notifications',
-                        size: 30.0,
-                      ),
-                      Container(
-                        padding: const EdgeInsetsDirectional.only(
-                          top: 11.0,
-                          end: 14.0,
+                  Expanded(
+                    child: Stack(
+                      alignment: AlignmentDirectional.topEnd,
+                      children: [
+                        customIconButton(
+                          onPressed: () {
+                            context.pushNamed(Routes.sellerNotificationsScreen);
+                          },
+                          icon: Icons.notifications,
+                          toolTip: 'Notifications',
+                          size: 30.0,
                         ),
-                        child: const CircleAvatar(
-                          radius: 3.5,
-                          backgroundColor: ColorManager.mainOrange,
+                        Container(
+                          padding: EdgeInsetsDirectional.only(
+                            top: 12.0.h,
+                            end: 12.0.w,
+                          ),
+                          child: const CircleAvatar(
+                            radius: 4.5,
+                            backgroundColor: Colors.white,
+                            child: CircleAvatar(
+                              radius: 3.5,
+                              backgroundColor: ColorManager.mainOrange,
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -226,10 +238,7 @@ class HomeScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           verticalSpace(10),
-                          // SizedBox(height: height * 0.05),
                           Container(
-                            // margin: EdgeInsets.only(left: width * 0.05),
-                            // alignment: Alignment.topLeft,
                             child: resuableText(
                                 text: "Best Seller",
                                 fontsize: 25.sp,
@@ -239,20 +248,41 @@ class HomeScreen extends StatelessWidget {
                           verticalSpace(10),
                           Expanded(
                             child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 20.w),
-                              child: GridView.builder(
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 10,
-                                  mainAxisSpacing: 10,
-                                  childAspectRatio: 1 / 1.4,
-                                ),
-                                itemCount: 20,
-                                itemBuilder: (context, index) => InkWell(
-                                  onTap: () {},
-                                  child: buildSellerProductItem(),
-                                ),
+                              padding: EdgeInsets.only(
+                                  left: 20.w,
+                                  right: 20.w,
+                                  bottom: 20.h,
+                                  top: 10.h),
+                              child: Builder(
+                                builder: (context) {
+                                  if (cubit.sellerProducts == null ||
+                                      cubit.sellerProducts!.data == null) {
+                                    return Center(
+                                      child: Text(
+                                        'No products available',
+                                        style: TextStyles.font17BlackBold,
+                                      ),
+                                    );
+                                  }
+
+                                  return GridView.builder(
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 10,
+                                      mainAxisSpacing: 10,
+                                      childAspectRatio: 1 / 1.4,
+                                    ),
+                                    itemCount:
+                                        cubit.sellerProducts!.data!.length,
+                                    itemBuilder: (context, index) => InkWell(
+                                      onTap: () {},
+                                      child: BuildSellerProductItem(
+                                          product: cubit
+                                              .sellerProducts!.data![index]),
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                           ),

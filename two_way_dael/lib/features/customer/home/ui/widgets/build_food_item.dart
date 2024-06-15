@@ -37,11 +37,17 @@ Widget buildItem(context, Products model) =>
                       width: double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        image: DecorationImage(
-                            image: NetworkImage(model.images![1]),
-                            fit: BoxFit.cover),
+                        image: model.images!.isNotEmpty
+                            ? DecorationImage(
+                                image: NetworkImage(model.images![1]),
+                                fit: BoxFit.cover)
+                            : const DecorationImage(
+                                image: AssetImage(
+                                    'assets/images/no_product_image.png'),
+                                fit: BoxFit.cover),
                       ),
                     ),
+                    model.discount!=null?
                     Positioned(
                       bottom: 20.h,
                       child: Container(
@@ -58,7 +64,7 @@ Widget buildItem(context, Products model) =>
                           textAlign: TextAlign.center,
                         ),
                       ),
-                    ),
+                    ): Container(),
                   ],
                 ),
               ),
@@ -66,6 +72,8 @@ Widget buildItem(context, Products model) =>
               Text(
                 model.name!,
                 style: TextStyles.font17BlackBold,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
               verticalSpace(5),
               Row(

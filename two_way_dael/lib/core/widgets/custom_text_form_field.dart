@@ -23,9 +23,11 @@ class CustomTextFormField extends StatelessWidget {
   final Color? backgroundColor;
   final BorderRadius? borderRadius;
   final TextInputType? keyboardType;
+  final Function()? onTap;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final bool? enabled;
+  final bool? readOnly;
   const CustomTextFormField(
       {super.key,
       this.contentPadding,
@@ -47,11 +49,13 @@ class CustomTextFormField extends StatelessWidget {
       this.onFieldSubmitted,
       this.suffixIconSize,
       this.maxLines,
-      this.enabled, this.onChanged});
+      this.enabled, this.onChanged, this.onTap, this.readOnly});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      readOnly: readOnly ?? false,
+      onTap: onTap,
       onChanged: onChanged,
       enabled: enabled,
       maxLines: isObsecureText ? 1 : maxLines,

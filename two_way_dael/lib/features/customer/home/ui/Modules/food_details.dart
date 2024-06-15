@@ -123,14 +123,28 @@ class _FoodDetailsState extends State<FoodDetails> {
                       tag: widget.product.id!,
                       child: CarouselSlider(
                         items: [
-                          Image.network(
-                            widget.product.images![0],
-                            fit: BoxFit.cover,
-                          ),
-                          Image.network(
-                            widget.product.images![1],
-                            fit: BoxFit.cover,
-                          ),
+                          widget.product.images!.isNotEmpty &&
+                                  widget.product.images![0] !=
+                                      'http://2waydeal.online/uploads/default.png'
+                              ? Image.network(
+                                  widget.product.images![0],
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.asset(
+                                  'assets/images/no_product_image.png',
+                                  fit: BoxFit.cover,
+                                ),
+                          widget.product.images!.isNotEmpty &&
+                                  widget.product.images![1] !=
+                                      'http://2waydeal.online/uploads/default.png'
+                              ? Image.network(
+                                  widget.product.images![1],
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.asset(
+                                  'assets/images/no_product_image.png',
+                                  fit: BoxFit.cover,
+                                ),
                         ],
                         options: CarouselOptions(
                           height: 380.0.h,
@@ -138,14 +152,11 @@ class _FoodDetailsState extends State<FoodDetails> {
                           viewportFraction: 1.0,
                           enableInfiniteScroll: true,
                           enlargeCenterPage: false,
-                          // autoPlay: true,
-                          // autoPlayCurve: Curves.fastEaseInToSlowEaseOut,
-                          // autoPlayInterval: const Duration(seconds: 5),
-                          // autoPlayAnimationDuration: const Duration(seconds: 1),
                           reverse: false,
                           scrollDirection: Axis.horizontal,
                         ),
                       )
+
                       // child: Image.network(
                       //   widget.product.images?.isNotEmpty == true
                       //       ? widget.product.images![0]
@@ -190,51 +201,43 @@ class _FoodDetailsState extends State<FoodDetails> {
   Widget buildProductHeader(BuildContext context) {
     return Row(
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.product.name ?? '',
-              style: TextStyles.font25blackbold,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            verticalSpace(10),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
-              children: [
-                Text(
-                  widget.product.netPrice ?? '',
-                  style: TextStyles.font20blackbold,
-                ),
-                horizontalSpace(8),
-                Text(
-                  '${widget.product.price ?? ''}',
-                  style: TextStyles.font20blackbold.copyWith(
-                    decoration: TextDecoration.lineThrough,
-                    decorationThickness: 2.0,
+        SizedBox(
+          width: 170.w,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.product.name ?? '',
+                style: TextStyles.font20blackbold,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ),
+              verticalSpace(10),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  Text(
+                    widget.product.netPrice ?? '',
+                    style: TextStyles.font20blackbold,
                   ),
-                ),
-                horizontalSpace(5),
-                Text(
-                  ' EGP',
-                  style: TextStyles.font14BlackBold,
-                ),
-              ],
-            ),
-            widget.product.expireDate != null
-                ? Column(
-                    children: [
-                      verticalSpace(10),
-                      Text(
-                        'ExpiryDate:\n${widget.product.expireDate}',
-                        style: TextStyles.font15BlackBold,
-                      ),
-                    ],
-                  )
-                : Container(),
-          ],
+                  horizontalSpace(8),
+                  Text(
+                    widget.product.price ?? '',
+                    style: TextStyles.font20blackbold.copyWith(
+                      decoration: TextDecoration.lineThrough,
+                      decorationThickness: 2.0,
+                    ),
+                  ),
+                  horizontalSpace(5),
+                  Text(
+                    ' EGP',
+                    style: TextStyles.font14BlackBold,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
         const Spacer(),
         InkWell(
@@ -243,10 +246,12 @@ class _FoodDetailsState extends State<FoodDetails> {
           },
           child: Column(
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 40,
-                backgroundImage:
-                    AssetImage('assets/images/default_profile.png'),
+                backgroundImage: widget.product.store!.image == null
+                    ? const AssetImage('assets/images/default_profile.png')
+                        as ImageProvider
+                    : NetworkImage(widget.product.store!.image!),
               ),
               SizedBox(
                 width: 150.0.w,
@@ -267,7 +272,7 @@ class _FoodDetailsState extends State<FoodDetails> {
                     size: 19.0,
                   ),
                   Text(
-                    ' 5.0 (23 Reviews)',
+                    ' ${widget.product.store!.rate} (23 Reviews)',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w100,
                           color: Colors.grey[700],
@@ -288,13 +293,23 @@ class _FoodDetailsState extends State<FoodDetails> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Available Quantity: ${widget.product.availableQuantity}',
-          style: TextStyles.font15BlackBold,
+          'More Information',
+          style: TextStyles.font17BlackBold,
         ),
         verticalSpace(10),
+        widget.product.expireDate != null
+            ? Text(
+                'ExpiryDate: ${widget.product.expireDate}',
+                style: TextStyles.font15GrayRegular,
+              )
+            : Container(),
+        Text(
+          'Available Quantity: ${widget.product.availableQuantity}',
+          style: TextStyles.font15GrayRegular,
+        ),
         Text(
           'Available For: ${widget.product.availableFor}',
-          style: TextStyles.font15BlackBold,
+          style: TextStyles.font15GrayRegular,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),
@@ -365,7 +380,7 @@ class _FoodDetailsState extends State<FoodDetails> {
               child: SizedBox(
                 height: 90.0.h,
                 width: 75.0.w,
-                child: product.images?.isNotEmpty == true
+                child: product.images!.isNotEmpty
                     ? Image.network(
                         product.images![0],
                         fit: BoxFit.cover,

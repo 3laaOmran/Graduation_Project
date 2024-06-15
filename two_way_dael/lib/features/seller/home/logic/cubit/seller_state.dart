@@ -24,3 +24,51 @@ class GetSellerDataErrorState extends SellerStates {
 
   GetSellerDataErrorState(this.error);
 }
+
+class GetSellerProductsLoadingState extends SellerStates {}
+
+class GetSellerProductsSuccessState extends SellerStates {}
+
+class GetSellerProductsErrorState extends SellerStates {
+  final String error;
+
+  GetSellerProductsErrorState(this.error);
+}
+
+class DeleteSellerProductsLoadingState extends SellerStates {}
+
+class DeleteSellerProductsSuccessState extends SellerStates {}
+
+class DeleteSellerProductsErrorState extends SellerStates {
+  final String error;
+
+  DeleteSellerProductsErrorState(this.error);
+}
+
+class GetSellerProductDetailsLoadingState extends SellerStates {}
+
+class GetSellerProductDetailsSuccessState extends SellerStates {
+  final SellerProductDetails sellerProductDetails;
+
+  GetSellerProductDetailsSuccessState(this.sellerProductDetails);
+}
+
+class GetSellerProductDetailsErrorState extends SellerStates {
+  final String error;
+
+  GetSellerProductDetailsErrorState(this.error);
+}
+
+class SellerAddProductLoadingState extends SellerStates {}
+
+class SellerAddProductSuccessState extends SellerStates {
+  // final SellerProductDetails sellerProductDetails;
+
+  // GetSellerProductDetailsSuccessState(this.sellerProductDetails);
+}
+
+class SellerAddProductErrorState extends SellerStates {
+  final String error;
+
+  SellerAddProductErrorState(this.error);
+}

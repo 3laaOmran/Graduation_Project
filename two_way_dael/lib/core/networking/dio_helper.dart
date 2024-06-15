@@ -16,75 +16,6 @@ class DioHelper {
 
 //*----------------------------------------------
 
-//   static Future<Response> postData({
-//   required String url,
-//   String? token,
-//   Map<String, dynamic>? query,
-//   required Map<String, dynamic> data,
-//   File? image,
-// }) async {
-//   dio.options.headers = {
-//     'Content_Type': 'application/json',
-//     'Accept': 'application/json',
-//   };
-
-//   if (token != null && token.isNotEmpty) {
-//     dio.options.headers['Authorization'] = 'Bearer $token';
-//   }
-
-//   FormData formData = FormData.fromMap(data);
-
-//   if (image != null) {
-//     String fileName = image.path.split('/').last;
-//     formData.files.add(
-//       MapEntry(
-//         'file',
-//         await MultipartFile.fromFile(image.path, filename: fileName),
-//       ),
-//     );
-//   }
-
-//   try {
-//     final response = await dio.post(
-//       url,
-//       queryParameters: query,
-//       data: formData,
-//     );
-//     return response;
-//   } on DioException catch (e) {
-//     if (e.response != null) {
-//       // The server responded with an error code
-//       if (e.response?.statusCode == 401) {
-//         // Handle 401 Unauthorized status code
-//         final errorData = e.response?.data;
-//         debugPrint('Status code: ${e.response?.statusCode}');
-//         debugPrint('Message: ${errorData['message']}');
-//       } else if (e.response?.statusCode == 429) {
-//         // Handle 429 Unauthorized status code
-//         final errorData = e.response?.data;
-//         debugPrint('Status code: ${e.response?.statusCode}');
-//         debugPrint('Message: ${errorData['message']}');
-//       } else if (e.response?.statusCode == 422) {
-//         final errorData = e.response?.data;
-//         debugPrint('Status code: ${e.response?.statusCode}');
-//         debugPrint('Message: ${errorData['message']}');
-//       } else {
-//         // Handle other status codes
-//         debugPrint('Unexpected status code: ${e.response?.statusCode}');
-//         debugPrint('Response data: ${e.response?.data}');
-//       }
-//     } else {
-//       // Something happened in setting up or sending the request that triggered an Error
-//       debugPrint('Error sending request: ${e.message}');
-//     }
-//     rethrow; // Re-throw the exception after logging
-//   } catch (e) {
-//     // Handle any other type of error (e.g., parsing error, etc.)
-//     debugPrint('Unexpected error: $e');
-//     rethrow; // Re-throw the exception after logging
-//   }
-// }
-
   static Future<Response> postData({
     required String url,
     String? token,
@@ -92,41 +23,6 @@ class DioHelper {
     required Map<String, dynamic> data,
     File? image,
   }) async {
-    // dio.options.headers = {
-    //   'Content-Type': 'application/json',
-    //   'Accept': 'application/json',
-    // };
-
-    // if (token != null && token.isNotEmpty) {
-    //   dio.options.headers['Authorization'] = 'Bearer $token';
-    // }
-
-    // // Initialize formData outside the if condition to ensure it gets initialized properly
-    // FormData formData = FormData();
-
-    // // Convert data map to formData fields
-    // data.forEach((key, value) {
-    //   formData.fields.add(MapEntry(key, value.toString()));
-    // });
-
-    // // Add image to formData if present
-    // if (image != null) {
-    //   String fileName = image.path.split('/').last;
-    //   formData.files.add(
-    //     MapEntry(
-    //       'file',
-    //       await MultipartFile.fromFile(image.path, filename: fileName),
-    //     ),
-    //   );
-    // }
-
-    // try {
-    //   final response = await dio.post(
-    //     url,
-    //     queryParameters: query,
-    //     data: formData,
-    //   );
-    //   return response;
     dio.options.headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -155,7 +51,7 @@ class DioHelper {
         data: formData,
       );
       return response;
-    }on DioException catch (e) {
+    } on DioException catch (e) {
       if (e.response != null) {
         // The server responded with an error code
         if (e.response?.statusCode == 401) {
@@ -269,6 +165,87 @@ class DioHelper {
       rethrow; // Re-throw the exception after logging
     } catch (e) {
       // Handle any other type of error (e.g., parsing error, etc.)
+      debugPrint('Unexpected error: $e');
+      rethrow; // Re-throw the exception after logging
+    }
+  }
+  //*--------------------------------------------------
+
+  
+static Future<Response> postProduct({
+    required String url,
+    String? token,
+    required List<File> images,
+    required int categoryId,
+    required String name,
+    required String description,
+    required double price,
+    required double discount,
+    required String expiryDate,
+    required String availableFor,
+    required double quantity,
+  }) async {
+    // Set default headers
+    dio.options.headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'multipart/form-data',
+    };
+
+    // Add Authorization header if token is provided
+    if (token != null && token.isNotEmpty) {
+      dio.options.headers['Authorization'] = 'Bearer $token';
+    }
+
+    // Create FormData for multipart/form-data
+    FormData formData = FormData();
+
+    // Add images to FormData
+    for (int i = 0; i < images.length; i++) {
+      String fileName = images[i].path.split('/').last;
+      formData.files.add(MapEntry(
+        'images[]',
+        await MultipartFile.fromFile(
+          images[i].path,
+          filename: fileName,
+        ),
+      ));
+    }
+
+    // Add other product data to FormData
+    formData.fields.addAll([
+      MapEntry('category_id', categoryId.toString()),
+      MapEntry('name', name),
+      MapEntry('description', description),
+      MapEntry('price', price.toString()),
+      MapEntry('descount', discount.toString()),
+      MapEntry('expire_date', expiryDate),
+      MapEntry('available_for', availableFor),
+      MapEntry('quantity', quantity.toString()),
+    ]);
+
+    try {
+      final response = await dio.post(
+        url,
+        data: formData,
+        options: Options(),
+      );
+      return response;
+    } on DioException catch (e) {
+      if (e.response != null) {
+        // Handle different status codes
+        if (e.response?.statusCode == 401) {
+          debugPrint('Unauthorized error: ${e.response?.statusCode}');
+        } else if (e.response?.statusCode == 422) {
+          debugPrint('Unprocessable Entity error: ${e.response?.statusCode}');
+        } else {
+          debugPrint('Unexpected error: ${e.response?.statusCode}');
+        }
+        debugPrint('Response data: ${e.response?.data}');
+      } else {
+        debugPrint('Error sending request: ${e.message}');
+      }
+      rethrow; // Re-throw the exception after logging
+    } catch (e) {
       debugPrint('Unexpected error: $e');
       rethrow; // Re-throw the exception after logging
     }

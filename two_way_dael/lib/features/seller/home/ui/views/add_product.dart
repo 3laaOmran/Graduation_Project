@@ -1,9 +1,10 @@
 import 'dart:io';
-
 import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
@@ -11,6 +12,8 @@ import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/core/widgets/custom_text_form_field.dart';
 import 'package:two_way_dael/core/widgets/resuable_text.dart';
+import 'package:two_way_dael/core/widgets/show_toast.dart';
+import 'package:two_way_dael/features/seller/home/logic/cubit/seller_cubit.dart';
 import '../../../../customer/home/ui/widgets/build_ctegory_item.dart';
 
 class AddProduct extends StatefulWidget {
@@ -21,13 +24,6 @@ class AddProduct extends StatefulWidget {
 }
 
 class _AddProductState extends State<AddProduct> {
-  TextEditingController productNameController = TextEditingController();
-  TextEditingController discountController = TextEditingController();
-  TextEditingController productDescriptionController = TextEditingController();
-  TextEditingController priceController = TextEditingController();
-  TextEditingController expirydateController = TextEditingController();
-  TextEditingController quantityController = TextEditingController();
-
   File? imagePick1;
   File? imagePick2;
   File? imagePick3;
@@ -51,308 +47,489 @@ class _AddProductState extends State<AddProduct> {
 
   dynamic openBottomSheet(BuildContext context, int numberImage) {
     return showAdaptiveActionSheet(
+      bottomSheetColor: Colors.white,
       context: context,
       androidBorderRadius: 30,
       actions: <BottomSheetAction>[
         BottomSheetAction(
             title: const Text('Camera'),
             onPressed: (context) {
+              context.pop();
               uploadImagefromCameraorGallary(ImageSource.camera, numberImage);
             }),
         BottomSheetAction(
             title: const Text('Gallery'),
             onPressed: (context) {
+              context.pop();
               uploadImagefromCameraorGallary(ImageSource.gallery, numberImage);
             }),
       ],
-      cancelAction: CancelAction(
-          title: const Text(
-              'Cancel')), // onPressed parameter is optional by default will dismiss the ActionSheet
+      cancelAction: CancelAction(title: const Text('Cancel')),
     );
   }
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    productDescriptionController.dispose();
-    discountController.dispose();
-    productNameController.dispose();
-    priceController.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ColorManager.mainOrange,
-      appBar: AppBar(
-        toolbarHeight: 80,
-        backgroundColor: ColorManager.mainOrange,
-        leading: IconButton(
-          onPressed: () {
-            context.pop();
-          },
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-        ),
-        centerTitle: true,
-        title: resuableText(
-            text: "Add new Product ",
-            color: Colors.white,
-            fontsize: 20.sp,
-            fontWeight: FontWeight.bold),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15, bottom: 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 10.w),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    resuableText(
-                        text: "Add Product Images",
-                        fontsize: 17.sp,
-                        fontWeight: FontWeight.bold),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        buildPickImage(
-                          onPressed: () {
-                            openBottomSheet(context, 1);
-                          },
-                          image: imagePick1 == null
-                              ? const DecorationImage(
-                                  image: AssetImage(
-                                      'assets/images/image_picker_background.png'),
-                                )
-                              : DecorationImage(
-                                  image: FileImage(imagePick1!),
-                                  fit: BoxFit.cover,
-                                ),
-                        ),
-                        Column(
-                          children: [
-                            buildPickImage(
-                              width: 125.w,
-                              height: 95.h,
-                              onPressed: () {
-                                openBottomSheet(context, 2);
-                              },
-                              image: imagePick2 == null
-                                  ? const DecorationImage(
-                                      image: AssetImage(
-                                          'assets/images/image_picker_background.png'),
-                                    )
-                                  : DecorationImage(
-                                      image: FileImage(imagePick2!),
-                                      fit: BoxFit.cover,
-                                    ),
-                            ),
-                            buildPickImage(
-                              width: 125.w,
-                              height: 95.h,
-                              onPressed: () {
-                                openBottomSheet(context, 3);
-                              },
-                              image: imagePick3 == null
-                                  ? const DecorationImage(
-                                      image: AssetImage(
-                                          'assets/images/image_picker_background.png'),
-                                    )
-                                  : DecorationImage(
-                                      image: FileImage(imagePick3!),
-                                      fit: BoxFit.cover,
-                                    ),
-                            ),
-                          ],
-                        )
-                      ],
+    return BlocConsumer<SellerCubit, SellerStates>(
+      listener: (context, state) {
+        if (state is SellerAddProductSuccessState) {
+          // SellerCubit.get(context).getSellerProducts();
+          context.pop();
+          SellerCubit.get(context).clearControllers();
+          showToast(
+              message: 'Product Added Successfully', state: TostStates.SUCCESS);
+        } else if (state is SellerAddProductErrorState) {
+          showToast(message: 'could not add product', state: TostStates.ERROR);
+        }
+      },
+      builder: (context, state) {
+        var cubit = SellerCubit.get(context);
+        return Scaffold(
+          backgroundColor: ColorManager.mainOrange,
+          appBar: AppBar(
+            toolbarHeight: 80,
+            backgroundColor: ColorManager.mainOrange,
+            leading: IconButton(
+              onPressed: () {
+                context.pop();
+              },
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+            ),
+            centerTitle: true,
+            title: resuableText(
+                text: "Add new Product ",
+                color: Colors.white,
+                fontsize: 20.sp,
+                fontWeight: FontWeight.bold),
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15, right: 15, bottom: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 18.h, horizontal: 10.w),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                    verticalSpace(15),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                    child: AbsorbPointer(
+                      absorbing:
+                          state is SellerAddProductLoadingState ? true : false,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          resuableText(
+                              text: "Add Product Images",
+                              fontsize: 17.sp,
+                              fontWeight: FontWeight.bold),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              resuableText(
-                                  text: "Add Name",
-                                  fontsize: 14.sp,
-                                  fontWeight: FontWeight.bold),
-                              CustomTextFormField(
-                                controller: productNameController,
-                                isObsecureText: false,
-                                hintText: 'ProductName',
+                              buildPickImage(
+                                onPressed: () {
+                                  openBottomSheet(context, 1);
+                                },
+                                image: imagePick1 == null
+                                    ? const DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/image_picker_background.png'),
+                                      )
+                                    : DecorationImage(
+                                        image: FileImage(imagePick1!),
+                                        fit: BoxFit.cover,
+                                      ),
+                              ),
+                              Column(
+                                children: [
+                                  buildPickImage(
+                                    width: 125.w,
+                                    height: 95.h,
+                                    onPressed: () {
+                                      openBottomSheet(context, 2);
+                                    },
+                                    image: imagePick2 == null
+                                        ? const DecorationImage(
+                                            image: AssetImage(
+                                                'assets/images/image_picker_background.png'),
+                                          )
+                                        : DecorationImage(
+                                            image: FileImage(imagePick2!),
+                                            fit: BoxFit.cover,
+                                          ),
+                                  ),
+                                  buildPickImage(
+                                    width: 125.w,
+                                    height: 95.h,
+                                    onPressed: () {
+                                      openBottomSheet(context, 3);
+                                    },
+                                    image: imagePick3 == null
+                                        ? const DecorationImage(
+                                            image: AssetImage(
+                                                'assets/images/image_picker_background.png'),
+                                          )
+                                        : DecorationImage(
+                                            image: FileImage(imagePick3!),
+                                            fit: BoxFit.cover,
+                                          ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                          verticalSpace(15),
+                          Form(
+                            key: cubit.addproductFormKey,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          resuableText(
+                                              text: "Add Name",
+                                              fontsize: 14.sp,
+                                              fontWeight: FontWeight.bold),
+                                          CustomTextFormField(
+                                            controller:
+                                                cubit.addproductNameController,
+                                            isObsecureText: false,
+                                            hintText: 'ProductName',
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return 'please enter product name';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                verticalSpace(15),
+                                resuableText(
+                                    text: "Add Description",
+                                    fontsize: 14.sp,
+                                    fontWeight: FontWeight.bold),
+                                CustomTextFormField(
+                                  controller:
+                                      cubit.addproductDescriptionController,
+                                  isObsecureText: false,
+                                  hintText: 'Product Description',
+                                  maxLines: 4,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'please enter product description';
+                                    }
+                                    return null;
+                                  },
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                verticalSpace(15),
+                                resuableText(
+                                    text: "Choose Category",
+                                    fontsize: 14.sp,
+                                    fontWeight: FontWeight.bold),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: SizedBox(
+                                      height: 25,
+                                      child: Row(
+                                        children: [
+                                          const BuildCategoryItem(text: 'Food'),
+                                          horizontalSpace(10),
+                                          const BuildCategoryItem(
+                                              text: 'Drink'),
+                                          horizontalSpace(10),
+                                          const BuildCategoryItem(text: 'Soup'),
+                                          horizontalSpace(10),
+                                          const BuildCategoryItem(
+                                              text: 'Pizza'),
+                                          horizontalSpace(10),
+                                          const BuildCategoryItem(
+                                              text: 'Burger'),
+                                          horizontalSpace(10),
+                                          const BuildCategoryItem(text: 'Soda'),
+                                          horizontalSpace(10),
+                                          const BuildCategoryItem(
+                                              text: 'Others'),
+                                          horizontalSpace(10),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                verticalSpace(15),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          resuableText(
+                                              text: "Price",
+                                              fontsize: 14.sp,
+                                              fontWeight: FontWeight.bold),
+                                          CustomTextFormField(
+                                            controller:
+                                                cubit.addpriceController,
+                                            keyboardType: TextInputType.number,
+                                            isObsecureText: false,
+                                            hintText: 'Price',
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return 'please enter price';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    horizontalSpace(10),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          resuableText(
+                                              text: "Discount",
+                                              fontsize: 14.sp,
+                                              fontWeight: FontWeight.bold),
+                                          CustomTextFormField(
+                                            controller:
+                                                cubit.adddiscountController,
+                                            keyboardType: TextInputType.number,
+                                            isObsecureText: false,
+                                            hintText: 'Disc',
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return 'please enter discount';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                verticalSpace(20),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          resuableText(
+                                              text: "Expiry Date",
+                                              fontsize: 14.sp,
+                                              fontWeight: FontWeight.bold),
+                                          CustomTextFormField(
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return 'please enter expiry date';
+                                              }
+                                              return null;
+                                            },
+                                            onTap: () {
+                                              debugPrint('Expiry date Tapped');
+                                              showDatePicker(
+                                                context: context,
+                                                initialDate: DateTime.now(),
+                                                firstDate: DateTime.now(),
+                                                lastDate: DateTime.parse(
+                                                    '2030-05-01'),
+                                              ).then((value) {
+                                                if (value != null) {
+                                                  setState(() {
+                                                    cubit
+                                                        .addexpirydateController
+                                                        .text = DateFormat(
+                                                            'yyyy-MM-dd')
+                                                        .format(value);
+                                                  });
+                                                }
+                                              });
+                                            },
+                                            readOnly: true,
+                                            controller:
+                                                cubit.addexpirydateController,
+                                            keyboardType:
+                                                TextInputType.datetime,
+                                            isObsecureText: false,
+                                            hintText: 'Expiry Date',
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    horizontalSpace(10),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          resuableText(
+                                              text: "Quantity",
+                                              fontsize: 14.sp,
+                                              fontWeight: FontWeight.bold),
+                                          CustomTextFormField(
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return 'please enter quantity';
+                                              }
+                                              return null;
+                                            },
+                                            controller:
+                                                cubit.addquantityController,
+                                            keyboardType: TextInputType.number,
+                                            isObsecureText: false,
+                                            hintText: 'Quantity',
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                verticalSpace(20),
+                                resuableText(
+                                    text: "Available For",
+                                    fontsize: 14.sp,
+                                    fontWeight: FontWeight.bold),
+                                CustomTextFormField(
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'please enter available for';
+                                    }
+                                    return null;
+                                  },
+                                  onTap: () {
+                                    debugPrint('Available for date Tapped');
+                                    showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime.now(),
+                                      lastDate: DateTime.parse('2030-05-01'),
+                                    ).then((value) {
+                                      if (value != null) {
+                                        setState(() {
+                                          cubit.addavailableForController.text =
+                                              DateFormat('yyyy-MM-dd')
+                                                  .format(value);
+                                        });
+                                      }
+                                    });
+                                  },
+                                  readOnly: true,
+                                  controller: cubit.addavailableForController,
+                                  keyboardType: TextInputType.datetime,
+                                  isObsecureText: false,
+                                  hintText: 'Available For',
+                                ),
+                              ],
+                            ),
+                          ),
+                          verticalSpace(20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Expanded(
+                                child: AppTextButton(
+                                  textStyle: TextStyles.font17WhiteBold,
+                                  buttonText: 'cancel',
+                                  onPressed: () {
+                                    context.pop();
+                                    cubit.clearControllers();
+                                  },
+                                ),
+                              ),
+                              horizontalSpace(10),
+                              Expanded(
+                                child: AppTextButton(
+                                  textStyle: TextStyles.font17WhiteBold,
+                                  buttonText:
+                                      state is SellerAddProductLoadingState
+                                          ? 'Publishing...'
+                                          : 'Publish',
+                                  onPressed: () {
+                                    if (cubit.addproductFormKey.currentState!
+                                        .validate()) {
+                                      if (imagePick1 == null ||
+                                          imagePick2 == null ||
+                                          imagePick3 == null) {
+                                        showToast(
+                                          message:
+                                              'Please Add All Product Images',
+                                          state: TostStates.ERROR,
+                                        );
+                                        return;
+                                      }
+                                      try {
+                                        double price = double.parse(
+                                            cubit.addpriceController.text);
+                                        double discount = double.parse(
+                                            cubit.adddiscountController.text);
+                                        double quantity = double.parse(
+                                            cubit.addquantityController.text);
+                                        DateTime expiryDate =
+                                            DateFormat('yyyy-MM-dd').parse(cubit
+                                                .addexpirydateController.text);
+                                        DateTime availableFor =
+                                            DateFormat('yyyy-MM-dd').parse(cubit
+                                                .addavailableForController
+                                                .text);
+
+                                        cubit.addSellerProduct(
+                                          images: [
+                                            if (imagePick1 != null) imagePick1!,
+                                            if (imagePick2 != null) imagePick2!,
+                                            if (imagePick3 != null) imagePick3!,
+                                          ],
+                                          categoryId: 1, // Adjust as necessary
+                                          price: price,
+                                          discount: discount,
+                                          name: cubit
+                                              .addproductNameController.text,
+                                          description: cubit
+                                              .addproductDescriptionController
+                                              .text,
+                                          expiryDate: expiryDate,
+                                          availableFor: availableFor,
+                                          quantity: quantity,
+                                        );
+                                      } catch (e) {
+                                        debugPrint('Error in input data: $e');
+                                      }
+                                    }
+                                  },
+                                ),
                               ),
                             ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    verticalSpace(15),
-                    resuableText(
-                        text: "Add Description",
-                        fontsize: 14.sp,
-                        fontWeight: FontWeight.bold),
-                    CustomTextFormField(
-                      controller: productDescriptionController,
-                      isObsecureText: false,
-                      hintText: 'Product Description',
-                      maxLines: 4,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    verticalSpace(15),
-                    resuableText(
-                        text: "Choose Category",
-                        fontsize: 14.sp,
-                        fontWeight: FontWeight.bold),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: SizedBox(
-                          height: 25,
-                          child: Row(
-                            children: [
-                              const BuildCategoryItem(text: 'All'),
-                              horizontalSpace(10),
-                              const BuildCategoryItem(text: 'Food'),
-                              horizontalSpace(10),
-                              const BuildCategoryItem(text: 'Drink'),
-                              horizontalSpace(10),
-                              const BuildCategoryItem(text: 'Soup'),
-                              horizontalSpace(10),
-                              const BuildCategoryItem(text: 'Pizza'),
-                              horizontalSpace(10),
-                              const BuildCategoryItem(text: 'Burger'),
-                              horizontalSpace(10),
-                              const BuildCategoryItem(text: 'Soda'),
-                              horizontalSpace(10),
-                              const BuildCategoryItem(text: 'Others'),
-                              horizontalSpace(10),
-                            ],
-                          ),
-                        ),
+                          )
+                        ],
                       ),
                     ),
-                    verticalSpace(15),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              resuableText(
-                                  text: "Price",
-                                  fontsize: 14.sp,
-                                  fontWeight: FontWeight.bold),
-                              CustomTextFormField(
-                                controller: priceController,
-                                keyboardType: TextInputType.number,
-                                isObsecureText: false,
-                                hintText: 'Price',
-                              ),
-                            ],
-                          ),
-                        ),
-                        horizontalSpace(10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              resuableText(
-                                  text: "Discount",
-                                  fontsize: 14.sp,
-                                  fontWeight: FontWeight.bold),
-                              CustomTextFormField(
-                                controller: discountController,
-                                keyboardType: TextInputType.number,
-                                isObsecureText: false,
-                                hintText: 'Disc',
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    verticalSpace(20),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              resuableText(
-                                  text: "Expiry Date",
-                                  fontsize: 14.sp,
-                                  fontWeight: FontWeight.bold),
-                              CustomTextFormField(
-                                controller: expirydateController,
-                                keyboardType: TextInputType.datetime,
-                                isObsecureText: false,
-                                hintText: 'Expiry Date',
-                              ),
-                            ],
-                          ),
-                        ),
-                        horizontalSpace(10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              resuableText(
-                                  text: "Quantity",
-                                  fontsize: 14.sp,
-                                  fontWeight: FontWeight.bold),
-                              CustomTextFormField(
-                                controller: quantityController,
-                                keyboardType: TextInputType.number,
-                                isObsecureText: false,
-                                hintText: 'Quantity',
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    verticalSpace(20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Expanded(
-                          child: AppTextButton(
-                            textStyle: TextStyles.font17WhiteBold,
-                            buttonText: 'cancel',
-                            onPressed: () {
-                              context.pop();
-                            },
-                          ),
-                        ),
-                        horizontalSpace(10),
-                        Expanded(
-                          child: AppTextButton(
-                            textStyle: TextStyles.font17WhiteBold,
-                            buttonText: 'Publish',
-                            onPressed: () {},
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

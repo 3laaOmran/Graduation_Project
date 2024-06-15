@@ -3,6 +3,7 @@ import 'package:two_way_dael/core/helpers/cash_helper.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/routing/routes.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
+import 'package:two_way_dael/features/customer/home/logic/cubit/customer_cubit.dart';
 import 'package:two_way_dael/features/customer/home/ui/widgets/build_account_settings_item.dart';
 import '../../../../../core/helpers/spacing.dart';
 import '../../../../../core/theming/styles.dart';
@@ -78,6 +79,7 @@ class AccountSettings extends StatelessWidget {
                         Routes.chooseAccountTypeScreen,
                         predicate: ((route) => false));
                   }
+                  CustomerCubit.get(context).clearCart();
                 });
               },
             ),

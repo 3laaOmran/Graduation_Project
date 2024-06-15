@@ -1,8 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:two_way_dael/core/helpers/cash_helper.dart';
 import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
@@ -36,7 +34,7 @@ class CartScreen extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     cubit.clearCart();
-                    CashHelper.removeData(key: 'totalPrice');
+                    // CashHelper.removeData(key: 'totalPrice');
                   },
                   child: const Image(
                     image: AssetImage('assets/images/delete.png'),
@@ -155,14 +153,15 @@ class CartScreen extends StatelessWidget {
                       child: SizedBox(
                         height: 68.0.h,
                         width: 65.0.w,
-                        child: CachedNetworkImage(
-                          imageUrl: product.images!.isNotEmpty
-                              ? product.images![0]
-                              : '',
-                          fit: BoxFit.cover,
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                        ),
+                        child: product.images!.isNotEmpty
+                            ? Image.network(
+                                product.images![0],
+                                fit: BoxFit.cover,
+                              )
+                            : Image.asset(
+                                'assets/images/no_product_image.png',
+                                fit: BoxFit.cover,
+                              ),
                       ),
                     ),
                     horizontalSpace(10),
@@ -172,14 +171,9 @@ class CartScreen extends StatelessWidget {
                         children: [
                           Text(
                             product.name ?? '',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  fontSize: 17.0,
-                                ),
+                            style: TextStyles.font17BlackBold,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           Expanded(
                             child: Row(
@@ -252,7 +246,9 @@ class CartScreen extends StatelessWidget {
                                     children: [
                                       const Spacer(),
                                       Text(
-                                        (double.parse(product.netPrice!) * product.quantity).toStringAsFixed(2),
+                                        (double.parse(product.netPrice!) *
+                                                product.quantity)
+                                            .toStringAsFixed(2),
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyMedium

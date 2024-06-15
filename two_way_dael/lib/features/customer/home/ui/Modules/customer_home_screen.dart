@@ -30,8 +30,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
   @override
   void initState() {
     super.initState();
-    CustomerCubit.get(context)
-        .loadCart(); // Load cart once when screen initializes
+    CustomerCubit.get(context).loadCart();
   }
 
   @override
@@ -71,6 +70,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                           style: TextStyles.font17WhiteBold,
                         ),
                         onPressed: () {
+                          // cubit.clearCart();
                           context.pushNamed(Routes.cartScreen);
                         },
                       ),

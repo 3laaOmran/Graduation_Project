@@ -15,9 +15,8 @@ void showSnackBar(context, {required String message}) {
 
   final textHeight = textPainter.size.height;
 
-  // Calculate the total height of the SnackBar
   final snackBarHeight =
-      textHeight + 2 * 30 + 30.h; // 30 is the vertical padding
+      textHeight + 2 * 30 + 30.h; 
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       clipBehavior: Clip.hardEdge,
