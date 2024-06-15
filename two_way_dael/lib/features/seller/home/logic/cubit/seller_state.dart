@@ -35,6 +35,16 @@ class GetSellerProductsErrorState extends SellerStates {
   GetSellerProductsErrorState(this.error);
 }
 
+class EditSellerProductsLoadingState extends SellerStates {}
+
+class EditSellerProductsSuccessState extends SellerStates {}
+
+class EditSellerProductsErrorState extends SellerStates {
+  final String error;
+
+  EditSellerProductsErrorState(this.error);
+}
+
 class DeleteSellerProductsLoadingState extends SellerStates {}
 
 class DeleteSellerProductsSuccessState extends SellerStates {}

@@ -46,6 +46,7 @@ class SellerCubit extends Cubit<SellerStates> {
   var phoneController = TextEditingController();
   var addressController = TextEditingController();
   //*--------------------------------------------
+  final editProductFormKey = GlobalKey<FormState>();
   var productNameController = TextEditingController();
   var discountController = TextEditingController();
   var productDescriptionController = TextEditingController();
@@ -114,6 +115,42 @@ class SellerCubit extends Cubit<SellerStates> {
     }).catchError((error) {
       debugPrint(error.toString());
       emit(GetSellerProductsErrorState(error.toString()));
+    });
+  }
+
+  void editSellerProduct({
+    required int id,
+    required String name,
+    required String description,
+    required int categoryId,
+    required double price,
+    required double discount,
+    required DateTime expiryDate,
+    required DateTime availableFor,
+    required double quantity,
+    required List<File> images,
+  }) {
+    final formattedExpiryDate = DateFormat('yyyy-MM-dd').format(expiryDate);
+    final formattedAvailableFor = DateFormat('yyyy-MM-dd').format(availableFor);
+    emit(EditSellerProductsLoadingState());
+    DioHelper.postProduct(
+      url: 'seller/product/$id',
+      token: sellerToken,
+      images: images,
+      name: name,
+      description: description,
+      categoryId: categoryId,
+      price: price,
+      discount: discount,
+      expiryDate: formattedExpiryDate,
+      availableFor: formattedAvailableFor,
+      quantity: quantity,
+    ).then((value) {
+      debugPrint('ProductEditedSuccessfully');
+      emit(EditSellerProductsSuccessState());
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(EditSellerProductsErrorState(error.toString()));
     });
   }
 
@@ -192,56 +229,57 @@ class SellerCubit extends Cubit<SellerStates> {
     }
   }
 
-void addSellerProduct({
-  required List<File> images,
-  required int categoryId,
-  required double price,
-  required double discount,
-  required String name,
-  required String description,
-  required DateTime expiryDate,
-  required DateTime availableFor,
-  required double quantity,
-}) {
-  final formattedExpiryDate = DateFormat('yyyy-MM-dd').format(expiryDate);
-  final formattedAvailableFor = DateFormat('yyyy-MM-dd').format(availableFor);
+  void addSellerProduct({
+    required List<File> images,
+    required int categoryId,
+    required double price,
+    required double discount,
+    required String name,
+    required String description,
+    required DateTime expiryDate,
+    required DateTime availableFor,
+    required double quantity,
+  }) {
+    final formattedExpiryDate = DateFormat('yyyy-MM-dd').format(expiryDate);
+    final formattedAvailableFor = DateFormat('yyyy-MM-dd').format(availableFor);
 
-  debugPrint('Sending Data to Server:');
-  debugPrint('Category ID: $categoryId');
-  debugPrint('Price: $price');
-  debugPrint('Discount: $discount');
-  debugPrint('Name: $name');
-  debugPrint('Description: $description');
-  debugPrint('Expiry Date: $formattedExpiryDate');
-  debugPrint('Available For: $formattedAvailableFor');
-  debugPrint('Quantity: $quantity');
+    debugPrint('Sending Data to Server:');
+    debugPrint('Category ID: $categoryId');
+    debugPrint('Price: $price');
+    debugPrint('Discount: $discount');
+    debugPrint('Name: $name');
+    debugPrint('Description: $description');
+    debugPrint('Expiry Date: $formattedExpiryDate');
+    debugPrint('Available For: $formattedAvailableFor');
+    debugPrint('Quantity: $quantity');
 
-  emit(SellerAddProductLoadingState());
+    emit(SellerAddProductLoadingState());
 
-  DioHelper.postProduct(
-    token: sellerToken,
-    url: sellerProducsEndPoint,
-    images: images,
-    categoryId: categoryId,
-    name: name,
-    description: description,
-    price: price,
-    discount: discount,
-    expiryDate: formattedExpiryDate,
-    availableFor: formattedAvailableFor,
-    quantity: quantity,
-  ).then((response) {
-    debugPrint('Response from Server: ${response.data}');
-    emit(SellerAddProductSuccessState());
-  }).catchError((error) {
-    if (error is DioException) {
-      debugPrint('DioError: ${error.response?.data}');
-    } else {
-      debugPrint('Unexpected Error: $error');
-    }
-    emit(SellerAddProductErrorState(error.toString()));
-  });
-}
+    DioHelper.postProduct(
+      token: sellerToken,
+      url: sellerProducsEndPoint,
+      images: images,
+      categoryId: categoryId,
+      name: name,
+      description: description,
+      price: price,
+      discount: discount,
+      expiryDate: formattedExpiryDate,
+      availableFor: formattedAvailableFor,
+      quantity: quantity,
+    ).then((response) {
+      debugPrint('Response from Server: ${response.data}');
+      emit(SellerAddProductSuccessState());
+    }).catchError((error) {
+      if (error is DioException) {
+        debugPrint('DioError: ${error.response?.data}');
+      } else {
+        debugPrint('Unexpected Error: $error');
+      }
+      emit(SellerAddProductErrorState(error.toString()));
+    });
+  }
+
   List<NotificationItem> sellerNotifications = [
     NotificationItem(
       title: 'Seller',
