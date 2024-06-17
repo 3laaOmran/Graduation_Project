@@ -1,6 +1,7 @@
-import 'package:two_way_dael/features/customer/auth/login/data/models/login_model.dart';
+import 'package:two_way_dael/features/customer/home/data/models/category_details_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/get_profile_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/products_model.dart';
+import 'package:two_way_dael/features/customer/home/data/models/update_password_model.dart';
 
 abstract class CustomerStates {}
 
@@ -48,6 +49,46 @@ final class GetUserDataErrorState extends CustomerStates {
 
   GetUserDataErrorState(this.error);
 }
+
+class CustomerUpdateProfileLoadingState extends CustomerStates {}
+
+class CustomerUpdateProfileSuccessState extends CustomerStates {
+  final UserDataModel? userDataModel;
+
+  CustomerUpdateProfileSuccessState(this.userDataModel);
+}
+
+class CustomerUpdateProfileErrorState extends CustomerStates {
+  final String error;
+  CustomerUpdateProfileErrorState(this.error);
+}
+
+class CustomerUpdateImageLoadingState extends CustomerStates {}
+
+class CustomerUpdateImageSuccessState extends CustomerStates {
+  final UserDataModel? userDataModel;
+
+  CustomerUpdateImageSuccessState(this.userDataModel);
+}
+
+class CustomerUpdateImageErrorState extends CustomerStates {
+  final String error;
+  CustomerUpdateImageErrorState(this.error);
+}
+
+class CustomerUpdatePasswordLoadingState extends CustomerStates {}
+
+class CustomerUpdatePasswordSuccessState extends CustomerStates {
+  final UpdatePasswordModel? updatePasswordModel;
+
+  CustomerUpdatePasswordSuccessState(this.updatePasswordModel);
+}
+
+class CustomerUpdatePasswordErrorState extends CustomerStates {
+  final String error;
+  CustomerUpdatePasswordErrorState(this.error);
+}
+
 
 final class GetSearchDataLoadingState extends CustomerStates {}
 
@@ -101,15 +142,6 @@ final class GetCategoriesErrorState extends CustomerStates {
 
 final class GetUserDataChaneIconVisibilityState extends CustomerStates {}
 
-class CustomerUpdateProfileLoadingState extends CustomerStates {}
-
-class CustomerUpdateProfileSuccessState extends CustomerStates {
-  final LoginModel loginModel;
-
-  CustomerUpdateProfileSuccessState(this.loginModel);
-}
-
-class CustomerUpdateProfileErrorState extends CustomerStates {}
 
 class NotificationsState extends CustomerStates {}
 
@@ -120,7 +152,19 @@ class CustomerCartLoadedState extends CustomerStates {
 
   CustomerCartLoadedState(this.cartProducts, this.totalPrice);
 }
+final class GetCategoryDetailsLoadingState extends CustomerStates {}
 
+final class GetCategoryDetailsSuccessState extends CustomerStates {
+  final CategoryDetails? categoryDetails;
+
+  GetCategoryDetailsSuccessState(this.categoryDetails);
+}
+
+final class GetCategoryDetailsErrorState extends CustomerStates {
+  final String error;
+
+  GetCategoryDetailsErrorState(this.error);
+}
 class ItemQuantityMinusState extends CustomerStates {
   // int itemQuantity;
   // double itemPrice;

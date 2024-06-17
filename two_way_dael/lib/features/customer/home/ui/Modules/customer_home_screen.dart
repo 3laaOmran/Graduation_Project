@@ -7,10 +7,11 @@ import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/routing/routes.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_text_form_field.dart';
+import 'package:two_way_dael/features/customer/home/data/models/categoties_model.dart';
 import 'package:two_way_dael/features/customer/home/logic/cubit/customer_cubit.dart';
 import 'package:two_way_dael/features/customer/home/logic/cubit/customer_states.dart';
+import 'package:two_way_dael/features/customer/home/ui/Modules/categories_details_screen.dart';
 import 'package:two_way_dael/features/customer/home/ui/Modules/food_details.dart';
-import 'package:two_way_dael/features/customer/home/ui/widgets/build_ctegory_item.dart';
 import 'package:two_way_dael/features/customer/home/ui/widgets/build_food_item.dart';
 import 'package:two_way_dael/features/customer/home/ui/widgets/home_skelton_loading.dart';
 
@@ -46,6 +47,16 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                         .product!,
                   )));
         }
+        if (state is GetCategoryDetailsSuccessState) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => CategoriesDetailsScreen(
+                category: CustomerCubit.get(context).categoryDetails?.data,
+              ),
+            ),
+          );
+        }
+        // },
       },
       builder: (context, state) {
         var cubit = CustomerCubit.get(context);
@@ -99,10 +110,14 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                           backgroundColor: Colors.white,
                           backgroundImage: image! ==
                                   'http://2waydeal.online/uploads/default.png'
-                              ? const AssetImage(
+                              ? Image.asset(
                                   'assets/images/two_way_deal_icon.png',
-                                ) as ImageProvider
-                              : NetworkImage(image),
+                                  fit: BoxFit.cover,
+                                ).image
+                              : Image.network(
+                                  image,
+                                  fit: BoxFit.cover,
+                                ).image,
                         ),
                       ),
                       horizontalSpace(10),
@@ -216,19 +231,17 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                 elevation: 6,
                                 shadowColor: Colors.grey,
                                 borderRadius: BorderRadius.circular(25),
-                                child: GestureDetector(
+                                child: CustomTextFormField(
+                                  readOnly: true,
                                   onTap: () {
                                     context.pushNamed(Routes.searchScreen);
                                     CustomerCubit.get(context)
                                         .getSearchData(categryId: 200);
                                   },
-                                  child: const CustomTextFormField(
-                                    enabled: false,
-                                    hintText: 'Search...',
-                                    isObsecureText: false,
-                                    sufixIcon: Icons.search,
-                                    suffixIconSize: 25,
-                                  ),
+                                  hintText: 'Search...',
+                                  isObsecureText: false,
+                                  sufixIcon: Icons.search,
+                                  suffixIconSize: 25,
                                 ),
                               ),
                               verticalSpace(25),
@@ -309,25 +322,41 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                   scrollDirection: Axis.horizontal,
                                   child: SizedBox(
                                     height: 25,
-                                    child: Row(
-                                      children: [
-                                        const BuildCategoryItem(text: 'All'),
-                                        horizontalSpace(10),
-                                        const BuildCategoryItem(text: 'Food'),
-                                        horizontalSpace(10),
-                                        const BuildCategoryItem(text: 'Drink'),
-                                        horizontalSpace(10),
-                                        const BuildCategoryItem(text: 'Soup'),
-                                        horizontalSpace(10),
-                                        const BuildCategoryItem(text: 'Pizza'),
-                                        horizontalSpace(10),
-                                        const BuildCategoryItem(text: 'Burger'),
-                                        horizontalSpace(10),
-                                        const BuildCategoryItem(text: 'Soda'),
-                                        horizontalSpace(10),
-                                        const BuildCategoryItem(text: 'Others'),
-                                        horizontalSpace(10),
-                                      ],
+                                    child: ListView.separated(
+                                      scrollDirection: Axis.horizontal,
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, index) {
+                                        final categoriesModel =
+                                            CustomerCubit.get(context)
+                                                .categoriesModel;
+                                        if (categoriesModel != null &&
+                                            categoriesModel.data != null &&
+                                            categoriesModel.data!.length >
+                                                index) {
+                                          return InkWell(
+                                              onTap: () {
+                                                CustomerCubit.get(context)
+                                                    .getCategoryDetails(
+                                                        id: CustomerCubit.get(
+                                                                context)
+                                                            .categoriesModel
+                                                            ?.data?[index]
+                                                            .id);
+                                              },
+                                              child: buildCatItem(
+                                                  context,
+                                                  categoriesModel
+                                                      .data![index]));
+                                        }
+                                        return null;
+                                      },
+                                      separatorBuilder: (context, index) =>
+                                          horizontalSpace(10),
+                                      itemCount: CustomerCubit.get(context)
+                                              .categoriesModel
+                                              ?.data
+                                              ?.length ??
+                                          0,
                                     ),
                                   ),
                                 ),
@@ -408,4 +437,28 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
       },
     );
   }
+
+  Widget buildCatItem(BuildContext context, CategoryData data) => Container(
+        width: 53.0,
+        height: 23.0,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+          border: Border.all(
+            color: ColorManager.mainOrange,
+            width: 1.3,
+          ),
+        ),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: Center(
+          child: Text(
+            '${data.name}',
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 10.0,
+                  color: ColorManager.mainOrange,
+                ),
+          ),
+        ),
+      );
 }

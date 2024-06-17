@@ -12,6 +12,9 @@ const CONFIRMPHONENUMBER = 'password/otp/customer';
 const CHANGEPASSWORD = 'password/change/customer';
 const SEARCH = 'products';
 const CATEGORIES = 'categories';
+const UPDATEPASSWORD = 'me/update-password';
+const UPDATEPROFILE = 'me';
+const UPDATEIMAGEPROFILE = 'me/update-pic';
 //--------------------------------------
 const sellerLogin = 'auth/login/seller';
 const sellerSignup = 'auth/register/seller';
@@ -20,3 +23,5 @@ const sellerCertificates = 'auth/seller/certificates';
 const sellerPhotoAndAddress = 'auth/address/seller';
 const sellerdata = 'seller';
 const sellerProducsEndPoint = 'seller/products';
+const sellersNotifications = 'seller/notifications';
+const sellerUpdatePasswordPoint = 'seller/update-password';

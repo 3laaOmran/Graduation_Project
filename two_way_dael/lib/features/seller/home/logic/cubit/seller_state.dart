@@ -7,6 +7,20 @@ final class SellerInitial extends SellerStates {}
 
 final class SellerChangeBottomNavState extends SellerStates {}
 
+class GetNotificationDetailsLoadingState extends SellerStates {}
+
+class GetNotificationDetailsSuccessState extends SellerStates {
+  final NotificationDetails notificationDetails;
+
+  GetNotificationDetailsSuccessState(this.notificationDetails);
+}
+
+class GetNotificationDetailsErrorState extends SellerStates {
+  final String error;
+
+  GetNotificationDetailsErrorState(this.error);
+}
+
 class SellerNotificationsState extends SellerStates {}
 
 class SellerDeleteNotificationsState extends SellerStates {}
@@ -23,6 +37,22 @@ class GetSellerDataErrorState extends SellerStates {
   final String error;
 
   GetSellerDataErrorState(this.error);
+}
+
+class SellerUpdatePasswordLoadingState extends SellerStates {}
+
+class ChaneIconVisibilityState extends SellerStates {}
+
+class SellerUpdatePasswordSuccessState extends SellerStates {
+  final SellerUpdatePasswordModel sellerUpdatePasswordModel;
+
+  SellerUpdatePasswordSuccessState(this.sellerUpdatePasswordModel);
+}
+
+class SellerUpdatePasswordErrorState extends SellerStates {
+  final String error;
+
+  SellerUpdatePasswordErrorState(this.error);
 }
 
 class GetSellerProductsLoadingState extends SellerStates {}
@@ -43,6 +73,16 @@ class EditSellerProductsErrorState extends SellerStates {
   final String error;
 
   EditSellerProductsErrorState(this.error);
+}
+
+class GetSellerNotificationsLoadingState extends SellerStates {}
+
+class GetSellerNotificationsSuccessState extends SellerStates {}
+
+class GetSellerNotificationsErrorState extends SellerStates {
+  final String error;
+
+  GetSellerNotificationsErrorState(this.error);
 }
 
 class DeleteSellerProductsLoadingState extends SellerStates {}

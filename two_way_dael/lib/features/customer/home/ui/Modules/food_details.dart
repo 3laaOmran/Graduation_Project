@@ -94,13 +94,6 @@ class _FoodDetailsState extends State<FoodDetails> {
                   color: ColorManager.mainOrange,
                 ),
                 actions: const [
-                  // customIconButton(
-                  //   onPressed: () {
-                  //   },
-                  //   icon: Icons.more_vert,
-                  //   color: ColorManager.mainOrange,
-                  //   toolTip: 'more',
-                  // ),
                   ReportMenu(),
                 ],
                 centerTitle: true,
@@ -219,19 +212,19 @@ class _FoodDetailsState extends State<FoodDetails> {
                 children: [
                   Text(
                     widget.product.netPrice ?? '',
-                    style: TextStyles.font20blackbold,
+                    style: TextStyles.font17BlackBold,
                   ),
-                  horizontalSpace(8),
+                  horizontalSpace(5),
                   Text(
                     widget.product.price ?? '',
-                    style: TextStyles.font20blackbold.copyWith(
+                    style: TextStyles.font15BlackBold.copyWith(
                       decoration: TextDecoration.lineThrough,
                       decorationThickness: 2.0,
                     ),
                   ),
                   horizontalSpace(5),
                   Text(
-                    ' EGP',
+                    'egp',
                     style: TextStyles.font14BlackBold,
                   ),
                 ],

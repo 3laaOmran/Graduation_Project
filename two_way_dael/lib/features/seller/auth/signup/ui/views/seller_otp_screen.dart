@@ -160,6 +160,10 @@ class SellerConfirmAccount extends StatelessWidget {
                                     ),
                                   ),
                                   onCompleted: (value) {
+                                    cubit.otpVerification(
+                                        otp: otpController.text,
+                                        token: sellerRegisterToken!,
+                                      );
                                     debugPrint(otpController.text);
                                   },
                                 ),

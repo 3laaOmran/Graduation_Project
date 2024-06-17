@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
+import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
@@ -12,7 +13,57 @@ class SellerNotificationsModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SellerCubit, SellerStates>(
+    return BlocConsumer<SellerCubit, SellerStates>(
+      listener: (context, state) {
+        if (state is GetNotificationDetailsSuccessState) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              backgroundColor: Colors.white,
+              title: Center(
+                  child: Text(
+                state.notificationDetails.notificationData!.title!,
+                style: TextStyles.font28MainOrangeBold.copyWith(
+                  fontSize: 20,
+                ),
+              )),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    state.notificationDetails.notificationData!.body!,
+                    style: TextStyles.font15BlackBold,
+                  ),
+                  verticalSpace(15),
+                  Text('Craeted At: ', style: TextStyles.font15BlackBold),
+                  Text(
+                    state.notificationDetails.notificationData!.createdAt!,
+                    style: TextStyles.font15GrayRegular,
+                  ),
+                  verticalSpace(5),
+                  Text('Available For: ', style: TextStyles.font15BlackBold),
+                  Text(
+                    state.notificationDetails.notificationData!.lastUpdated!,
+                    style: TextStyles.font15GrayRegular,
+                  ),
+                ],
+              ),
+              actions: [
+                AppTextButton(
+                  buttonText: 'Close',
+                  textStyle: TextStyles.font12White,
+                  onPressed: () {
+                    context.pop();
+                  },
+                  buttonWidth: 80,
+                  buttonHeight: 15,
+                ),
+              ],
+            ),
+          );
+        }
+      },
       builder: (context, state) {
         var cubit = SellerCubit.get(context);
         return Scaffold(
@@ -36,75 +87,11 @@ class SellerNotificationsModule extends StatelessWidget {
               itemCount: cubit.sellerNotifications.length,
               itemBuilder: (context, index) {
                 final notification = cubit.sellerNotifications[index];
-                return Dismissible(
-                  background: Container(
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.only(left: 20),
-                    color: Colors.red,
-                    child: const Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                      size: 50,
-                    ),
-                  ),
-                  secondaryBackground: Container(
-                    alignment: Alignment.centerRight,
-                    padding: const EdgeInsets.only(right: 20),
-                    color: Colors.red,
-                    child: const Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                      size: 50,
-                    ),
-                  ),
-                  key: Key(cubit.sellerNotifications[index].title),
-                  confirmDismiss: (direction) async {
-                    final result = await showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        backgroundColor: Colors.white,
-                        title: const Center(child: Text('Are you sure ?!')),
-                        content:
-                            const Text('You want to delete this notification'),
-                        actions: [
-                          AppTextButton(
-                            buttonText: 'Yes',
-                            textStyle: TextStyles.font12White,
-                            onPressed: () {
-                              Navigator.of(context).pop(true);
-                            },
-                            buttonWidth: 30,
-                            buttonHeight: 15,
-                          ),
-                          AppTextButton(
-                            buttonText: 'No',
-                            textStyle: TextStyles.font12White,
-                            onPressed: () {
-                              Navigator.of(context).pop(false);
-                            },
-                            buttonWidth: 30,
-                            buttonHeight: 15,
-                          ),
-                        ],
-                      ),
-                    );
-                    return result;
-                  },
-                  onDismissed: (direction) {
-                    cubit.deleteNotificatins(index);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        behavior: SnackBarBehavior.floating,
-                        backgroundColor: Colors.red,
-                        duration: const Duration(milliseconds: 900),
-                        content: Center(
-                          child: Text(
-                            'Notification deleted',
-                            style: TextStyles.font18White,
-                          ),
-                        ),
-                      ),
-                    );
+                return InkWell(
+                  onTap: () {
+                    cubit.getNotificationDetails(
+                        id: cubit.sellerNotificationsModel!.data!
+                            .notifications![index].id!);
                   },
                   child: Container(
                     height: 100,
@@ -115,11 +102,17 @@ class SellerNotificationsModule extends StatelessWidget {
                       child: ListTile(
                         leading: CircleAvatar(
                           radius: 40,
-                          backgroundImage:
-                              AssetImage(cubit.sellerNotifications[index].image),
+                          backgroundColor: notification.isNew
+                              ? ColorManager.notificationColor
+                              : Colors.white,
+                          child: Image.asset(
+                            cubit.sellerNotifications[index].image,
+                            fit: BoxFit.contain,
+                          ),
                         ),
                         title: Text(
                           cubit.sellerNotifications[index].title,
+                          style: TextStyles.font20blackbold,
                         ),
                         subtitle: Text(
                           cubit.sellerNotifications[index].message,
@@ -127,18 +120,15 @@ class SellerNotificationsModule extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                         trailing: customIconButton(
-                            onPressed: () {
-                              cubit.showNotificationDetails(
-                                  cubit.sellerNotifications[index], context);
-                            },
-                            icon: Icons.info,
-                            toolTip: 'View',
-                            color: notification.isNew
-                                ? ColorManager.mainOrange
-                                : ColorManager.gray),
+                          onPressed: () {},
+                          icon: Icons.info,
+                          color: ColorManager.mainOrange,
+                          toolTip: '',
+                        ),
                       ),
                     ),
                   ),
+                  // ),
                 );
               },
               separatorBuilder: (context, index) {

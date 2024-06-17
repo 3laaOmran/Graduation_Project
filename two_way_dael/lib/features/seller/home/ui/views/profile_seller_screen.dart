@@ -9,7 +9,7 @@ import 'package:two_way_dael/core/routing/routes.dart';
 import 'package:two_way_dael/features/seller/home/logic/cubit/seller_cubit.dart';
 import 'package:two_way_dael/features/seller/home/ui/widgets/seller_account_settings.dart';
 import 'package:two_way_dael/features/seller/home/ui/widgets/seller_change_logo.dart';
-import 'package:two_way_dael/features/seller/home/ui/widgets/seller_edit_info.dart';
+import 'package:two_way_dael/features/seller/home/ui/widgets/seller_info.dart';
 
 import '../../../../../core/theming/colors.dart';
 import '../../../../../core/widgets/custom_icon_button.dart';
@@ -66,6 +66,7 @@ class _ProfileSellerScreenState extends State<ProfileSellerScreen> {
                           child: Stack(
                             children: [
                               CircleAvatar(
+                                backgroundColor: Colors.white,
                                 radius: 100.0,
                                 backgroundImage: image ==
                                         'http://2waydeal.online/uploads/default.png'
@@ -81,7 +82,7 @@ class _ProfileSellerScreenState extends State<ProfileSellerScreen> {
                                   radius: 10,
                                   backgroundColor: Colors.transparent,
                                   child: Icon(
-                                    Icons.edit_square,
+                                    Icons.visibility,
                                     color: Colors.grey,
                                     size: 15,
                                   ),
@@ -117,7 +118,7 @@ class _ProfileSellerScreenState extends State<ProfileSellerScreen> {
                                   ),
                                   horizontalSpace(8),
                                   const Icon(
-                                    Icons.edit_square,
+                                    Icons.visibility,
                                     size: 12,
                                     color: Colors.grey,
                                   )

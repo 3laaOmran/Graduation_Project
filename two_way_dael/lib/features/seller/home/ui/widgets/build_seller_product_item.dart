@@ -139,8 +139,8 @@ class DeleteCircleAvatar extends StatelessWidget {
                     textStyle: TextStyles.font12White,
                     onPressed: () {
                       SellerCubit.get(context).deleteSellerProduct(id: id);
-                      SellerCubit.get(context).getSellerProducts();
                       Navigator.of(context).pop();
+                      SellerCubit.get(context).getSellerProducts();
                     },
                     buttonWidth: 30,
                     buttonHeight: 15,

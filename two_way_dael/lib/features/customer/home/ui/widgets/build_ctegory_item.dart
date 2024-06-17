@@ -9,9 +9,9 @@ class BuildCategoryItem extends StatefulWidget {
   State<BuildCategoryItem> createState() => _BuildCategoryItemState();
 }
 
-bool istapped = false;
 
 class _BuildCategoryItemState extends State<BuildCategoryItem> {
+bool istapped = false;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

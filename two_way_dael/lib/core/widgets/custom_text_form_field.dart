@@ -49,7 +49,10 @@ class CustomTextFormField extends StatelessWidget {
       this.onFieldSubmitted,
       this.suffixIconSize,
       this.maxLines,
-      this.enabled, this.onChanged, this.onTap, this.readOnly});
+      this.enabled,
+      this.onChanged,
+      this.onTap,
+      this.readOnly});
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +76,7 @@ class CustomTextFormField extends StatelessWidget {
           ),
           borderRadius: borderRadius ?? BorderRadius.circular(50.0),
         ),
+        disabledBorder: InputBorder.none,
         contentPadding: contentPadding ??
             EdgeInsets.symmetric(
               vertical: 12.h,

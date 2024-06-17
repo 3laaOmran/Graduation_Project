@@ -150,6 +150,10 @@ class ConfirmAccount extends StatelessWidget {
                                   ),
                                   onCompleted: (value) {
                                     debugPrint(otpController.text);
+                                    cubit.otpVerification(
+                                        otp: otpController.text,
+                                        token: registerToken!,
+                                      );
                                   },
                                 ),
                               ),

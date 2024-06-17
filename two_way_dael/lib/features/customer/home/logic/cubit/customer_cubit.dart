@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,8 +11,10 @@ import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/features/customer/auth/signup/data/models/get_gov_and_city_model.dart';
+import 'package:two_way_dael/features/customer/home/data/models/category_details_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/get_profile_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/product_details_model.dart';
+import 'package:two_way_dael/features/customer/home/data/models/update_password_model.dart';
 import 'package:two_way_dael/features/customer/home/logic/cubit/customer_states.dart';
 import 'package:two_way_dael/features/customer/home/ui/Modules/customer_home_screen.dart';
 import 'package:two_way_dael/features/customer/home/ui/Modules/customer_profile_screen.dart';
@@ -28,7 +32,7 @@ class CustomerCubit extends Cubit<CustomerStates> {
   int currentIndex = 0;
 
   List<Widget> bottomScreens = [
-    const CustomerHomeScreen(),
+    CustomerHomeScreen(),
     const CustomerProfileScreen(),
   ];
 
@@ -173,6 +177,117 @@ class CustomerCubit extends Cubit<CustomerStates> {
       emit(GetUserDataErrorState(error.toString()));
     });
   }
+  void updateProfile({
+    required String name,
+    required String email,
+    required String phone,
+    required int governorate,
+    required int city,
+  }) {
+    emit(CustomerUpdateProfileLoadingState());
+
+    try {
+      DioHelper.postData(
+        url: UPDATEPROFILE,
+        token: token,
+        data: {
+          'name': name,
+          'email': email,
+          'phone': phone,
+          'governorate_id': governorate,
+          'city_id': city,
+        },
+      ).then((value) {
+        userDataModel = UserDataModel.fromJson(value.data);
+        emit(CustomerUpdateProfileSuccessState(userDataModel));
+      }).catchError((error) {
+        if (error is DioException && error.response != null) {
+          final errorMessage =
+              'Error ${error.response?.statusCode}: ${error.response?.data['message']}';
+          emit(CustomerUpdateProfileErrorState(errorMessage));
+        } else {
+          emit(CustomerUpdateProfileErrorState(
+              'An unexpected error occurred: $error'));
+        }
+      });
+    } catch (error) {
+      emit(CustomerUpdateProfileErrorState(
+          'An unexpected error occurred: $error'));
+    }
+  }
+
+  void updateProfileImage({
+    required File image,
+  }) async {
+    emit(CustomerUpdateImageLoadingState());
+
+    Map<String, dynamic> data = {
+      'image': await MultipartFile.fromFile(
+        image.path,
+        filename: image.path.split('/').last,
+      ),
+    };
+
+    DioHelper.postData(
+      url: UPDATEIMAGEPROFILE,
+      token: token,
+      data: data,
+    ).then((value) {
+      userDataModel = UserDataModel.fromJson(value.data);
+      emit(CustomerUpdateImageSuccessState(userDataModel));
+    }).catchError((error) {
+      if (error is DioException && error.response != null) {
+        if (error.response?.statusCode == 422) {
+          final errorMessage =
+              'Error ${error.response?.statusCode}: The image must be in a valid format.';
+          emit(CustomerUpdateImageErrorState(errorMessage));
+        } else {
+          final errorMessage =
+              'Error ${error.response?.statusCode}: ${error.response?.data['message']}';
+          emit(CustomerUpdateImageErrorState(errorMessage));
+        }
+      } else {
+        emit(CustomerUpdateImageErrorState(
+            'An unexpected error occurred: $error'));
+      }
+    });
+  }
+
+  UpdatePasswordModel? updatePasswordModel;
+  void updatePassword({
+    required String oldPassword,
+    required String password,
+    required String confirmPassword,
+  }) async {
+    emit(CustomerUpdatePasswordLoadingState());
+    DioHelper.postData(
+      url: UPDATEPASSWORD,
+      token: token,
+      data: {
+        'old_password': oldPassword,
+        'password': password,
+        'password_confirmation': confirmPassword,
+      },
+    ).then((value) {
+      updatePasswordModel = UpdatePasswordModel.fromJson(value.data);
+      emit(CustomerUpdatePasswordSuccessState(updatePasswordModel));
+    }).catchError((error) {
+      if (error is DioException && error.response != null) {
+        if (error.response?.statusCode == 422) {
+          final errorMessage =
+              'Error ${error.response?.statusCode}: The image must be in a valid format.';
+          emit(CustomerUpdatePasswordErrorState(errorMessage));
+        } else {
+          final errorMessage =
+              'Error ${error.response?.statusCode}: ${error.response?.data['message']}';
+          emit(CustomerUpdatePasswordErrorState(errorMessage));
+        }
+      } else {
+        emit(CustomerUpdatePasswordErrorState(
+            'An unexpected error occurred: $error'));
+      }
+    });
+  }
 
   // List<ProductsModel> searchProducts = [];
   ProductsModel? searchModel;
@@ -244,6 +359,21 @@ class CustomerCubit extends Cubit<CustomerStates> {
     }).catchError((error) {
       debugPrint(error.toString());
       emit(GetGoverniratesErrorState(error.toString()));
+    });
+  }
+  CategoryDetails? categoryDetails;
+  void getCategoryDetails({
+    required int? id,
+  }) async {
+    emit(GetCategoryDetailsLoadingState());
+    await DioHelper.getData(
+      url: 'category/$id',
+    ).then((value) {
+      categoryDetails = CategoryDetails.fromJson(value.data);
+      emit(GetCategoryDetailsSuccessState(categoryDetails));
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(GetCategoryDetailsErrorState(error.toString()));
     });
   }
 

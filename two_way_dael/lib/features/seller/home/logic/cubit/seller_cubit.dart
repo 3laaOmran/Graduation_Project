@@ -1,17 +1,15 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:two_way_dael/core/constants/constants.dart';
-import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/networking/end_points.dart';
-import 'package:two_way_dael/core/theming/styles.dart';
-import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/features/seller/home/data/models/Seller_products_model.dart';
 import 'package:two_way_dael/features/seller/home/data/models/seler_product_details.dart';
 import 'package:two_way_dael/features/seller/home/data/models/seller_data_model.dart';
+import 'package:two_way_dael/features/seller/home/data/models/seller_notifications_model.dart';
+import 'package:two_way_dael/features/seller/home/data/models/seller_update_password.dart';
 import 'package:two_way_dael/features/seller/home/ui/views/mian_seller_screen.dart';
 import 'package:two_way_dael/features/seller/home/ui/views/profile_seller_screen.dart';
 import 'package:two_way_dael/features/seller/home/ui/views/seller_notifications_module.dart';
@@ -45,6 +43,8 @@ class SellerCubit extends Cubit<SellerStates> {
   var emailController = TextEditingController();
   var phoneController = TextEditingController();
   var addressController = TextEditingController();
+  var joinDateController = TextEditingController();
+  var verifiedController = TextEditingController();
   //*--------------------------------------------
   final editProductFormKey = GlobalKey<FormState>();
   var productNameController = TextEditingController();
@@ -63,6 +63,37 @@ class SellerCubit extends Cubit<SellerStates> {
   var addexpirydateController = TextEditingController();
   var addquantityController = TextEditingController();
   var addavailableForController = TextEditingController();
+
+  var newPasswordController = TextEditingController();
+  var oldPasswordController = TextEditingController();
+  var confirmPasswordController = TextEditingController();
+  final changePasswordFormKey = GlobalKey<FormState>();
+
+   IconData newSuffixIcon = Icons.visibility;
+  bool newIsObsecure = true;
+  void changeNewPasswordVisibility() {
+    newIsObsecure = !newIsObsecure;
+    newSuffixIcon = newIsObsecure ? Icons.visibility : Icons.visibility_off;
+    emit(ChaneIconVisibilityState());
+  }
+
+  IconData oldSuffixIcon = Icons.visibility;
+  bool oldIsObsecure = true;
+  void changeOldPasswordVisibility() {
+    oldIsObsecure = !oldIsObsecure;
+    oldSuffixIcon = oldIsObsecure ? Icons.visibility : Icons.visibility_off;
+    emit(ChaneIconVisibilityState());
+  }
+
+  IconData confirmSuffixIcon = Icons.visibility;
+  bool confirmIsObsecure = true;
+  void changeConfirmPasswordVisibility() {
+    confirmIsObsecure = !confirmIsObsecure;
+    confirmSuffixIcon =
+        confirmIsObsecure ? Icons.visibility : Icons.visibility_off;
+    emit(ChaneIconVisibilityState());
+  }
+
 
   void clearControllers() {
     nameController.clear();
@@ -98,6 +129,43 @@ class SellerCubit extends Cubit<SellerStates> {
     }).catchError((error) {
       debugPrint(error.toString());
       emit(GetSellerDataErrorState(error.toString()));
+    });
+  }
+  
+  SellerUpdatePasswordModel? sellerUpdatePasswordModel;
+  void updatePassword({
+    required String oldPassword,
+    required String password,
+    required String confirmPassword,
+  }) async {
+    emit(SellerUpdatePasswordLoadingState());
+    DioHelper.postData(
+      url: sellerUpdatePasswordPoint,
+      token: sellerToken,
+      data: {
+        'old_password': oldPassword,
+        'password': password,
+        'password_confirmation': confirmPassword,
+      },
+    ).then((value) {
+      sellerUpdatePasswordModel =
+          SellerUpdatePasswordModel.fromJson(value.data);
+      emit(SellerUpdatePasswordSuccessState(sellerUpdatePasswordModel!));
+    }).catchError((error) {
+      if (error is DioException && error.response != null) {
+        if (error.response?.statusCode == 422) {
+          final errorMessage =
+              'Error ${error.response?.statusCode}: The image must be in a valid format.';
+          emit(SellerUpdatePasswordErrorState(errorMessage));
+        } else {
+          final errorMessage =
+              'Error ${error.response?.statusCode}: ${error.response?.data['message']}';
+          emit(SellerUpdatePasswordErrorState(errorMessage));
+        }
+      } else {
+        emit(SellerUpdatePasswordErrorState(
+            'An unexpected error occurred: $error'));
+      }
     });
   }
 
@@ -186,29 +254,44 @@ class SellerCubit extends Cubit<SellerStates> {
         .sort((a, b) => (b.isNew ? 1 : 0).compareTo(a.isNew ? 1 : 0));
   }
 
-  void showNotificationDetails(NotificationItem notification, context) {
-    markNotificationAsRead(sellerNotifications.indexOf(notification));
-    emit(SellerNotificationsState());
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
-        title: Center(child: Text(notification.title)),
-        content: Text(notification.message),
-        actions: [
-          AppTextButton(
-            buttonText: 'Close',
-            textStyle: TextStyles.font12White,
-            onPressed: () {
-              context.pop();
-            },
-            buttonWidth: 80,
-            buttonHeight: 15,
-          ),
-        ],
-      ),
-    );
+  NotificationDetails? notificationDetails;
+  Future<void> getNotificationDetails({required int id}) async {
+    emit(GetNotificationDetailsLoadingState());
+    DioHelper.getData(
+      url: 'seller/notification/$id',
+      token: sellerToken,
+    ).then((value) {
+      notificationDetails = NotificationDetails.fromJson(value.data);
+      emit(GetNotificationDetailsSuccessState(notificationDetails!));
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(GetNotificationDetailsErrorState(error.toString()));
+    });
   }
+
+  // void showNotificationDetails(NotificationItem notification, context) {
+  //   markNotificationAsRead(sellerNotifications.indexOf(notification));
+  //   emit(SellerNotificationsState());
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //       backgroundColor: Colors.white,
+  //       title: Center(child: Text(notification.title)),
+  //       content: Text(notification.message),
+  //       actions: [
+  //         AppTextButton(
+  //           buttonText: 'Close',
+  //           textStyle: TextStyles.font12White,
+  //           onPressed: () {
+  //             context.pop();
+  //           },
+  //           buttonWidth: 80,
+  //           buttonHeight: 15,
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   SellerProductDetails? sellerProductDetails;
   Future<void> getSellerProductDetails({required int id}) async {
@@ -280,40 +363,33 @@ class SellerCubit extends Cubit<SellerStates> {
     });
   }
 
-  List<NotificationItem> sellerNotifications = [
-    NotificationItem(
-      title: 'Seller',
-      message: 'Seller: Alaa Meawd Omran',
-      image: 'assets/images/default_profile.png',
-    ),
-    NotificationItem(
-      title: '3laaOmran',
-      message:
-          'Alaa Meawd OmranAlaa Meawd OmranAlaa Meawd OmranAlaa Meawd OmranAlaa Meawd Omran',
-      image: 'assets/images/default_profile.png',
-    ),
-    NotificationItem(
-      title: 'Two way dael',
-      message: 'Alaa Meawd Omran',
-      image: 'assets/images/default_profile.png',
-    ),
-    NotificationItem(
-      title: 'Two Way Deal',
-      message: 'Alaa Meawd Omran',
-      image: 'assets/images/default_profile.png',
-    ),
-    NotificationItem(
-      title: 'Two Way Deal',
-      message: 'Alaa Meawd Omran',
-      image: 'assets/images/default_profile.png',
-    ),
-    NotificationItem(
-      title: 'twoWayDeal',
-      message:
-          ' Alaa Meawd OmranAlaa Meawd OmranAlaa Meawd OmranAlaa Meawd OmranAlaa Meawd Omran',
-      image: 'assets/images/default_profile.png',
-    ),
-  ];
+  List<NotificationItem> sellerNotifications = [];
+  NotificationsModel? sellerNotificationsModel;
+  void getNotifiCations() {
+    emit(GetSellerNotificationsLoadingState());
+    DioHelper.getData(
+      url: sellersNotifications,
+      token: sellerToken,
+    ).then((value) {
+      sellerNotificationsModel = NotificationsModel.fromJson(value.data);
+      if (sellerNotificationsModel!.data!.notifications != null) {
+        sellerNotificationsModel!.data!.notifications!.forEach((dataItem) {
+          sellerNotifications.add(NotificationItem(
+            title: dataItem.title!,
+            message: dataItem.createdAt!,
+            image: 'assets/images/two_way_deal_icon.png',
+          ));
+        });
+      } else {
+        print("No data available.");
+      }
+      emit(GetSellerNotificationsSuccessState());
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(GetSellerNotificationsErrorState(error.toString()));
+    });
+  }
+
   List<Widget> charities = [
     BuildCharityItem(
       charityItemModel: CharityItemModel(

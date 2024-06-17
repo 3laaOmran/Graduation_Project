@@ -24,7 +24,6 @@ class EditInfo extends StatelessWidget {
         if (state is GetUserDataSuccessState) {}
       },
       builder: (context, state) {
-       
         var cubit = CustomerCubit.get(context);
         var model = cubit.userDataModel;
         cubit.nameController.text = model!.data!.name!;
@@ -204,11 +203,23 @@ class EditInfo extends StatelessWidget {
                     ),
                     onPressed: () {
                       if (cubit.formKey.currentState!.validate()) {
-                        // cubit.updateUserData(
-                        //   name: cubit.nameController.text,
-                        //   email: cubit.emailController.text,
-                        //   // phone: cubit.phoneController.text,
-                        // );
+                        if (cubit.selectedGovernorateId != null &&
+                            cubit.selectedCityId != null) {
+                          cubit.updateProfile(
+                            name: cubit.nameController.text,
+                            email: cubit.emailController.text,
+                            phone: cubit.phoneController.text,
+                            governorate: cubit.selectedGovernorateId!,
+                            city: cubit.selectedCityId!,
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'Please select a governorate and a city.'),
+                            ),
+                          );
+                        }
                       }
                     },
                   ),
