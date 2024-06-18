@@ -55,21 +55,22 @@ class HomeScreen extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.only(right: 10.w),
                       child: CircleAvatar(
-                          radius: 30.0.w,
-                          backgroundColor: Colors.white,
-                          backgroundImage: image !=
-                                  'http://2waydeal.online/uploads/default.png'||image==null
-                              ? NetworkImage(image!)
-                              : null,
-                          child: image !=
-                                  'http://2waydeal.online/uploads/default.png'
-                              ? null
-                              : const Image(
-                                  image: AssetImage(
-                                      'assets/images/two_way_deal_icon.png'),
-                                  fit: BoxFit.cover,
-                                ),
-                        ),
+                        radius: 30.0.w,
+                        backgroundColor: Colors.white,
+                        backgroundImage: image !=
+                                    'http://2waydeal.online/uploads/default.png' ||
+                                image == null
+                            ? NetworkImage(image!)
+                            : null,
+                        child: image !=
+                                'http://2waydeal.online/uploads/default.png'
+                            ? null
+                            : const Image(
+                                image: AssetImage(
+                                    'assets/images/two_way_deal_icon.png'),
+                                fit: BoxFit.cover,
+                              ),
+                      ),
                       // child: CircleAvatar(
                       //   radius: 30.0,
                       //   backgroundImage: image !=
@@ -386,11 +387,25 @@ class HomeScreen extends StatelessWidget {
                                 builder: (context) {
                                   if (cubit.sellerProducts == null ||
                                       cubit.sellerProducts!.data == null) {
-                                    return Center(
-                                      child: Text(
-                                        'No products available',
-                                        style: TextStyles.font17BlackBold,
-                                      ),
+                                    return Column(
+                                      children: [
+                                        verticalSpace(50),
+                                        Text(
+                                          'No Sold Products yet',
+                                          style: TextStyles.font20Whitebold,
+                                        ),
+                                        verticalSpace(20),
+                                        AppTextButton(
+                                          backgroundColor: Colors.white,
+                                          buttonText: 'Publish New Product',
+                                          textStyle:
+                                              TextStyles.font17MainOrangeBold,
+                                          onPressed: () {
+                                            context.pushNamed(
+                                                Routes.sellerAddNewProduct);
+                                          },
+                                        ),
+                                      ],
                                     );
                                   }
 

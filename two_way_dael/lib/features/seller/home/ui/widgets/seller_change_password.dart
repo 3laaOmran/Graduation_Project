@@ -8,6 +8,7 @@ import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/core/widgets/custom_text_form_field.dart';
 import 'package:two_way_dael/core/widgets/resuable_text.dart';
 import 'package:two_way_dael/core/widgets/show_toast.dart';
+import 'package:two_way_dael/core/widgets/validation.dart';
 import 'package:two_way_dael/features/seller/home/logic/cubit/seller_cubit.dart';
 
 import '../../../../../core/theming/colors.dart';
@@ -25,6 +26,9 @@ class SellerChangePasswordScreen extends StatelessWidget {
               message:
                   state.sellerUpdatePasswordModel.message!,
               state: TostStates.SUCCESS);
+        }
+        if (state is SellerUpdatePasswordErrorState) {
+          showToast(message: state.error, state: TostStates.ERROR);
         }
       },
       builder: (context, state) {
@@ -90,12 +94,7 @@ class SellerChangePasswordScreen extends StatelessWidget {
                                 suffixOnPressed: () {
                                   cubit.changeOldPasswordVisibility();
                                 },
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter your old password';
-                                  }
-                                  return null;
-                                },
+                                validator: passwordValidation,
                               ),
                               verticalSpace(30),
                               resuableText(
@@ -110,12 +109,7 @@ class SellerChangePasswordScreen extends StatelessWidget {
                                 suffixOnPressed: () {
                                   cubit.changeNewPasswordVisibility();
                                 },
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter your new password';
-                                  }
-                                  return null;
-                                },
+                                validator:passwordValidation,
                               ),
                               verticalSpace(30),
                               resuableText(
@@ -130,12 +124,7 @@ class SellerChangePasswordScreen extends StatelessWidget {
                                 suffixOnPressed: () {
                                   cubit.changeConfirmPasswordVisibility();
                                 },
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter your password confirmation';
-                                  }
-                                  return null;
-                                },
+                                validator: passwordValidation,
                               ),
                               verticalSpace(60),
                             ],

@@ -18,7 +18,7 @@ class HomeSkeltonLoading extends StatelessWidget {
                 children: [
                   const CircleAvatar(
                     radius: 30,
-                    backgroundColor: Colors.grey,
+                    backgroundColor: Colors.white,
                   ),
                   horizontalSpace(5),
                   Column(
@@ -28,7 +28,7 @@ class HomeSkeltonLoading extends StatelessWidget {
                         width: 130,
                         height: 17,
                         decoration: BoxDecoration(
-                          color: Colors.grey,
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(5),
                         ),
                       ),
@@ -37,7 +37,7 @@ class HomeSkeltonLoading extends StatelessWidget {
                         width: 80,
                         height: 10,
                         decoration: BoxDecoration(
-                          color: Colors.grey,
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(5),
                         ),
                       ),
@@ -48,7 +48,7 @@ class HomeSkeltonLoading extends StatelessWidget {
                     width: 30,
                     height: 30,
                     decoration: BoxDecoration(
-                      color: Colors.grey,
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
@@ -57,7 +57,7 @@ class HomeSkeltonLoading extends StatelessWidget {
                     width: 30,
                     height: 30,
                     decoration: BoxDecoration(
-                      color: Colors.grey,
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
@@ -68,7 +68,7 @@ class HomeSkeltonLoading extends StatelessWidget {
                 width: double.infinity,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: Colors.grey,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(50),
                 ),
               ),
@@ -77,7 +77,7 @@ class HomeSkeltonLoading extends StatelessWidget {
                 width: 180,
                 height: 20,
                 decoration: BoxDecoration(
-                  color: Colors.grey,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(5),
                 ),
               ),
@@ -86,7 +86,7 @@ class HomeSkeltonLoading extends StatelessWidget {
                 width: double.infinity,
                 height: 200,
                 decoration: BoxDecoration(
-                  color: Colors.grey,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(50),
                 ),
               ),
@@ -95,7 +95,7 @@ class HomeSkeltonLoading extends StatelessWidget {
                 width: 150,
                 height: 20,
                 decoration: BoxDecoration(
-                  color: Colors.grey,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(5),
                 ),
               ),
@@ -108,7 +108,7 @@ class HomeSkeltonLoading extends StatelessWidget {
                       width: 53,
                       height: 23,
                       decoration: BoxDecoration(
-                          color: Colors.grey,
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(10)),
                     ),
                     horizontalSpace(10),
@@ -116,7 +116,7 @@ class HomeSkeltonLoading extends StatelessWidget {
                       width: 53,
                       height: 23,
                       decoration: BoxDecoration(
-                          color: Colors.grey,
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(10)),
                     ),
                     horizontalSpace(10),
@@ -124,7 +124,7 @@ class HomeSkeltonLoading extends StatelessWidget {
                       width: 53,
                       height: 23,
                       decoration: BoxDecoration(
-                          color: Colors.grey,
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(10)),
                     ),
                     horizontalSpace(10),
@@ -132,7 +132,7 @@ class HomeSkeltonLoading extends StatelessWidget {
                       width: 53,
                       height: 23,
                       decoration: BoxDecoration(
-                          color: Colors.grey,
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(10)),
                     ),
                     horizontalSpace(10),
@@ -140,7 +140,7 @@ class HomeSkeltonLoading extends StatelessWidget {
                       width: 53,
                       height: 23,
                       decoration: BoxDecoration(
-                          color: Colors.grey,
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(10)),
                     ),
                     horizontalSpace(10),
@@ -148,7 +148,7 @@ class HomeSkeltonLoading extends StatelessWidget {
                       width: 53,
                       height: 23,
                       decoration: BoxDecoration(
-                          color: Colors.grey,
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(10)),
                     ),
                     horizontalSpace(10),
@@ -156,7 +156,7 @@ class HomeSkeltonLoading extends StatelessWidget {
                       width: 53,
                       height: 23,
                       decoration: BoxDecoration(
-                          color: Colors.grey,
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(10)),
                     ),
                     horizontalSpace(10),
@@ -168,7 +168,7 @@ class HomeSkeltonLoading extends StatelessWidget {
                 width: 250,
                 height: 20,
                 decoration: BoxDecoration(
-                  color: Colors.grey,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(5),
                 ),
               ),
@@ -187,7 +187,7 @@ class HomeSkeltonLoading extends StatelessWidget {
                           width: 50,
                           height: 100,
                           decoration: BoxDecoration(
-                            color: Colors.grey,
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(15),
                           ),
                         )),

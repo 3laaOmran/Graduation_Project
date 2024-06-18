@@ -22,7 +22,7 @@ class SellerHomeSkeltonLoading extends StatelessWidget {
                     radius: 35.0.w,
                     backgroundColor: Colors.white,
                   ),
-                  horizontalSpace(10),
+                  horizontalSpace(8),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -48,8 +48,8 @@ class SellerHomeSkeltonLoading extends StatelessWidget {
                           ),
                           horizontalSpace(5),
                           Container(
-                            height: 20.h,
-                            width: 50.w,
+                            height: 10.h,
+                            width: 40.w,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(5.r),

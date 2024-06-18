@@ -177,6 +177,7 @@ class CustomerCubit extends Cubit<CustomerStates> {
       emit(GetUserDataErrorState(error.toString()));
     });
   }
+
   void updateProfile({
     required String name,
     required String email,
@@ -272,19 +273,13 @@ class CustomerCubit extends Cubit<CustomerStates> {
       updatePasswordModel = UpdatePasswordModel.fromJson(value.data);
       emit(CustomerUpdatePasswordSuccessState(updatePasswordModel));
     }).catchError((error) {
-      if (error is DioException && error.response != null) {
-        if (error.response?.statusCode == 422) {
-          final errorMessage =
-              'Error ${error.response?.statusCode}: The image must be in a valid format.';
-          emit(CustomerUpdatePasswordErrorState(errorMessage));
-        } else {
-          final errorMessage =
-              'Error ${error.response?.statusCode}: ${error.response?.data['message']}';
-          emit(CustomerUpdatePasswordErrorState(errorMessage));
-        }
-      } else {
-        emit(CustomerUpdatePasswordErrorState(
-            'An unexpected error occurred: $error'));
+      if (error is DioException && error.response?.statusCode == 422) {
+        String errorMessage = error.response?.data['message'];
+        print('Error: $errorMessage');
+        emit(CustomerUpdatePasswordErrorState(errorMessage));
+      } else if (error is DioException && error.response?.statusCode == 429) {
+        print('Unauthorized: ${error.response!.data['message']}');
+        emit(CustomerUpdatePasswordErrorState(error.response!.data['message']));
       }
     });
   }
@@ -361,6 +356,7 @@ class CustomerCubit extends Cubit<CustomerStates> {
       emit(GetGoverniratesErrorState(error.toString()));
     });
   }
+
   CategoryDetails? categoryDetails;
   void getCategoryDetails({
     required int? id,

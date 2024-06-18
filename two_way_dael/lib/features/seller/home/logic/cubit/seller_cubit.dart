@@ -152,19 +152,13 @@ class SellerCubit extends Cubit<SellerStates> {
           SellerUpdatePasswordModel.fromJson(value.data);
       emit(SellerUpdatePasswordSuccessState(sellerUpdatePasswordModel!));
     }).catchError((error) {
-      if (error is DioException && error.response != null) {
-        if (error.response?.statusCode == 422) {
-          final errorMessage =
-              'Error ${error.response?.statusCode}: The image must be in a valid format.';
-          emit(SellerUpdatePasswordErrorState(errorMessage));
-        } else {
-          final errorMessage =
-              'Error ${error.response?.statusCode}: ${error.response?.data['message']}';
-          emit(SellerUpdatePasswordErrorState(errorMessage));
-        }
-      } else {
-        emit(SellerUpdatePasswordErrorState(
-            'An unexpected error occurred: $error'));
+      if (error is DioException && error.response?.statusCode == 422) {
+        String errorMessage = error.response?.data['message'];
+        print('Error: $errorMessage');
+        emit(SellerUpdatePasswordErrorState(errorMessage));
+      } else if (error is DioException && error.response?.statusCode == 429) {
+        print('Unauthorized: ${error.response!.data['message']}');
+        emit(SellerUpdatePasswordErrorState(error.response!.data['message']));
       }
     });
   }
@@ -259,13 +253,12 @@ class SellerCubit extends Cubit<SellerStates> {
     });
   }
 
-   int? selectedCategoryId;
+  int? selectedCategoryId;
 
   void selectCategory(int id) {
     selectedCategoryId = id;
     emit(CategorySelectedState(selectedCategoryId!));
   }
-
 
   void markNotificationAsRead(int index) {
     sellerNotifications[index].isNew = false;

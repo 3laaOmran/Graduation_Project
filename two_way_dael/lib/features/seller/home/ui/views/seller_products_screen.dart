@@ -116,8 +116,7 @@ class _SellerProductsScreenState extends State<SellerProductsScreen> {
                           crossAxisCount: 2,
                           crossAxisSpacing: 10,
                           mainAxisSpacing: 10,
-                          childAspectRatio: 1 / 1.4, 
-
+                          childAspectRatio: 1 / 1.4,
                           children: List.generate(
                               8,
                               (index) => Container(
