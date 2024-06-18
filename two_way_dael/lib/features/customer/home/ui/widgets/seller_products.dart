@@ -3,7 +3,6 @@ import 'package:number_pagination/number_pagination.dart';
 import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
-import 'package:two_way_dael/features/customer/home/ui/widgets/build_ctegory_item.dart';
 
 class SellerProducts extends StatefulWidget {
   const SellerProducts({super.key});
@@ -32,34 +31,34 @@ class _SellerProductsState extends State<SellerProducts> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  BuildCategoryItem(text: 'All'),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  BuildCategoryItem(text: 'Food'),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  BuildCategoryItem(text: 'Drink'),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  BuildCategoryItem(text: 'Soup'),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  BuildCategoryItem(text: 'Pizza'),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  BuildCategoryItem(text: 'Burger'),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  BuildCategoryItem(text: 'Soda'),
-                  SizedBox(
-                    width: 10.0,
-                  ),
+                  // BuildCategoryItem(text: 'All'),
+                  // SizedBox(
+                  //   width: 10.0,
+                  // ),
+                  // BuildCategoryItem(text: 'Food'),
+                  // SizedBox(
+                  //   width: 10.0,
+                  // ),
+                  // BuildCategoryItem(text: 'Drink'),
+                  // SizedBox(
+                  //   width: 10.0,
+                  // ),
+                  // BuildCategoryItem(text: 'Soup'),
+                  // SizedBox(
+                  //   width: 10.0,
+                  // ),
+                  // BuildCategoryItem(text: 'Pizza'),
+                  // SizedBox(
+                  //   width: 10.0,
+                  // ),
+                  // BuildCategoryItem(text: 'Burger'),
+                  // SizedBox(
+                  //   width: 10.0,
+                  // ),
+                  // BuildCategoryItem(text: 'Soda'),
+                  // SizedBox(
+                  //   width: 10.0,
+                  // ),
                 ],
               ),
             ),

@@ -4,13 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/features/customer/home/ui/Modules/food_details.dart';
-import 'package:two_way_dael/features/customer/home/ui/widgets/build_product_category_item.dart';
+import 'package:two_way_dael/features/customer/home/ui/widgets/build_food_item.dart';
 import '../../../../../core/helpers/spacing.dart';
 import '../../../../../core/routing/routes.dart';
 import '../../../../../core/theming/colors.dart';
 import '../../../../../core/theming/styles.dart';
 import '../../../../../core/widgets/custom_icon_button.dart';
-import '../../../../../core/widgets/show_toast.dart';
 import '../../data/models/category_details_model.dart';
 import '../../logic/cubit/customer_cubit.dart';
 import '../../logic/cubit/customer_states.dart';
@@ -25,13 +24,13 @@ class CategoriesDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<CustomerCubit, CustomerStates>(
       listener: (context, state) {
-        if (state is CustomerAddToCartState) {
-          showToast(
-            message:
-                'Added Successfully\nGo to your cart to complete check out',
-            state: TostStates.SUCCESS,
-          );
-        }
+        // if (state is CustomerAddToCartState) {
+        //   showToast(
+        //     message:
+        //         'Added Successfully\nGo to your cart to complete check out',
+        //     state: TostStates.SUCCESS,
+        //   );
+        // }
 
         if (state is GetProductDetailsSuccessState) {
           Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -73,19 +72,11 @@ class CategoriesDetailsScreen extends StatelessWidget {
                 leading: customIconButton(
                   toolTip: 'back',
                   onPressed: () {
-                    // Navigator.of(context).pop();
                     context.pop();
                   },
                   icon: Icons.arrow_back,
                   color: ColorManager.mainOrange,
                 ),
-                actions: [
-                  customIconButton(
-                      onPressed: () {},
-                      icon: Icons.more_vert,
-                      color: ColorManager.mainOrange,
-                      toolTip: 'more'),
-                ],
                 centerTitle: true,
                 expandedHeight: 70,
                 toolbarHeight: 60,
@@ -111,7 +102,7 @@ class CategoriesDetailsScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      verticalSpace(15),
+                      verticalSpace(20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -144,43 +135,53 @@ class CategoriesDetailsScreen extends StatelessWidget {
                                         ),
                                     ],
                                   ),
-                                  verticalSpace(20),
+                                  // verticalSpace(0),
                                   if (cubit.categoryDetails != null &&
                                       cubit.categoryDetails!.data != null &&
                                       cubit.categoryDetails!.data!.products !=
                                           null)
-                                    GridView.count(
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      crossAxisCount: 2,
-                                      crossAxisSpacing: 10,
-                                      mainAxisSpacing: 10,
-                                      childAspectRatio:
-                                          1 / 1.4, //width / height
-                                      children: List.generate(
-                                        cubit.categoryDetails!.data!.products!
-                                            .length,
-                                        (index) => InkWell(
-                                          onTap: () {
-                                            if (cubit.categoryDetails != null &&
-                                                cubit.categoryDetails!.data !=
-                                                    null &&
+                                    Padding(
+                                      padding: EdgeInsets.only(bottom: 20.0.h),
+                                      child: GridView.count(
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: 10,
+                                        mainAxisSpacing: 10,
+                                        childAspectRatio:
+                                            1 / 1.4, 
+                                        children: List.generate(
+                                          cubit.categoryDetails!.data!.products!
+                                              .length,
+                                          (index) => InkWell(
+                                            onTap: () {
+                                              if (cubit.categoryDetails !=
+                                                      null &&
+                                                  cubit.categoryDetails!.data !=
+                                                      null &&
+                                                  cubit.categoryDetails!.data!
+                                                          .products !=
+                                                      null &&
+                                                  index <
+                                                      cubit
+                                                          .categoryDetails!
+                                                          .data!
+                                                          .products!
+                                                          .length) {
+                                                cubit.getProductDetails(
+                                                    id: cubit
+                                                        .categoryDetails!
+                                                        .data!
+                                                        .products![index]
+                                                        .id!);
+                                              }
+                                            },
+                                            child: buildItem(
+                                                context,
                                                 cubit.categoryDetails!.data!
-                                                        .products !=
-                                                    null &&
-                                                index <
-                                                    cubit.categoryDetails!.data!
-                                                        .products!.length) {
-                                              cubit.getProductDetails(
-                                                  id: cubit.productsModel!.data!
-                                                      .products![index].id!);
-                                            }
-                                          },
-                                          child: buildProductCategory(
-                                              context,
-                                              cubit.categoryDetails!.data!
-                                                  .products![index]),
+                                                    .products![index]),
+                                          ),
                                         ),
                                       ),
                                     )

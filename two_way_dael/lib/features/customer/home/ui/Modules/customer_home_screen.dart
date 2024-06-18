@@ -109,7 +109,8 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                           radius: 25.0.w,
                           backgroundColor: Colors.white,
                           backgroundImage: image !=
-                                  'http://2waydeal.online/uploads/default.png'||image==null
+                                      'http://2waydeal.online/uploads/default.png' ||
+                                  image == null
                               ? NetworkImage(image!)
                               : null,
                           child: image !=
@@ -379,25 +380,30 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                               if (cubit.productsModel != null &&
                                   cubit.productsModel!.data != null &&
                                   cubit.productsModel!.data!.products != null)
-                                GridView.count(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 10,
-                                  mainAxisSpacing: 10,
-                                  childAspectRatio: 1 / 1.4, //width / height
-                                  children: List.generate(
-                                    cubit.productsModel!.data!.products!.length,
-                                    (index) => InkWell(
-                                      onTap: () {
-                                        cubit.getProductDetails(
-                                            id: cubit.productsModel!.data!
-                                                .products![index].id!);
-                                      },
-                                      child: buildItem(
-                                          context,
-                                          cubit.productsModel!.data!
-                                              .products![index]),
+                                Padding(
+                                  padding:  EdgeInsets.only(bottom: 20.0.h),
+                                  child: GridView.count(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 10,
+                                    mainAxisSpacing: 10,
+                                    childAspectRatio: 1 / 1.4, //width / height
+                                    children: List.generate(
+                                      cubit.productsModel!.data!.products!
+                                          .length,
+                                      (index) => InkWell(
+                                        onTap: () {
+                                          cubit.getProductDetails(
+                                              id: cubit.productsModel!.data!
+                                                  .products![index].id!);
+                                        },
+                                        child: buildItem(
+                                            context,
+                                            cubit.productsModel!.data!
+                                                .products![index]),
+                                      ),
                                     ),
                                   ),
                                 )

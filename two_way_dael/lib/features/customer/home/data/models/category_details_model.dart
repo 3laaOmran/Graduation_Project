@@ -1,3 +1,5 @@
+import 'package:two_way_dael/features/customer/home/data/models/products_model.dart';
+
 class CategoryDetails {
   int? status;
   String? message;
@@ -16,7 +18,7 @@ class Data {
   String? image;
   String? description;
   int? productsCount;
-  List<CategoryProducts>? products;
+  List<Products>? products;
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -25,28 +27,10 @@ class Data {
     description = json['description'];
     productsCount = json['products_count'];
     if (json['products'] != null) {
-      products = <CategoryProducts>[];
+      products = <Products>[];
       json['products'].forEach((v) {
-        products!.add(CategoryProducts.fromJson(v));
+        products!.add(Products.fromJson(v));
       });
     }
-  }
-}
-
-class CategoryProducts {
-  int? id;
-  String? name;
-  String? price;
-  String? discount;
-  String? netPrice;
-  List<String>? images;
-
-  CategoryProducts.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    price = json['price'];
-    discount = json['discount'];
-    netPrice = json['net_price'];
-    images = json['images'].cast<String>();
   }
 }
