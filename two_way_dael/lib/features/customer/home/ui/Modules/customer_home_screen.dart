@@ -7,11 +7,11 @@ import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/routing/routes.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_text_form_field.dart';
-import 'package:two_way_dael/features/customer/home/data/models/categoties_model.dart';
 import 'package:two_way_dael/features/customer/home/logic/cubit/customer_cubit.dart';
 import 'package:two_way_dael/features/customer/home/logic/cubit/customer_states.dart';
 import 'package:two_way_dael/features/customer/home/ui/Modules/categories_details_screen.dart';
 import 'package:two_way_dael/features/customer/home/ui/Modules/food_details.dart';
+import 'package:two_way_dael/features/customer/home/ui/widgets/build_category_item.dart';
 import 'package:two_way_dael/features/customer/home/ui/widgets/build_food_item.dart';
 import 'package:two_way_dael/features/customer/home/ui/widgets/home_skelton_loading.dart';
 
@@ -108,16 +108,18 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                         child: CircleAvatar(
                           radius: 25.0.w,
                           backgroundColor: Colors.white,
-                          backgroundImage: image! ==
+                          backgroundImage: image !=
+                                  'http://2waydeal.online/uploads/default.png'||image==null
+                              ? NetworkImage(image!)
+                              : null,
+                          child: image !=
                                   'http://2waydeal.online/uploads/default.png'
-                              ? Image.asset(
-                                  'assets/images/two_way_deal_icon.png',
+                              ? null
+                              : const Image(
+                                  image: AssetImage(
+                                      'assets/images/two_way_deal_icon.png'),
                                   fit: BoxFit.cover,
-                                ).image
-                              : Image.network(
-                                  image,
-                                  fit: BoxFit.cover,
-                                ).image,
+                                ),
                         ),
                       ),
                       horizontalSpace(10),
@@ -437,28 +439,4 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
       },
     );
   }
-
-  Widget buildCatItem(BuildContext context, CategoryData data) => Container(
-        width: 53.0,
-        height: 23.0,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-          border: Border.all(
-            color: ColorManager.mainOrange,
-            width: 1.3,
-          ),
-        ),
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        child: Center(
-          child: Text(
-            '${data.name}',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 10.0,
-                  color: ColorManager.mainOrange,
-                ),
-          ),
-        ),
-      );
 }

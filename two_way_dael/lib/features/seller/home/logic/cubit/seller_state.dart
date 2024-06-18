@@ -21,6 +21,21 @@ class GetNotificationDetailsErrorState extends SellerStates {
   GetNotificationDetailsErrorState(this.error);
 }
 
+class GetCategoriesLoadingState extends SellerStates {}
+
+class GetCategoriesSuccessState extends SellerStates {}
+
+class GetCategoriesErrorState extends SellerStates {
+  final String error; 
+
+  GetCategoriesErrorState(this.error);
+}
+
+class CategorySelectedState extends SellerStates {
+  final int selectedCategoryId;
+  CategorySelectedState(this.selectedCategoryId);
+}
+
 class SellerNotificationsState extends SellerStates {}
 
 class SellerDeleteNotificationsState extends SellerStates {}

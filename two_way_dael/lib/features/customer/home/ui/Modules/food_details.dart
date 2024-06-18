@@ -138,6 +138,17 @@ class _FoodDetailsState extends State<FoodDetails> {
                                   'assets/images/no_product_image.png',
                                   fit: BoxFit.cover,
                                 ),
+                          widget.product.images!.isNotEmpty &&
+                                  widget.product.images![2] !=
+                                      'http://2waydeal.online/uploads/default.png'
+                              ? Image.network(
+                                  widget.product.images![2],
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.asset(
+                                  'assets/images/no_product_image.png',
+                                  fit: BoxFit.cover,
+                                ),
                         ],
                         options: CarouselOptions(
                           height: 380.0.h,
@@ -241,7 +252,7 @@ class _FoodDetailsState extends State<FoodDetails> {
             children: [
               CircleAvatar(
                 radius: 40,
-                backgroundImage: widget.product.store!.image == null
+                backgroundImage: widget.product.store!.image != null
                     ? const AssetImage('assets/images/default_profile.png')
                         as ImageProvider
                     : NetworkImage(widget.product.store!.image!),

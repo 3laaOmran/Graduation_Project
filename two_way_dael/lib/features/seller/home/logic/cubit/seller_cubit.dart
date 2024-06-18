@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:two_way_dael/core/constants/constants.dart';
 import 'package:two_way_dael/core/networking/end_points.dart';
+import 'package:two_way_dael/features/customer/home/data/models/categoties_model.dart';
 import 'package:two_way_dael/features/seller/home/data/models/Seller_products_model.dart';
 import 'package:two_way_dael/features/seller/home/data/models/seler_product_details.dart';
 import 'package:two_way_dael/features/seller/home/data/models/seller_data_model.dart';
@@ -69,7 +70,7 @@ class SellerCubit extends Cubit<SellerStates> {
   var confirmPasswordController = TextEditingController();
   final changePasswordFormKey = GlobalKey<FormState>();
 
-   IconData newSuffixIcon = Icons.visibility;
+  IconData newSuffixIcon = Icons.visibility;
   bool newIsObsecure = true;
   void changeNewPasswordVisibility() {
     newIsObsecure = !newIsObsecure;
@@ -93,7 +94,6 @@ class SellerCubit extends Cubit<SellerStates> {
         confirmIsObsecure ? Icons.visibility : Icons.visibility_off;
     emit(ChaneIconVisibilityState());
   }
-
 
   void clearControllers() {
     nameController.clear();
@@ -131,7 +131,7 @@ class SellerCubit extends Cubit<SellerStates> {
       emit(GetSellerDataErrorState(error.toString()));
     });
   }
-  
+
   SellerUpdatePasswordModel? sellerUpdatePasswordModel;
   void updatePassword({
     required String oldPassword,
@@ -237,6 +237,36 @@ class SellerCubit extends Cubit<SellerStates> {
     });
   }
 
+  List<DropdownMenuItem<String>>? categoriesList = [];
+  CategoriesModel? categoriesModel;
+  void getCategories() {
+    emit(GetCategoriesLoadingState());
+    DioHelper.getData(url: CATEGORIES).then((value) {
+      categoriesModel = CategoriesModel.fromJson(value.data);
+      if (categoriesModel?.data != null) {
+        for (var i = 0; i < categoriesModel!.data!.length; i++) {
+          categoriesList!.add(
+            DropdownMenuItem(
+              value: '${categoriesModel!.data![i].id}',
+              child: Text('${categoriesModel!.data![i].name}'),
+            ),
+          );
+        }
+      }
+      emit(GetCategoriesSuccessState());
+    }).catchError((error) {
+      emit(GetCategoriesErrorState(error.toString()));
+    });
+  }
+
+   int? selectedCategoryId;
+
+  void selectCategory(int id) {
+    selectedCategoryId = id;
+    emit(CategorySelectedState(selectedCategoryId!));
+  }
+
+
   void markNotificationAsRead(int index) {
     sellerNotifications[index].isNew = false;
     sortNotifications();
@@ -325,16 +355,6 @@ class SellerCubit extends Cubit<SellerStates> {
   }) {
     final formattedExpiryDate = DateFormat('yyyy-MM-dd').format(expiryDate);
     final formattedAvailableFor = DateFormat('yyyy-MM-dd').format(availableFor);
-
-    debugPrint('Sending Data to Server:');
-    debugPrint('Category ID: $categoryId');
-    debugPrint('Price: $price');
-    debugPrint('Discount: $discount');
-    debugPrint('Name: $name');
-    debugPrint('Description: $description');
-    debugPrint('Expiry Date: $formattedExpiryDate');
-    debugPrint('Available For: $formattedAvailableFor');
-    debugPrint('Quantity: $quantity');
 
     emit(SellerAddProductLoadingState());
 

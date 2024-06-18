@@ -9,7 +9,6 @@ import 'package:two_way_dael/features/customer/home/logic/cubit/customer_states.
 import 'package:two_way_dael/features/customer/home/ui/widgets/account_settings.dart';
 import 'package:two_way_dael/features/customer/home/ui/widgets/change_profile_photo.dart';
 import 'package:two_way_dael/features/customer/home/ui/widgets/edit_info.dart';
-import 'package:two_way_dael/features/customer/home/ui/widgets/profile_skelton_loading.dart';
 
 import '../../../../../core/theming/colors.dart';
 import '../../../../../core/widgets/custom_icon_button.dart';
@@ -206,7 +205,11 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                   ],
                 ),
               )
-            : const ProfileSkeltonLoading();
+            : const Center(
+                child: CircularProgressIndicator(
+                  color: ColorManager.mainOrange,
+                ),
+              );
       },
     );
   }

@@ -13,8 +13,8 @@ import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/core/widgets/custom_text_form_field.dart';
 import 'package:two_way_dael/core/widgets/resuable_text.dart';
 import 'package:two_way_dael/core/widgets/show_toast.dart';
+import 'package:two_way_dael/features/customer/home/ui/widgets/build_category_item.dart';
 import 'package:two_way_dael/features/seller/home/logic/cubit/seller_cubit.dart';
-import '../../../../customer/home/ui/widgets/build_ctegory_item.dart';
 
 class AddProduct extends StatefulWidget {
   const AddProduct({super.key});
@@ -28,7 +28,7 @@ class _AddProductState extends State<AddProduct> {
   File? imagePick2;
   File? imagePick3;
   final ImagePicker picker = ImagePicker();
-
+  int? categoryId;
   // ignore: unused_field
   uploadImagefromCameraorGallary(ImageSource source, int numberImage) async {
     var pickedimage = await picker.pickImage(source: source);
@@ -73,7 +73,6 @@ class _AddProductState extends State<AddProduct> {
     return BlocConsumer<SellerCubit, SellerStates>(
       listener: (context, state) {
         if (state is SellerAddProductSuccessState) {
-          // SellerCubit.get(context).getSellerProducts();
           context.pop();
           SellerCubit.get(context).clearControllers();
           showToast(
@@ -84,6 +83,7 @@ class _AddProductState extends State<AddProduct> {
       },
       builder: (context, state) {
         var cubit = SellerCubit.get(context);
+
         return Scaffold(
           backgroundColor: ColorManager.mainOrange,
           appBar: AppBar(
@@ -246,27 +246,39 @@ class _AddProductState extends State<AddProduct> {
                                     scrollDirection: Axis.horizontal,
                                     child: SizedBox(
                                       height: 25,
-                                      child: Row(
-                                        children: [
-                                          const BuildCategoryItem(text: 'Food'),
-                                          horizontalSpace(10),
-                                          const BuildCategoryItem(
-                                              text: 'Drink'),
-                                          horizontalSpace(10),
-                                          const BuildCategoryItem(text: 'Soup'),
-                                          horizontalSpace(10),
-                                          const BuildCategoryItem(
-                                              text: 'Pizza'),
-                                          horizontalSpace(10),
-                                          const BuildCategoryItem(
-                                              text: 'Burger'),
-                                          horizontalSpace(10),
-                                          const BuildCategoryItem(text: 'Soda'),
-                                          horizontalSpace(10),
-                                          const BuildCategoryItem(
-                                              text: 'Others'),
-                                          horizontalSpace(10),
-                                        ],
+                                      child: ListView.separated(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        itemBuilder: (context, index) {
+                                          final categoriesModel =
+                                              cubit.categoriesModel;
+                                          if (categoriesModel != null &&
+                                              categoriesModel.data != null &&
+                                              categoriesModel.data!.length >
+                                                  index) {
+                                            final category =
+                                                categoriesModel.data![index];
+                                            final isSelected =
+                                                cubit.selectedCategoryId ==
+                                                    category.id;
+                                            return InkWell(
+                                              onTap: () {
+                                                cubit.selectCategory(
+                                                    category.id!);
+                                                categoryId = category.id!;
+                                              },
+                                              child: buildCatItem(
+                                                  context, category,
+                                                  isSelected: isSelected),
+                                            );
+                                          }
+                                          return const SizedBox.shrink();
+                                        },
+                                        separatorBuilder: (context, index) =>
+                                            horizontalSpace(10),
+                                        itemCount: cubit.categoriesModel?.data
+                                                ?.length ??
+                                            0,
                                       ),
                                     ),
                                   ),
@@ -478,6 +490,11 @@ class _AddProductState extends State<AddProduct> {
                                         );
                                         return;
                                       }
+                                      if (categoryId == null) {
+                                        showToast(
+                                            message: 'Please Choose Category',
+                                            state: TostStates.ERROR);
+                                      }
                                       try {
                                         double price = double.parse(
                                             cubit.addpriceController.text);
@@ -499,7 +516,7 @@ class _AddProductState extends State<AddProduct> {
                                             if (imagePick2 != null) imagePick2!,
                                             if (imagePick3 != null) imagePick3!,
                                           ],
-                                          categoryId: 1, // Adjust as necessary
+                                          categoryId: categoryId!,
                                           price: price,
                                           discount: discount,
                                           name: cubit

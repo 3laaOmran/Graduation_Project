@@ -9,9 +9,12 @@ import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/core/widgets/custom_icon_button.dart';
+import 'package:two_way_dael/core/widgets/custom_text_form_field.dart';
 import 'package:two_way_dael/core/widgets/resuable_text.dart';
+import 'package:two_way_dael/core/widgets/show_toast.dart';
 import 'package:two_way_dael/features/seller/home/logic/cubit/seller_cubit.dart';
 import 'package:two_way_dael/features/seller/home/ui/widgets/build_seller_product_item.dart';
+import 'package:two_way_dael/features/seller/home/ui/widgets/seller_home_skelton_loading.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -27,11 +30,7 @@ class HomeScreen extends StatelessWidget {
         var model = cubit.sellerDataModel;
 
         if (model == null || model.data == null) {
-          return const Center(
-            child: CircularProgressIndicator(
-              color: ColorManager.mainOrange,
-            ),
-          );
+          return const SellerHomeSkeltonLoading();
         }
 
         var name = model.data!.name;
@@ -56,87 +55,134 @@ class HomeScreen extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.only(right: 10.w),
                       child: CircleAvatar(
-                        radius: 30.0,
-                        backgroundImage: image !=
-                                'http://2waydeal.online/uploads/default.png'
-                            ? NetworkImage(
-                                image!,
-                              )
-                            : const AssetImage(
-                                    'assets/images/default_profile.png')
-                                as ImageProvider,
-                        backgroundColor: Colors.white,
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      cubit.changeBottomNav(cubit.currentIndex + 1);
-                      if (cubit.currentIndex != 1) {
-                        cubit.currentIndex = 2;
-                      }
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: 190.w,
-                          child: Text(
-                            name ?? 'Welcome',
-                            style: TextStyles.font17BlackBold,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                          radius: 30.0.w,
+                          backgroundColor: Colors.white,
+                          backgroundImage: image !=
+                                  'http://2waydeal.online/uploads/default.png'||image==null
+                              ? NetworkImage(image!)
+                              : null,
+                          child: image !=
+                                  'http://2waydeal.online/uploads/default.png'
+                              ? null
+                              : const Image(
+                                  image: AssetImage(
+                                      'assets/images/two_way_deal_icon.png'),
+                                  fit: BoxFit.cover,
+                                ),
                         ),
-                        Row(
-                          children: [
-                            RatingBarIndicator(
-                              rating: rate,
-                              itemCount: 5,
-                              itemSize: 20.0,
-                              itemBuilder: (context, _) => const Icon(
-                                Icons.star,
-                                color: ColorManager.mainOrange,
-                              ),
-                            ),
-                            horizontalSpace(5),
-                            Text(
-                              '$rate Stars',
-                              style: TextStyles.font13GreyBold,
-                            ),
-                          ],
-                        ),
-                      ],
+                      // child: CircleAvatar(
+                      //   radius: 30.0,
+                      //   backgroundImage: image !=
+                      //           'http://2waydeal.online/uploads/default.png'
+                      //       ? NetworkImage(
+                      //           image!,
+                      //         )
+                      //       : const AssetImage(
+                      //               'assets/images/default_profile.png')
+                      //           as ImageProvider,
+                      //   backgroundColor: Colors.white,
+                      // ),
                     ),
                   ),
                   Expanded(
-                    child: Stack(
-                      alignment: AlignmentDirectional.topEnd,
-                      children: [
-                        customIconButton(
-                          onPressed: () {
-                            context.pushNamed(Routes.sellerNotificationsScreen);
-                          },
-                          icon: Icons.notifications,
-                          toolTip: 'Notifications',
-                          size: 30.0,
-                        ),
-                        Container(
-                          padding: EdgeInsetsDirectional.only(
-                            top: 12.0.h,
-                            end: 12.0.w,
-                          ),
-                          child: const CircleAvatar(
-                            radius: 4.5,
-                            backgroundColor: Colors.white,
-                            child: CircleAvatar(
-                              radius: 3.5,
-                              backgroundColor: ColorManager.mainOrange,
+                    child: InkWell(
+                      onTap: () {
+                        cubit.changeBottomNav(cubit.currentIndex + 1);
+                        if (cubit.currentIndex != 1) {
+                          cubit.currentIndex = 2;
+                        }
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            // width: 180.w,
+                            child: Text(
+                              name ?? 'Welcome',
+                              style: TextStyles.font17BlackBold,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                        ),
-                      ],
+                          Row(
+                            children: [
+                              RatingBarIndicator(
+                                rating: rate,
+                                itemCount: 5,
+                                itemSize: 20.0,
+                                itemBuilder: (context, _) => const Icon(
+                                  Icons.star,
+                                  color: ColorManager.mainOrange,
+                                ),
+                              ),
+                              horizontalSpace(5),
+                              Text(
+                                '$rate Stars',
+                                style: TextStyles.font13GreyBold,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
+                  ),
+                  Row(
+                    children: [
+                      Stack(
+                        alignment: AlignmentDirectional.topEnd,
+                        children: [
+                          customIconButton(
+                              onPressed: () {
+                                context.pushNamed(Routes.sellerNewOrdersScreen);
+                              },
+                              icon: Icons.fastfood,
+                              toolTip: 'New Orders',
+                              size: 30.0),
+                          Container(
+                            padding: EdgeInsetsDirectional.only(
+                              top: 7.0.h,
+                              end: 7.0.w,
+                            ),
+                            child: const CircleAvatar(
+                              radius: 4.5,
+                              backgroundColor: Colors.white,
+                              child: CircleAvatar(
+                                radius: 3.5,
+                                backgroundColor: ColorManager.mainOrange,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Stack(
+                        alignment: AlignmentDirectional.topEnd,
+                        children: [
+                          customIconButton(
+                            onPressed: () {
+                              context
+                                  .pushNamed(Routes.sellerNotificationsScreen);
+                            },
+                            icon: Icons.notifications,
+                            toolTip: 'Notifications',
+                            size: 30.0,
+                          ),
+                          Container(
+                            padding: EdgeInsetsDirectional.only(
+                              top: 12.0.h,
+                              end: 12.0.w,
+                            ),
+                            child: const CircleAvatar(
+                              radius: 4.5,
+                              backgroundColor: Colors.white,
+                              child: CircleAvatar(
+                                radius: 3.5,
+                                backgroundColor: ColorManager.mainOrange,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -203,7 +249,90 @@ class HomeScreen extends StatelessWidget {
                                     buttonText: 'Withdraw',
                                     textStyle: TextStyles.font17MainOrangeBold
                                         .copyWith(fontSize: 15),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          backgroundColor: Colors.white,
+                                          title: Center(
+                                              child: Text(
+                                            'Withdraw Request',
+                                            style: TextStyles
+                                                .font28MainOrangeBold
+                                                .copyWith(
+                                              fontSize: 20,
+                                            ),
+                                          )),
+                                          content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Choose your withdrawal method',
+                                                style:
+                                                    TextStyles.font14BlackBold,
+                                              ),
+                                              verticalSpace(15),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Image.asset(
+                                                    'assets/images/bank_ahly.png',
+                                                    height: 50,
+                                                    width: 50,
+                                                  ),
+                                                  horizontalSpace(15),
+                                                  Image.asset(
+                                                    'assets/images/MisrElkhair.png',
+                                                    height: 50,
+                                                    width: 50,
+                                                  ),
+                                                ],
+                                              ),
+                                              verticalSpace(15),
+                                              Text(
+                                                'Enter amount',
+                                                style:
+                                                    TextStyles.font14BlackBold,
+                                              ),
+                                              verticalSpace(15),
+                                              const CustomTextFormField(
+                                                isObsecureText: false,
+                                                keyboardType:
+                                                    TextInputType.number,
+                                                hintText: 'Enter amount',
+                                              ),
+                                              verticalSpace(20),
+                                            ],
+                                          ),
+                                          actions: [
+                                            AppTextButton(
+                                              buttonText: 'Close',
+                                              textStyle: TextStyles.font12White,
+                                              onPressed: () {
+                                                context.pop();
+                                              },
+                                              buttonWidth: 80,
+                                              buttonHeight: 15,
+                                            ),
+                                            AppTextButton(
+                                              buttonText: 'Send',
+                                              textStyle: TextStyles.font12White,
+                                              onPressed: () {
+                                                showToast(
+                                                    message:
+                                                        'Request Sent Successfully',
+                                                    state: TostStates.SUCCESS);
+                                              },
+                                              buttonWidth: 80,
+                                              buttonHeight: 15,
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ],
                               ),

@@ -27,7 +27,10 @@ class TwoWayDealApp extends StatelessWidget {
                 ..getUserData(),
             ),
             BlocProvider(
-              create: (context) => SellerCubit()..getNotifiCations()..getSellerData(),
+              create: (context) => SellerCubit()
+                ..getCategories()
+                ..getNotifiCations()
+                ..getSellerData(),
             ),
           ],
           child: MaterialApp(

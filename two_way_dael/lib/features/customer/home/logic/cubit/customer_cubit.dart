@@ -405,30 +405,6 @@ class CustomerCubit extends Cubit<CustomerStates> {
     });
   }
 
-  // void updateUserData({
-  //   required String name,
-  //   required String email,
-  //   String? phone,
-  // }) {
-  //   emit(CustomerUpdateProfileLoadingState());
-  //   DioHelper.updateData(
-  //     url: UPDATE,
-  //     token: token,
-  //     data: {
-  //       'name': name,
-  //       'email': email,
-  //       'phone': phone,
-  //     },
-  //   ).then((value) {
-  //     userModel = LoginModel.fromJson(value.data);
-  //     // debugPrint(userModel!.data!.email);
-  //     emit(CustomerUpdateProfileSuccessState(userModel!));
-  //   }).catchError((error) {
-  //     debugPrint(error.toString());
-  //     emit(CustomerUpdateProfileErrorState());
-  //   });
-  // }
-
   final formKey = GlobalKey<FormState>();
   final changePasswordFormKey = GlobalKey<FormState>();
   var nameController = TextEditingController();

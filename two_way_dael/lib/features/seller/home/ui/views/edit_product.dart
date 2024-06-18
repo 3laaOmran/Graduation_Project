@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,9 +14,9 @@ import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/core/widgets/custom_text_form_field.dart';
 import 'package:two_way_dael/core/widgets/resuable_text.dart';
 import 'package:two_way_dael/core/widgets/show_toast.dart';
+import 'package:two_way_dael/features/customer/home/ui/widgets/build_category_item.dart';
 import 'package:two_way_dael/features/seller/home/data/models/seler_product_details.dart';
 import 'package:two_way_dael/features/seller/home/logic/cubit/seller_cubit.dart';
-import '../../../../customer/home/ui/widgets/build_ctegory_item.dart';
 
 class EditProduct extends StatefulWidget {
   final SellerProductDetails product;
@@ -31,21 +32,6 @@ class _EditProductState extends State<EditProduct> {
   File? imagePick2;
   File? imagePick3;
   final ImagePicker picker = ImagePicker();
-
-  @override
-  void initState() {
-    super.initState();
-    final cubit = SellerCubit.get(context);
-    cubit.productNameController.text = widget.product.data!.name ?? '';
-    cubit.productDescriptionController.text =
-        widget.product.data!.description ?? '';
-    cubit.priceController.text = widget.product.data!.price.toString();
-    cubit.discountController.text = widget.product.data!.discount.toString();
-    cubit.expirydateController.text = widget.product.data!.expiryDate ?? '';
-    cubit.quantityController.text =
-        widget.product.data!.availableQuantity.toString();
-    // cubit.availableForController.text = widget.product.data!.availableFor ?? '';
-  }
 
   Future<void> uploadImageFromCameraOrGallery(
       ImageSource source, int numberImage) async {
@@ -95,18 +81,34 @@ class _EditProductState extends State<EditProduct> {
     );
   }
 
+  int? categoryId;
+  @override
+  void initState() {
+    super.initState();
+    final cubit = SellerCubit.get(context);
+    cubit.productNameController.text = widget.product.data!.name ?? '';
+    cubit.productDescriptionController.text =
+        widget.product.data!.description ?? '';
+    cubit.priceController.text = widget.product.data!.price.toString();
+    cubit.discountController.text = widget.product.data!.discount.toString();
+    cubit.expirydateController.text = widget.product.data!.expiryDate ?? '';
+    cubit.quantityController.text =
+        widget.product.data!.availableQuantity.toString();
+    categoryId = widget.product.data!.category!.id;
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SellerCubit, SellerStates>(
       listener: (context, state) {
         if (state is EditSellerProductsSuccessState) {
-          // SellerCubit.get(context).getSellerProducts();
           context.pop();
           SellerCubit.get(context).clearControllers();
           SellerCubit.get(context).getSellerProducts();
           showToast(
               message: 'Product Edited Successfully',
               state: TostStates.SUCCESS);
+          categoryId = widget.product.data!.id;
         } else if (state is EditSellerProductsErrorState) {
           showToast(message: 'could not edit product', state: TostStates.ERROR);
         }
@@ -158,31 +160,21 @@ class _EditProductState extends State<EditProduct> {
                           children: [
                             buildPickImage(
                               onPressed: () => openBottomSheet(context, 1),
-                              image:imagePick1 == null
-                                    ? const DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/image_picker_background.png'),
-                                      )
-                                    : DecorationImage(
-                                        image: FileImage(imagePick1!),
-                                        fit: BoxFit.cover,
-                                      ),
-                              //  imagePick1 == null
-                              //     ? (widget.product.data!.images != null &&
-                              //             widget
-                              //                 .product.data!.images!.isNotEmpty
-                              //         ? DecorationImage(
-                              //             image: NetworkImage(
-                              //                 widget.product.data!.images![0]),
-                              //             fit: BoxFit.cover)
-                              //         : const DecorationImage(
-                              //             image: AssetImage(
-                              //                 'assets/images/image_picker_background.png'),
-                              //           ))
-                              //     : DecorationImage(
-                              //         image: FileImage(imagePick1!),
-                              //         fit: BoxFit.cover
-                              // ),
+                              image: imagePick1 == null
+                                  ? (widget.product.data!.images != null &&
+                                          widget
+                                              .product.data!.images!.isNotEmpty
+                                      ? DecorationImage(
+                                          image: NetworkImage(
+                                              widget.product.data!.images![0]),
+                                          fit: BoxFit.cover)
+                                      : const DecorationImage(
+                                          image: AssetImage(
+                                              'assets/images/image_picker_background.png'),
+                                        ))
+                                  : DecorationImage(
+                                      image: FileImage(imagePick1!),
+                                      fit: BoxFit.cover),
                             ),
                             Column(
                               children: [
@@ -191,60 +183,42 @@ class _EditProductState extends State<EditProduct> {
                                   height: 95.h,
                                   onPressed: () => openBottomSheet(context, 2),
                                   image: imagePick2 == null
-                                    ? const DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/image_picker_background.png'),
-                                      )
-                                    : DecorationImage(
-                                        image: FileImage(imagePick2!),
-                                        fit: BoxFit.cover,
-                                      ),
-                                  // imagePick2 == null
-                                  //     ? (widget.product.data!.images != null &&
-                                  //             widget.product.data!.images!
-                                  //                     .length >
-                                  //                 1
-                                  //         ? DecorationImage(
-                                  //             image: NetworkImage(widget
-                                  //                 .product.data!.images![1]),
-                                  //             fit: BoxFit.cover)
-                                  //         : const DecorationImage(
-                                  //             image: AssetImage(
-                                  //                 'assets/images/image_picker_background.png'),
-                                  //           ))
-                                  //     : DecorationImage(
-                                  //         image: FileImage(imagePick2!),
-                                  //         fit: BoxFit.cover),
+                                      ? (widget.product.data!.images != null &&
+                                              widget.product.data!.images!
+                                                      .length >
+                                                  1
+                                          ? DecorationImage(
+                                              image: NetworkImage(widget
+                                                  .product.data!.images![1]),
+                                              fit: BoxFit.cover)
+                                          : const DecorationImage(
+                                              image: AssetImage(
+                                                  'assets/images/image_picker_background.png'),
+                                            ))
+                                      : DecorationImage(
+                                          image: FileImage(imagePick2!),
+                                          fit: BoxFit.cover),
                                 ),
                                 buildPickImage(
                                   width: 125.w,
                                   height: 95.h,
                                   onPressed: () => openBottomSheet(context, 3),
                                   image: imagePick3 == null
-                                    ? const DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/image_picker_background.png'),
-                                      )
-                                    : DecorationImage(
-                                        image: FileImage(imagePick3!),
-                                        fit: BoxFit.cover,
-                                      ),
-                                  // imagePick3 == null
-                                  //     ? (widget.product.data!.images != null &&
-                                  //             widget.product.data!.images!
-                                  //                     .length >
-                                  //                 2
-                                  //         ? DecorationImage(
-                                  //             image: NetworkImage(widget
-                                  //                 .product.data!.images![2]),
-                                  //             fit: BoxFit.cover)
-                                  //         : const DecorationImage(
-                                  //             image: AssetImage(
-                                  //                 'assets/images/image_picker_background.png'),
-                                  //           ))
-                                  //     : DecorationImage(
-                                  //         image: FileImage(imagePick3!),
-                                  //         fit: BoxFit.cover),
+                                      ? (widget.product.data!.images != null &&
+                                              widget.product.data!.images!
+                                                      .length >
+                                                  2
+                                          ? DecorationImage(
+                                              image: NetworkImage(widget
+                                                  .product.data!.images![2]),
+                                              fit: BoxFit.cover)
+                                          : const DecorationImage(
+                                              image: AssetImage(
+                                                  'assets/images/image_picker_background.png'),
+                                            ))
+                                      : DecorationImage(
+                                          image: FileImage(imagePick3!),
+                                          fit: BoxFit.cover),
                                 ),
                               ],
                             ),
@@ -309,27 +283,41 @@ class _EditProductState extends State<EditProduct> {
                                     scrollDirection: Axis.horizontal,
                                     child: SizedBox(
                                       height: 25,
-                                      child: Row(
-                                        children: [
-                                          const BuildCategoryItem(text: 'Food'),
-                                          horizontalSpace(10),
-                                          const BuildCategoryItem(
-                                              text: 'Drink'),
-                                          horizontalSpace(10),
-                                          const BuildCategoryItem(text: 'Soup'),
-                                          horizontalSpace(10),
-                                          const BuildCategoryItem(
-                                              text: 'Pizza'),
-                                          horizontalSpace(10),
-                                          const BuildCategoryItem(
-                                              text: 'Burger'),
-                                          horizontalSpace(10),
-                                          const BuildCategoryItem(text: 'Soda'),
-                                          horizontalSpace(10),
-                                          const BuildCategoryItem(
-                                              text: 'Others'),
-                                          horizontalSpace(10),
-                                        ],
+                                      child: ListView.separated(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        itemBuilder: (context, index) {
+                                          final categoriesModel =
+                                              cubit.categoriesModel;
+                                          if (categoriesModel != null &&
+                                              categoriesModel.data != null &&
+                                              categoriesModel.data!.length >
+                                                  index) {
+                                            final category =
+                                                categoriesModel.data![index];
+                                            bool isSelected =
+                                                cubit.selectedCategoryId ==
+                                                        category.id ||
+                                                    categoryId == category.id;
+
+                                            return InkWell(
+                                              onTap: () {
+                                                cubit.selectCategory(
+                                                    category.id!);
+                                                categoryId = category.id!;
+                                              },
+                                              child: buildCatItem(
+                                                  context, category,
+                                                  isSelected: isSelected),
+                                            );
+                                          }
+                                          return const SizedBox.shrink();
+                                        },
+                                        separatorBuilder: (context, index) =>
+                                            horizontalSpace(10),
+                                        itemCount: cubit.categoriesModel?.data
+                                                ?.length ??
+                                            0,
                                       ),
                                     ),
                                   ),
@@ -524,7 +512,9 @@ class _EditProductState extends State<EditProduct> {
                                 textStyle: TextStyles.font17WhiteBold,
                                 buttonText: 'Cancel',
                                 onPressed: () {
-                                  Navigator.pop(context);
+                                  categoryId =
+                                      widget.product.data!.category!.id;
+                                  context.pop();
                                 },
                               ),
                             ),
@@ -539,16 +529,42 @@ class _EditProductState extends State<EditProduct> {
                                 onPressed: () {
                                   if (cubit.editProductFormKey.currentState!
                                       .validate()) {
-                                        if (imagePick1 == null ||
+                                    if (categoryId == null) {
+                                      showToast(
+                                        message: 'Please Select Category',
+                                        state: TostStates.ERROR,
+                                      );
+                                      return;
+                                    }
+
+                                    List<File> productImages = [];
+                                    bool imagesPicked = imagePick1 != null ||
+                                        imagePick2 != null ||
+                                        imagePick3 != null;
+
+                                    // Check if any image is picked, if yes, ensure all three are picked
+                                    if (imagesPicked) {
+                                      if (imagePick1 == null ||
                                           imagePick2 == null ||
                                           imagePick3 == null) {
                                         showToast(
-                                          message:
-                                              'Please Edit All Product Images',
+                                          message: 'Please Select All Images',
                                           state: TostStates.ERROR,
                                         );
                                         return;
+                                      } else {
+                                        if (imagePick1 != null) {
+                                          productImages.add(imagePick1!);
+                                        }
+                                        if (imagePick2 != null) {
+                                          productImages.add(imagePick2!);
+                                        }
+                                        if (imagePick3 != null) {
+                                          productImages.add(imagePick3!);
+                                        }
                                       }
+                                    }
+
                                     double price = double.parse(
                                         cubit.priceController.text);
                                     double discount = double.parse(
@@ -561,22 +577,19 @@ class _EditProductState extends State<EditProduct> {
                                     DateTime availableFor =
                                         DateFormat('yyyy-MM-dd').parse(
                                             cubit.availableForController.text);
+
                                     cubit.editSellerProduct(
                                       id: widget.product.data!.id!,
                                       name: cubit.productNameController.text,
                                       description: cubit
                                           .productDescriptionController.text,
-                                      categoryId: 2,
+                                      categoryId: categoryId!,
                                       price: price,
                                       discount: discount,
                                       expiryDate: expiryDate,
                                       availableFor: availableFor,
                                       quantity: quantity,
-                                      images: [
-                                        imagePick1!,
-                                        imagePick2!,
-                                        imagePick3!,
-                                      ],
+                                      images: productImages,
                                     );
                                   }
                                 },
