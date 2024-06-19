@@ -13,6 +13,7 @@ class ProductsModel {
 class Data {
   int? productsCount;
   List<Products>? products;
+  Pagination? pagination;
 
   Data.fromJson(Map<String, dynamic> json) {
     productsCount = json['products_count'];
@@ -22,6 +23,9 @@ class Data {
         products!.add(Products.fromJson(v));
       });
     }
+    pagination = json['pagination'] != null
+        ? Pagination.fromJson(json['pagination'])
+        : null;
   }
 }
 
@@ -32,13 +36,13 @@ class Products {
   String? discount;
   String? netPrice;
   List<String>? images;
-  int quantity = 1; // Add this field
+  int quantity = 1; 
 
   Products({
     this.name,
     this.price,
     this.images,
-    this.quantity = 1, // Default quantity to 1
+    this.quantity = 1, 
   });
   Products.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -58,20 +62,26 @@ class Products {
   }
 }
 
-// class Products {
-//   int? id;
-//   String? name;
-//   double? price;
-//   String? discount;
-//   String? netPrice;
-//   List<String>? images;
+class Pagination {
+  String? nextPageUrl;
+  String? prevPageUrl;
+  String? lastPageUrl;
+  String? firstPageUrl;
+  int? perPage;
+  int? currentPage;
+  int? lastPage;
+  int? from;
+  int? to;
 
-//   Products.fromJson(Map<String, dynamic> json) {
-//     id = json['id'];
-//     name = json['name'];
-//     price = json['price'];
-//     discount = json['discount'];
-//     netPrice = json['net_price'];
-//     images = json['images'] != null ? json['images'].cast<String>() : [];
-//   }
-// }
+  Pagination.fromJson(Map<String, dynamic> json) {
+    nextPageUrl = json['next_page_url'];
+    prevPageUrl = json['prev_page_url'];
+    lastPageUrl = json['last_page_url'];
+    firstPageUrl = json['first_page_url'];
+    perPage = json['per_page'];
+    currentPage = json['current_page'];
+    lastPage = json['last_page'];
+    from = json['from'];
+    to = json['to'];
+  }
+}

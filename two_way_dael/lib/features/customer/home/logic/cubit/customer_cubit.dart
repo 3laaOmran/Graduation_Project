@@ -147,11 +147,13 @@ class CustomerCubit extends Cubit<CustomerStates> {
     saveCart();
   }
 
+  int selectedPageNumber=1;
   ProductsModel? productsModel;
-  void getProducts() {
+  void getProducts({int? page}) {
     emit(CustomerGetProductsLoadingState());
     DioHelper.getData(
       url: PRODUCTS,
+      query: {'page': page},
     ).then((value) {
       productsModel = ProductsModel.fromJson(value.data);
       // print(value.data);

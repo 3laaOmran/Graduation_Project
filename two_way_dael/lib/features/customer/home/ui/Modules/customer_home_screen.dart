@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:number_pagination/number_pagination.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/routing/routes.dart';
@@ -379,32 +380,65 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                               verticalSpace(15),
                               if (cubit.productsModel != null &&
                                   cubit.productsModel!.data != null &&
-                                  cubit.productsModel!.data!.products != null)
+                                  cubit.productsModel!.data!.products != null &&
+                                  state is! CustomerGetProductsLoadingState)
                                 Padding(
-                                  padding:  EdgeInsets.only(bottom: 20.0.h),
-                                  child: GridView.count(
-                                    shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: 10,
-                                    mainAxisSpacing: 10,
-                                    childAspectRatio: 1 / 1.4, //width / height
-                                    children: List.generate(
-                                      cubit.productsModel!.data!.products!
-                                          .length,
-                                      (index) => InkWell(
-                                        onTap: () {
-                                          cubit.getProductDetails(
-                                              id: cubit.productsModel!.data!
-                                                  .products![index].id!);
-                                        },
-                                        child: buildItem(
-                                            context,
-                                            cubit.productsModel!.data!
-                                                .products![index]),
+                                  padding: EdgeInsets.only(bottom: 100.0.h),
+                                  child: Column(
+                                    children: [
+                                      GridView.count(
+                                        padding:
+                                            EdgeInsets.only(bottom: 20.0.h),
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: 10,
+                                        mainAxisSpacing: 10,
+                                        childAspectRatio: 1 / 1.4,
+                                        children: List.generate(
+                                          cubit.productsModel!.data!.products!
+                                              .length,
+                                          (index) => InkWell(
+                                            onTap: () {
+                                              cubit.getProductDetails(
+                                                  id: cubit.productsModel!.data!
+                                                      .products![index].id!);
+                                            },
+                                            child: buildItem(
+                                                context,
+                                                cubit.productsModel!.data!
+                                                    .products![index]),
+                                          ),
+                                        ),
                                       ),
-                                    ),
+                                      cubit.productsModel!.data!
+                                                  .productsCount! >
+                                              20
+                                          ? NumberPagination(
+                                              groupSpacing: 5,
+                                              threshold: 15,
+                                              buttonRadius: 20,
+                                              pageInit:
+                                                  cubit.selectedPageNumber,
+                                              colorPrimary:
+                                                  ColorManager.mainOrange,
+                                              colorSub: ColorManager
+                                                  .notificationColor,
+                                              onPageChanged: (index) {
+                                                cubit.getProducts(
+                                                  page: index,
+                                                );
+                                                setState(() {
+                                                  cubit.selectedPageNumber =
+                                                      index;
+                                                });
+                                              },
+                                              pageTotal: cubit.productsModel!
+                                                  .data!.pagination!.lastPage!,
+                                            )
+                                          : Container(),
+                                    ],
                                   ),
                                 )
                               else
@@ -418,13 +452,12 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                     crossAxisCount: 2,
                                     crossAxisSpacing: 10,
                                     mainAxisSpacing: 10,
-                                    childAspectRatio: 1 / 1.4, //width / height
-
+                                    childAspectRatio: 1 / 1.4,
                                     children: List.generate(
-                                        4,
+                                        20,
                                         (index) => Container(
-                                              width: 50,
-                                              height: 100,
+                                              width: 50.w,
+                                              height: 90.h,
                                               decoration: BoxDecoration(
                                                 color: Colors.grey,
                                                 borderRadius:
