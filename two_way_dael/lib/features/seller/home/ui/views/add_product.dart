@@ -78,7 +78,7 @@ class _AddProductState extends State<AddProduct> {
           showToast(
               message: 'Product Added Successfully', state: TostStates.SUCCESS);
         } else if (state is SellerAddProductErrorState) {
-          showToast(message: 'could not add product', state: TostStates.ERROR);
+          showToast(message: state.error, state: TostStates.ERROR);
         }
       },
       builder: (context, state) {

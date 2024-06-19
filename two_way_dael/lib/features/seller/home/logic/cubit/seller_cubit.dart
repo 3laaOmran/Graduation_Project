@@ -367,12 +367,12 @@ class SellerCubit extends Cubit<SellerStates> {
       debugPrint('Response from Server: ${response.data}');
       emit(SellerAddProductSuccessState());
     }).catchError((error) {
-      if (error is DioException) {
-        debugPrint('DioError: ${error.response?.data}');
-      } else {
-        debugPrint('Unexpected Error: $error');
+      if (error is DioException && error.response?.statusCode == 422) {
+        emit(SellerAddProductErrorState(
+            error.response!.data['message']));
+      } else if (error is DioException && error.response?.statusCode == 401) {
+        emit(SellerAddProductErrorState(error.response!.data['message']));
       }
-      emit(SellerAddProductErrorState(error.toString()));
     });
   }
 

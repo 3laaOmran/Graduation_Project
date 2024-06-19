@@ -417,8 +417,8 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                               20
                                           ? NumberPagination(
                                               groupSpacing: 5,
-                                              threshold: 15,
-                                              buttonRadius: 20,
+                                              threshold: 3,
+                                              buttonRadius: 50,
                                               pageInit:
                                                   cubit.selectedPageNumber,
                                               colorPrimary:
@@ -454,7 +454,8 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                     mainAxisSpacing: 10,
                                     childAspectRatio: 1 / 1.4,
                                     children: List.generate(
-                                        20,
+                                        cubit.productsModel!.data!.products!
+                                            .length,
                                         (index) => Container(
                                               width: 50.w,
                                               height: 90.h,

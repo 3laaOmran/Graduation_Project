@@ -86,9 +86,9 @@ class SellerLoginScreen extends StatelessWidget {
                                 letterspacing: 2,
                                 fontWeight: FontWeight.bold),
                             resuableText(
-                                text: "Welcome Back \nTo Your Business",
-                                fontsize: 17.sp,
-                                fontWeight: FontWeight.w400),
+                                text: "Welcome Back To Your Business",
+                                fontsize: 19.sp,
+                                fontWeight: FontWeight.bold),
                             SizedBox(
                               height: height * 0.06,
                             ),
