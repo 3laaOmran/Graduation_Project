@@ -36,7 +36,7 @@ class _ProfileSellerScreenState extends State<ProfileSellerScreen> {
         var model = cubit.sellerDataModel;
         cubit.nameController.text = model!.data!.name!;
         var image = model.data!.image;
-        var rate = double.parse('${model.data!.rate}');
+        var rate = double.tryParse('${model.data!.rate}') ?? 0.0;
         return SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

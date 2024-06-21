@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/features/seller/home/logic/cubit/seller_cubit.dart';
@@ -30,22 +31,8 @@ class _BuildCharityItemState extends State<BuildCharityItem> {
             children: [
               Row(
                 children: [
-                  // Checkbox(
-                  //   side: const BorderSide(
-                  //     color: ColorManager.mainOrange,
-                  //     width: 2,
-                  //   ),
-                  //   activeColor: ColorManager.mainOrange,
-                  //   value: isSelected,
-                  //   onChanged: (bool? newValue) {
-                  //     setState(() {
-                  //       isSelected = newValue;
-                  //     });
-                  //   },
-                  // ),
                   SizedBox(
-                    // width: 250,
-                    height: 100,
+                    height: 100.h,
                     child: Row(
                       children: [
                         Padding(
@@ -95,7 +82,7 @@ class _BuildCharityItemState extends State<BuildCharityItem> {
                               ),
                               verticalSpace(15),
                               Text(
-                                '${widget.charityItemModel.value} egp',
+                                widget.charityItemModel.address,
                                 style: TextStyles.font15BlackRegular,
                               ),
                             ],
@@ -123,11 +110,11 @@ class _BuildCharityItemState extends State<BuildCharityItem> {
 class CharityItemModel {
   final String image;
   final String name;
-  final int value;
+  final String address;
 
   CharityItemModel({
     required this.image,
     required this.name,
-    required this.value,
+    required this.address,
   });
 }

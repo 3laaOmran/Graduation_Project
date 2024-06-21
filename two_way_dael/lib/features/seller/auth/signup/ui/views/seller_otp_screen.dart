@@ -48,7 +48,7 @@ class SellerConfirmAccount extends StatelessWidget {
         },
         builder: (context, state) {
           var cubit = SellerSignupCubit.get(context);
-          var otpController = TextEditingController();
+          
           // String? otpToken = token;
           final defaultPinTheme = PinTheme(
             width: 80,
@@ -129,7 +129,7 @@ class SellerConfirmAccount extends StatelessWidget {
                               child: Form(
                                 key: cubit.otpFormKey,
                                 child: Pinput(
-                                  controller: otpController,
+                                  controller:cubit. otpController,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'Please enter your code';
@@ -161,10 +161,10 @@ class SellerConfirmAccount extends StatelessWidget {
                                   ),
                                   onCompleted: (value) {
                                     cubit.otpVerification(
-                                        otp: otpController.text,
+                                        otp: cubit.otpController.text,
                                         token: sellerRegisterToken!,
                                       );
-                                    debugPrint(otpController.text);
+                                    debugPrint(cubit.otpController.text);
                                   },
                                 ),
                               ),
@@ -199,7 +199,7 @@ class SellerConfirmAccount extends StatelessWidget {
                                     if (cubit.otpFormKey.currentState!
                                         .validate()) {
                                       cubit.otpVerification(
-                                        otp: otpController.text,
+                                        otp: cubit.otpController.text,
                                         token: sellerRegisterToken!,
                                       );
                                     }

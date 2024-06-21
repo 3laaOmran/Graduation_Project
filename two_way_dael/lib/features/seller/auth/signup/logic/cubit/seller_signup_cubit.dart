@@ -20,6 +20,7 @@ class SellerSignupCubit extends Cubit<SellerSignupStates> {
   final formKey = GlobalKey<FormState>();
   final otpFormKey = GlobalKey<FormState>();
   final photoAndAddressFormKey = GlobalKey<FormState>();
+  var otpController = TextEditingController();
 
   var nameController = TextEditingController();
   var phoneController = TextEditingController();

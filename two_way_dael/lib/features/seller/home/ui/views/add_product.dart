@@ -432,6 +432,7 @@ class _AddProductState extends State<AddProduct> {
                                   onTap: () {
                                     debugPrint('Available for date Tapped');
                                     showDatePicker(
+                                      barrierColor: ColorManager.mainOrange,
                                       context: context,
                                       initialDate: DateTime.now(),
                                       firstDate: DateTime.now(),

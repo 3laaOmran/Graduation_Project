@@ -20,6 +20,7 @@ class Routes {
   static const String cartScreen = '/cartScreen';
   static const String customerwelcomeScreen = '/customerwelcomeScreen';
   static const String chooseAccountTypeScreen = '/chooseAccountTypeScreen';
+  static const String ordersDetailsScreen = '/ordersDetailsScreen';
   //------------------------------------------------------------------
   static const String sellerLoginScreen = '/sellerLoginScreen';
   static const String sellerSignupScreen = '/sellerSignupScreen';

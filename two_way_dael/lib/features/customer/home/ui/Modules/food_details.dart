@@ -252,10 +252,9 @@ class _FoodDetailsState extends State<FoodDetails> {
             children: [
               CircleAvatar(
                 radius: 40,
-                backgroundImage: widget.product.store!.image != null
-                    ? const AssetImage('assets/images/default_profile.png')
-                        as ImageProvider
-                    : NetworkImage(widget.product.store!.image!),
+                backgroundColor: Colors.white,
+                backgroundImage:
+                    NetworkImage(widget.product.store!.image??''),
               ),
               SizedBox(
                 width: 150.0.w,
@@ -276,7 +275,7 @@ class _FoodDetailsState extends State<FoodDetails> {
                     size: 19.0,
                   ),
                   Text(
-                    ' ${widget.product.store!.rate} (23 Reviews)',
+                    ' ${widget.product.store!.rate}',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w100,
                           color: Colors.grey[700],

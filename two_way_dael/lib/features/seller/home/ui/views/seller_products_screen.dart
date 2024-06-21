@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:two_way_dael/core/helpers/extensions.dart';
+import 'package:two_way_dael/core/helpers/spacing.dart';
+import 'package:two_way_dael/core/routing/routes.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
+import 'package:two_way_dael/core/theming/styles.dart';
+import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/core/widgets/resuable_text.dart';
 import 'package:two_way_dael/features/customer/home/ui/widgets/home_skelton_loading.dart';
 import 'package:two_way_dael/features/seller/home/logic/cubit/seller_cubit.dart';
@@ -86,28 +91,49 @@ class _SellerProductsScreenState extends State<SellerProductsScreen> {
             SliverPadding(
               padding: EdgeInsets.only(
                   bottom: 100.h, right: 20.w, left: 20.w, top: 20.h),
-              sliver: cubit.sellerProducts != null &&
-                      cubit.sellerProducts!.data != null
-                  ? SliverGrid(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        childAspectRatio: 1 / 1.4,
-                      ),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) => InkWell(
-                          onTap: () {
-                            cubit.getSellerProductDetails(
-                                id: cubit.sellerProducts!.data![index].id!);
-                          },
-                          child: BuildSellerProductItem(
-                              product: cubit.sellerProducts!.data![index]),
-                        ),
-                        childCount: cubit.sellerProducts!.data!.length,
-                      ),
-                    )
+              sliver: state is! GetSellerProductsLoadingState
+                  ? cubit.sellerProducts != null &&
+                          cubit.sellerProducts!.data != null &&
+                          cubit.sellerProducts!.data!.isNotEmpty
+                      ? SliverGrid(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            childAspectRatio: 1 / 1.4,
+                          ),
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) => InkWell(
+                              onTap: () {
+                                cubit.getSellerProductDetails(
+                                    id: cubit.sellerProducts!.data![index].id!);
+                              },
+                              child: BuildSellerProductItem(
+                                  product: cubit.sellerProducts!.data![index]),
+                            ),
+                            childCount: cubit.sellerProducts!.data!.length,
+                          ),
+                        )
+                      : SliverToBoxAdapter(
+                          child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            children: [
+                              verticalSpace(50),
+                              const Image(
+                                  image: AssetImage(
+                                      'assets/images/noproducts.png')),
+                              AppTextButton(
+                                buttonText: 'Publish New Product',
+                                textStyle: TextStyles.font17WhiteBold,
+                                onPressed: () {
+                                  context.pushNamed(Routes.sellerAddNewProduct);
+                                },
+                              ),
+                            ],
+                          ),
+                        ))
                   : SliverToBoxAdapter(
                       child: buildShimmerWidget(
                         component: GridView.count(

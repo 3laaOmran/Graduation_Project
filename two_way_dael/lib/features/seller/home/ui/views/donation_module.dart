@@ -4,9 +4,7 @@ import 'package:two_way_dael/core/helpers/extensions.dart';
 import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
-import 'package:two_way_dael/core/widgets/custom_floating_action_button.dart';
 import 'package:two_way_dael/features/seller/home/logic/cubit/seller_cubit.dart';
-import 'package:two_way_dael/features/seller/home/ui/widgets/show_bottom_sheet.dart';
 
 class SellerDonationScreen extends StatelessWidget {
   const SellerDonationScreen({super.key});
@@ -44,12 +42,6 @@ class SellerDonationScreen extends StatelessWidget {
                 ],
               ),
             ),
-            floatingActionButton: floatingactionButton(
-              text: 'Donate Now',
-              onPressed: () {
-                showBottomSheetMethod(context);
-              },
-            ),
             body: ListView.separated(
               itemCount: cubit.charities.length,
               itemBuilder: (context, index) => ListTile(
@@ -68,4 +60,3 @@ class SellerDonationScreen extends StatelessWidget {
     );
   }
 }
-

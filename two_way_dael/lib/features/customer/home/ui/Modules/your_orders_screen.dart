@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
+import 'package:two_way_dael/core/routing/routes.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/features/customer/home/ui/widgets/build_your_orders_item.dart';
@@ -33,13 +34,14 @@ class YourOrdersScreen extends StatelessWidget {
           top: 15.0,
           bottom: 10.0,
         ),
-        child: GridView.count(
-          crossAxisCount: 2,
-          crossAxisSpacing: 5,
-          mainAxisSpacing: 2,
-          childAspectRatio: 1 / 1.35, //width / height
-          children: List.generate(5, (index) => const BuildYourOrdersItem()),
-        ),
+        child: ListView.builder(
+            itemCount: 5,
+            itemBuilder: (context, index) => InkWell(
+                onTap: () {
+                  context.pushNamed(Routes.ordersDetailsScreen);
+                },
+                child: const BuildYourOrdersItem())),
+
         // child: Center(
         //     child: Column(
         //   mainAxisAlignment: MainAxisAlignment.center,

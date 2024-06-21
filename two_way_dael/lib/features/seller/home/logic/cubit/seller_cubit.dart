@@ -46,6 +46,9 @@ class SellerCubit extends Cubit<SellerStates> {
   var addressController = TextEditingController();
   var joinDateController = TextEditingController();
   var verifiedController = TextEditingController();
+  final donateFormKey = GlobalKey<FormState>();
+  var detailsController = TextEditingController();
+  var amountController = TextEditingController();
   //*--------------------------------------------
   final editProductFormKey = GlobalKey<FormState>();
   var productNameController = TextEditingController();
@@ -124,11 +127,20 @@ class SellerCubit extends Cubit<SellerStates> {
       token: sellerToken,
     ).then((value) {
       sellerDataModel = SellerDataModel.fromJson(value.data);
-      debugPrint('Imge Is :${sellerDataModel!.data!.name}');
+      debugPrint('Name Is :${sellerDataModel!.data!.name}');
       emit(GetSellerDataSuccessState(sellerDataModel!));
     }).catchError((error) {
-      debugPrint(error.toString());
-      emit(GetSellerDataErrorState(error.toString()));
+      if (error is DioException && error.response?.statusCode == 422) {
+        String errorMessage = error.response?.data['message'];
+        print('Error: $errorMessage');
+        emit(GetSellerDataErrorState(errorMessage));
+      } else if (error is DioException && error.response?.statusCode == 429) {
+        print('Unauthorized: ${error.response!.data['message']}');
+        emit(GetSellerDataErrorState(error.response!.data['message']));
+      } else {
+        debugPrint(error.toString());
+        emit(GetSellerDataErrorState(error.toString()));
+      }
     });
   }
 
@@ -368,8 +380,7 @@ class SellerCubit extends Cubit<SellerStates> {
       emit(SellerAddProductSuccessState());
     }).catchError((error) {
       if (error is DioException && error.response?.statusCode == 422) {
-        emit(SellerAddProductErrorState(
-            error.response!.data['message']));
+        emit(SellerAddProductErrorState(error.response!.data['message']));
       } else if (error is DioException && error.response?.statusCode == 401) {
         emit(SellerAddProductErrorState(error.response!.data['message']));
       }
@@ -408,42 +419,70 @@ class SellerCubit extends Cubit<SellerStates> {
       charityItemModel: CharityItemModel(
         image: 'assets/images/MisrElkhair.png',
         name: 'Misr EL-Khair',
-        value: 796,
+        address: 'Cairo, Egypt',
       ),
     ),
     BuildCharityItem(
       charityItemModel: CharityItemModel(
         image: 'assets/images/FoodBank.png',
         name: 'Egyption Food Bank ',
-        value: 152,
+        address: 'Cairo, Egypt',
       ),
     ),
     BuildCharityItem(
       charityItemModel: CharityItemModel(
         image: 'assets/images/AhlMasr.png',
         name: 'Ahl Masr Foundation',
-        value: 150,
+        address: 'Cairo, Egypt',
       ),
     ),
     BuildCharityItem(
       charityItemModel: CharityItemModel(
         image: 'assets/images/Orman.png',
         name: 'Al Orman Association',
-        value: 888,
+        address: 'Cairo, Egypt',
       ),
     ),
     BuildCharityItem(
       charityItemModel: CharityItemModel(
         image: 'assets/images/57357.png',
         name: '57357',
-        value: 888,
+        address: 'Cairo, Egypt',
       ),
     ),
     BuildCharityItem(
       charityItemModel: CharityItemModel(
         image: 'assets/images/MisrElkhair.png',
         name: 'Misr EL-Khair',
-        value: 796,
+        address: 'Cairo, Egypt',
+      ),
+    ),
+    BuildCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/FoodBank.png',
+        name: 'Egyption Food Bank ',
+        address: 'Cairo, Egypt',
+      ),
+    ),
+    BuildCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/AhlMasr.png',
+        name: 'Ahl Masr Foundation',
+        address: 'Cairo, Egypt',
+      ),
+    ),
+    BuildCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/Orman.png',
+        name: 'Al Orman Association',
+        address: 'Cairo, Egypt',
+      ),
+    ),
+    BuildCharityItem(
+      charityItemModel: CharityItemModel(
+        image: 'assets/images/57357.png',
+        name: '57357',
+        address: 'Cairo, Egypt',
       ),
     ),
   ];

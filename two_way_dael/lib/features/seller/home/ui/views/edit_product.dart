@@ -122,7 +122,8 @@ class _EditProductState extends State<EditProduct> {
             backgroundColor: ColorManager.mainOrange,
             leading: IconButton(
               onPressed: () {
-                Navigator.pop(context);
+                context.pop();
+                // cubit.clearControllers();
               },
               icon: const Icon(Icons.arrow_back, color: Colors.white),
             ),

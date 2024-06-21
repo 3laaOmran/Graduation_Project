@@ -41,7 +41,7 @@ class ConfirmAccount extends StatelessWidget {
         },
         builder: (context, state) {
           var cubit = SignupCubit.get(context);
-          var otpController = TextEditingController();
+          
           // String? otpToken = token;
           final defaultPinTheme = PinTheme(
             width: 80,
@@ -118,7 +118,7 @@ class ConfirmAccount extends StatelessWidget {
                               child: Form(
                                 key: cubit.otpFormKey,
                                 child: Pinput(
-                                  controller: otpController,
+                                  controller: cubit.otpController,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'Please enter your code';
@@ -149,9 +149,9 @@ class ConfirmAccount extends StatelessWidget {
                                     ),
                                   ),
                                   onCompleted: (value) {
-                                    debugPrint(otpController.text);
+                                    debugPrint(cubit.otpController.text);
                                     cubit.otpVerification(
-                                        otp: otpController.text,
+                                        otp: cubit.otpController.text,
                                         token: registerToken!,
                                       );
                                   },
@@ -188,7 +188,7 @@ class ConfirmAccount extends StatelessWidget {
                                     if (cubit.otpFormKey.currentState!
                                         .validate()) {
                                       cubit.otpVerification(
-                                        otp: otpController.text,
+                                        otp: cubit.otpController.text,
                                         token: registerToken!,
                                       );
                                     }
