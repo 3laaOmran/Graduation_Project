@@ -1,99 +1,85 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
-import 'package:two_way_dael/core/widgets/custom_icon_button.dart';
-import 'package:two_way_dael/core/widgets/show_toast.dart';
+import 'package:two_way_dael/features/customer/home/data/models/orders_model.dart';
 
 class BuildYourOrdersItem extends StatelessWidget {
-  const BuildYourOrdersItem({super.key});
-
+  const BuildYourOrdersItem({super.key, required this.order});
+  final Orders order;
   @override
   Widget build(BuildContext context) {
+    Map<String, IconData> iconMapping = {
+      'Icons.pending': Icons.pending,
+      'Icons.payments': Icons.payments,
+      'Icons.highlight_off': Icons.highlight_off,
+      'Icons.check': Icons.check,
+      'Icons.error_outline': Icons.error_outline,
+    };
+    IconData getIconData(String iconString) {
+      return iconMapping[iconString] ??
+          Icons.help; // default to help icon if not found
+    }
+
+      Color stringToColor(String colorString) {
+    if (colorString.startsWith('0x') || colorString.startsWith('0X')) {
+      return Color(int.parse(colorString));
+    } else {
+      throw FormatException("Color string must start with '0x' or '0X'.");
+    }
+  }
+
+
     return Card(
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 10.0,
       child: Container(
-        height: 160.0.h,
         color: Colors.white,
         child: Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(20.0),
           child: Row(
-            // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 120.h,
-                width: 120.w,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
-                    'assets/images/pizza.png',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              horizontalSpace(10),
+              // horizontalSpace(10),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Order Name',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyles.font17BlackBold,
-                  ),
-                  // verticalSpace(10),
-
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    textBaseline: TextBaseline.alphabetic,
                     children: [
-                      Text(
-                        '50000 egp',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyles.font13GreyBold,
-                      ),
-                      horizontalSpace(20),
-                      customIconButton(
-                        onPressed: () {
-                          showToast(
-                            message: 'Delivery completed successfully',
-                            state: TostStates.SUCCESS,
-                          );
-                        },
-                        icon: Icons.check,
-                        color: Colors.green,
-                        size: 30.0,
-                        toolTip: 'Done',
-                      ),
+                      Text('Total paid: ',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyles.font17BlackBold),
+                      Text('${order.netPrice}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyles.font17MainOrangeBold),
                     ],
                   ),
-                  // customIconButton(
-                  //   onPressed: () {
-                  //     showToast(
-                  //       message: 'The Order has been canceled',
-                  //       state: TostStates.ERROR,
-                  //     );
-                  //   },
-                  //   icon: Icons.cancel_outlined,
-                  //   color: Colors.red,
-                  //   size: 30.0,
-                  //   toolTip: 'Canceled',
-                  // ),
-                  // customIconButton(
-                  //   onPressed: () {
-                  //     showToast(
-                  //       message: 'The order is on the way...',
-                  //       state: TostStates.WARNING,
-                  //     );
-                  //   },
-                  //   icon: Icons.watch_later_outlined,
-                  //   color: Colors.amber,
-                  //   size: 30.0,
-                  //   toolTip: 'In Progress',
-                  // ),
+                  verticalSpace(5),
+                  Text(
+                    'Status:  ${order.status}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyles.font13GreyBold,
+                  ),
+                ],
+              ),
+              const Spacer(),
+              //  horizontalSpace(10),
+
+              Column(
+                children: [
+                  Icon(
+                    // Icons.check_circle,
+                    getIconData(order.icon!),
+                    color: stringToColor(order.iconColor!),
+                    size: 25.0,
+                  ),
+                  verticalSpace(5),
+                  Text(
+                    '${order.orderedFrom}',
+                    style: TextStyles.font13GreyBold,
+                  ),
                 ],
               ),
             ],

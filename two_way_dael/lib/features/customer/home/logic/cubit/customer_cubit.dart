@@ -13,6 +13,8 @@ import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/features/customer/auth/signup/data/models/get_gov_and_city_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/category_details_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/get_profile_model.dart';
+import 'package:two_way_dael/features/customer/home/data/models/order_details_model.dart';
+import 'package:two_way_dael/features/customer/home/data/models/orders_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/product_details_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/update_password_model.dart';
 import 'package:two_way_dael/features/customer/home/logic/cubit/customer_states.dart';
@@ -475,6 +477,42 @@ class CustomerCubit extends Cubit<CustomerStates> {
         ],
       ),
     );
+  }
+
+  CustomerOrdersModel? customerOrders;
+  void getCustomerOrders(){
+
+    emit(GetCustomerOrdersLoadingState());
+
+    DioHelper.getData(
+      url: customerOrdersUrl,
+      token: token,
+    ).then((value) {
+      customerOrders = CustomerOrdersModel.fromJson(value.data);
+      debugPrint(customerOrders!.message);
+      emit(GetCustomerOrdersSuccessState());
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(GetCustomerOrdersErrorState(error.toString()));
+    });
+  }
+
+  OrderDetailsModel? orderDetails;
+  void getCustomerOrderDetails({required int? id}) {
+
+    emit(GetCustomerOrderDetailsLoadingState());
+
+    DioHelper.getData(
+      url: 'me/order/$id',
+      token: token,
+    ).then((value) {
+      orderDetails = OrderDetailsModel.fromJson(value.data);
+      debugPrint(orderDetails!.message);
+      emit(GetCustomerOrderDetailsSuccessState(orderDetails!));
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(GetCustomerOrderDetailsErrorState(error.toString()));
+    });
   }
 
   List<NotificationItem> notifications = [

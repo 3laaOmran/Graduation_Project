@@ -24,7 +24,8 @@ class TwoWayDealApp extends StatelessWidget {
                 ..getGovernorates()
                 ..getCategories()
                 ..getProducts()
-                ..getUserData(),
+                ..getUserData()
+                ..getCustomerOrders(),
             ),
             BlocProvider(
               create: (context) => SellerCubit()

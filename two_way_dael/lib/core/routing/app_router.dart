@@ -21,7 +21,6 @@ import 'package:two_way_dael/features/customer/home/ui/Modules/search_module.dar
 import 'package:two_way_dael/features/customer/home/ui/Modules/seller_details.dart';
 import 'package:two_way_dael/features/customer/home/ui/Modules/your_orders_screen.dart';
 import 'package:two_way_dael/features/customer/home/ui/widgets/change_password_screen.dart';
-import 'package:two_way_dael/features/customer/home/ui/widgets/order_details_screen.dart';
 import 'package:two_way_dael/features/seller/auth/login/ui/views/seller_login_screen.dart';
 import 'package:two_way_dael/features/seller/auth/signup/ui/views/seller_certificates.dart';
 import 'package:two_way_dael/features/seller/auth/signup/ui/views/seller_otp_screen.dart';
@@ -83,8 +82,6 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const CartScreen());
       case Routes.customerwelcomeScreen:
         return MaterialPageRoute(builder: (_) => const CustomerWelcomeScreen());
-      case Routes.ordersDetailsScreen:
-        return MaterialPageRoute(builder: (_) => const OrderDetailsScreen());
       case Routes.chooseAccountTypeScreen:
         return MaterialPageRoute(
             builder: (_) => const ChooseAccountTypeScreen());

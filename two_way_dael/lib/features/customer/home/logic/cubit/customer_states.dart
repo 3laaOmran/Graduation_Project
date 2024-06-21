@@ -1,5 +1,6 @@
 import 'package:two_way_dael/features/customer/home/data/models/category_details_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/get_profile_model.dart';
+import 'package:two_way_dael/features/customer/home/data/models/order_details_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/products_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/update_password_model.dart';
 
@@ -10,19 +11,19 @@ class CustomerInitialState extends CustomerStates {}
 class ChangeBottomNavState extends CustomerStates {}
 
 // class ItemQuantityMinusState extends CustomerStates {
-  // int itemQuantity;
-  // double itemPrice;
-  // double totalPrice;
+// int itemQuantity;
+// double itemPrice;
+// double totalPrice;
 
-  // ItemQuantityMinusState(this.itemQuantity, this.itemPrice, this.totalPrice);
+// ItemQuantityMinusState(this.itemQuantity, this.itemPrice, this.totalPrice);
 // }
 
 // class ItemQuantityPlusState extends CustomerStates {
-  // int itemQuantity;
-  // double itemPrice;
-  // double totalPrice;
+// int itemQuantity;
+// double itemPrice;
+// double totalPrice;
 
-  // ItemQuantityPlusState(this.itemQuantity, this.itemPrice, this.totalPrice);
+// ItemQuantityPlusState(this.itemQuantity, this.itemPrice, this.totalPrice);
 // }
 
 // class CustomerRemoveFromCartState extends CustomerStates {}
@@ -89,7 +90,6 @@ class CustomerUpdatePasswordErrorState extends CustomerStates {
   CustomerUpdatePasswordErrorState(this.error);
 }
 
-
 final class GetSearchDataLoadingState extends CustomerStates {}
 
 final class GetSearchDataSuccessState extends CustomerStates {}
@@ -142,16 +142,17 @@ final class GetCategoriesErrorState extends CustomerStates {
 
 final class GetUserDataChaneIconVisibilityState extends CustomerStates {}
 
-
 class NotificationsState extends CustomerStates {}
 
 class DeleteNotificationsState extends CustomerStates {}
+
 class CustomerCartLoadedState extends CustomerStates {
   final List<Products> cartProducts;
   final double totalPrice;
 
   CustomerCartLoadedState(this.cartProducts, this.totalPrice);
 }
+
 final class GetCategoryDetailsLoadingState extends CustomerStates {}
 
 final class GetCategoryDetailsSuccessState extends CustomerStates {
@@ -165,6 +166,7 @@ final class GetCategoryDetailsErrorState extends CustomerStates {
 
   GetCategoryDetailsErrorState(this.error);
 }
+
 class ItemQuantityMinusState extends CustomerStates {
   // int itemQuantity;
   // double itemPrice;
@@ -186,6 +188,7 @@ class ItemQuantityPlusState extends CustomerStates {
 }
 
 class CustomerCartInitializedState extends CustomerStates {}
+
 class CustomerRemoveFromCartState extends CustomerStates {}
 
 class CustomerClearCartState extends CustomerStates {}
@@ -210,6 +213,7 @@ class CustomerUpdateTotalPriceState extends CustomerStates {
   double totalPrice;
   CustomerUpdateTotalPriceState(this.totalPrice);
 }
+
 class CustomerUpdateCartItemQuantityState extends CustomerStates {}
 
 class CustomerIncreaseCartItemQuantityState extends CustomerStates {}
@@ -217,3 +221,26 @@ class CustomerIncreaseCartItemQuantityState extends CustomerStates {}
 class CustomerDecreaseCartItemQuantitySuccessState extends CustomerStates {}
 
 class CustomerDecreaseCartItemQuantityErrorState extends CustomerStates {}
+
+class GetCustomerOrdersLoadingState extends CustomerStates {}
+
+class GetCustomerOrdersSuccessState extends CustomerStates {}
+
+class GetCustomerOrdersErrorState extends CustomerStates {
+  final String error;
+
+  GetCustomerOrdersErrorState(this.error);
+}
+class GetCustomerOrderDetailsLoadingState extends CustomerStates {}
+
+class GetCustomerOrderDetailsSuccessState extends CustomerStates {
+  final OrderDetailsModel? orderDetailsModel;
+
+  GetCustomerOrderDetailsSuccessState(this.orderDetailsModel);
+}
+
+class GetCustomerOrderDetailsErrorState extends CustomerStates {
+  final String error;
+
+  GetCustomerOrderDetailsErrorState(this.error);
+}

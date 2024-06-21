@@ -15,6 +15,7 @@ const CATEGORIES = 'categories';
 const UPDATEPASSWORD = 'me/update-password';
 const UPDATEPROFILE = 'me';
 const UPDATEIMAGEPROFILE = 'me/update-pic';
+const customerOrdersUrl = 'me/orders';
 //--------------------------------------
 const sellerLogin = 'auth/login/seller';
 const sellerSignup = 'auth/register/seller';
