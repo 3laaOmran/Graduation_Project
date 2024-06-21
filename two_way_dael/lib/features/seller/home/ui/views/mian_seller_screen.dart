@@ -219,12 +219,12 @@ class HomeScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   resuableText(
-                                    text: "Your sales",
+                                    text: "Your Balance",
                                     fontsize: 15.sp,
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  verticalSpace(5),
+                                  verticalSpace(7),
                                   resuableText(
                                     text: balance!,
                                     fontsize: 20.sp,
@@ -239,7 +239,7 @@ class HomeScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   resuableText(
-                                    text: "Add balance",
+                                    text: "Withdrawal",
                                     fontsize: 15.sp,
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,

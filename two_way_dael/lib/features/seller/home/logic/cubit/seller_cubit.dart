@@ -46,6 +46,7 @@ class SellerCubit extends Cubit<SellerStates> {
   var addressController = TextEditingController();
   var joinDateController = TextEditingController();
   var verifiedController = TextEditingController();
+  var yourSalesController = TextEditingController();
   final donateFormKey = GlobalKey<FormState>();
   var detailsController = TextEditingController();
   var amountController = TextEditingController();

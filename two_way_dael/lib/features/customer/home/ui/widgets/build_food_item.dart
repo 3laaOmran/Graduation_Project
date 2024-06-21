@@ -47,24 +47,25 @@ Widget buildItem(context, Products model) =>
                                 fit: BoxFit.cover),
                       ),
                     ),
-                    model.discount!=null?
-                    Positioned(
-                      bottom: 20.h,
-                      child: Container(
-                        width: 70.w,
-                        height: 20.h,
-                        decoration: const BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                bottomRight: Radius.circular(15))),
-                        child: Text(
-                          '${model.discount!} off',
-                          style: TextStyles.font12White,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ): Container(),
+                    model.discount != null
+                        ? Positioned(
+                            bottom: 20.h,
+                            child: Container(
+                              width: 70.w,
+                              height: 20.h,
+                              decoration: const BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      bottomRight: Radius.circular(15))),
+                              child: Text(
+                                '${model.discount!} off',
+                                style: TextStyles.font12White,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          )
+                        : Container(),
                   ],
                 ),
               ),
@@ -72,7 +73,7 @@ Widget buildItem(context, Products model) =>
               Text(
                 model.name!,
                 style: TextStyles.font17BlackBold,
-                maxLines: 2,
+                maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
               verticalSpace(5),

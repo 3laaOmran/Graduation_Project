@@ -83,70 +83,77 @@ class SellerNotificationsModule extends StatelessWidget {
               style: TextStyles.font20Whitebold,
             ),
           ),
-          body: ListView.separated(
-              itemCount: cubit.sellerNotifications.length,
-              itemBuilder: (context, index) {
-                final notification = cubit.sellerNotifications[index];
-                return InkWell(
-                  onTap: () {
-                    cubit.getNotificationDetails(
-                        id: cubit.sellerNotificationsModel!.data!
-                            .notifications![index].id!);
-                  },
-                  child: Container(
-                    height: 100,
-                    color: notification.isNew
-                        ? ColorManager.notificationColor
-                        : Colors.white,
-                    child: Center(
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          radius: 40,
-                          backgroundColor: notification.isNew
-                              ? ColorManager.notificationColor
-                              : Colors.white,
-                          child: Image.asset(
-                            cubit.sellerNotifications[index].image,
-                            fit: BoxFit.contain,
+          body: cubit.sellerNotificationsModel?.data?.notifications?.isEmpty ==
+                  true
+              ? Center(
+                  child: Text(
+                  'No Notifications Yet',
+                  style: TextStyles.font20blackbold,
+                ))
+              : ListView.separated(
+                  itemCount: cubit.sellerNotifications.length,
+                  itemBuilder: (context, index) {
+                    final notification = cubit.sellerNotifications[index];
+                    return InkWell(
+                      onTap: () {
+                        cubit.getNotificationDetails(
+                            id: cubit.sellerNotificationsModel!.data!
+                                .notifications![index].id!);
+                      },
+                      child: Container(
+                        height: 100,
+                        color: notification.isNew
+                            ? ColorManager.notificationColor
+                            : Colors.white,
+                        child: Center(
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              radius: 40,
+                              backgroundColor: notification.isNew
+                                  ? ColorManager.notificationColor
+                                  : Colors.white,
+                              child: Image.asset(
+                                cubit.sellerNotifications[index].image,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            title: Text(
+                              cubit.sellerNotifications[index].title,
+                              style: TextStyles.font20blackbold,
+                            ),
+                            subtitle: Text(
+                              cubit.sellerNotifications[index].message,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            trailing: customIconButton(
+                              onPressed: () {},
+                              icon: Icons.info,
+                              color: ColorManager.mainOrange,
+                              toolTip: '',
+                            ),
                           ),
                         ),
-                        title: Text(
-                          cubit.sellerNotifications[index].title,
-                          style: TextStyles.font20blackbold,
-                        ),
-                        subtitle: Text(
-                          cubit.sellerNotifications[index].message,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        trailing: customIconButton(
-                          onPressed: () {},
-                          icon: Icons.info,
-                          color: ColorManager.mainOrange,
-                          toolTip: '',
+                      ),
+                      // ),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    final notification = cubit.sellerNotifications[index];
+                    return Container(
+                      color: !notification.isNew
+                          ? Colors.white
+                          : ColorManager.notificationColor,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                        child: Container(
+                          width: double.infinity,
+                          height: 1,
+                          color: Colors.grey,
                         ),
                       ),
-                    ),
-                  ),
-                  // ),
-                );
-              },
-              separatorBuilder: (context, index) {
-                final notification = cubit.sellerNotifications[index];
-                return Container(
-                  color: !notification.isNew
-                      ? Colors.white
-                      : ColorManager.notificationColor,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                    child: Container(
-                      width: double.infinity,
-                      height: 1,
-                      color: Colors.grey,
-                    ),
-                  ),
-                );
-              }),
+                    );
+                  }),
         );
       },
     );

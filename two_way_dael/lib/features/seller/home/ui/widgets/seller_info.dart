@@ -28,23 +28,16 @@ class SellerEditInfo extends StatelessWidget {
         cubit.addressController.text = model.data!.address!;
         cubit.joinDateController.text = model.data!.joinedFrom!;
         cubit.verifiedController.text = model.data!.verifiedFrom!;
-        // cubit.governorateController.text = model.data!.governorate!;
-        // cubit.cityController.text = model.data!.city!;
+        cubit.yourSalesController.text = model.data!.sales!;
 
         return Container(
           color: Colors.white,
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Form(
-              // key: cubit.formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // state is CustomerUpdateProfileLoadingState
-                  //     ? const LinearProgressIndicator(
-                  //         color: ColorManager.mainOrange,
-                  //       )
-                  //     :
                   Text(
                     'Your Profile',
                     style: TextStyles.font20blackbold,
@@ -126,6 +119,18 @@ class SellerEditInfo extends StatelessWidget {
                     enabled: false,
                     controller: cubit.verifiedController,
                     prefixIcon: const Icon(Icons.calendar_month),
+                    isObsecureText: false,
+                  ),
+                  verticalSpace(20),
+                  resuableText(
+                    text: 'Your Sales:',
+                    fontsize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  CustomTextFormField(
+                    enabled: false,
+                    controller: cubit.yourSalesController,
+                    prefixIcon: const Icon(Icons.money),
                     isObsecureText: false,
                   ),
                   verticalSpace(20),
