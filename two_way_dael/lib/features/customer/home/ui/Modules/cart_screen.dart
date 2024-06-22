@@ -155,7 +155,7 @@ class CartScreen extends StatelessWidget {
                         width: 65.0.w,
                         child: product.images!.isNotEmpty
                             ? Image.network(
-                                product.images![0],
+                                product.images![1],
                                 fit: BoxFit.cover,
                               )
                             : Image.asset(

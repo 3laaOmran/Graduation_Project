@@ -17,7 +17,7 @@ class Data {
   String? phone;
   String? balance;
   String? rate;
-  String? sales;
+  // int? sales;
   String? address;
   String? image;
   Certificates? certificates;
@@ -31,7 +31,7 @@ class Data {
     phone = json['phone'];
     balance = json['balance'];
     rate = json['rate'];
-    sales = json['sales'];
+    // sales = json['sales'];
     address = json['address'];
     image = json['image'];
     certificates = json['certificates'] != null

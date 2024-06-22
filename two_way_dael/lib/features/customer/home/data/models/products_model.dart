@@ -36,29 +36,25 @@ class Products {
   String? discount;
   String? netPrice;
   List<String>? images;
-  int quantity = 1; 
+  int quantity=1;
 
-  Products({
-    this.name,
-    this.price,
-    this.images,
-    this.quantity = 1, 
-  });
-  Products.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    price =
-        (json['price'] ); 
-    discount = json['discount'];
-    netPrice = json['net_price'];
-    images = json['images'] != null ? json['images'].cast<String>() : [];
-  }
+  Products.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        name = json['name'],
+        price = json['price'],
+        discount = json['discount'],
+        netPrice = json['net_price'],
+        images = List<String>.from(json['images'] ?? []);
+
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = name;
-    data['price'] = price;
-    data['images'] = images;
-    return data;
+    return {
+      'id': id,
+      'name': name,
+      'price': price,
+      'discount': discount,
+      'net_price': netPrice,
+      'images': images,
+    };
   }
 }
 

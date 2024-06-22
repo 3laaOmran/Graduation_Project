@@ -28,7 +28,7 @@ class SellerEditInfo extends StatelessWidget {
         cubit.addressController.text = model.data!.address!;
         cubit.joinDateController.text = model.data!.joinedFrom!;
         cubit.verifiedController.text = model.data!.verifiedFrom!;
-        cubit.yourSalesController.text = model.data!.sales!;
+        // cubit.yourSalesController.text = model.data!.sales!;
 
         return Container(
           color: Colors.white,

@@ -34,7 +34,7 @@ class CustomerCubit extends Cubit<CustomerStates> {
   int currentIndex = 0;
 
   List<Widget> bottomScreens = [
-    CustomerHomeScreen(),
+    const CustomerHomeScreen(),
     const CustomerProfileScreen(),
   ];
 
@@ -43,9 +43,13 @@ class CustomerCubit extends Cubit<CustomerStates> {
     emit(ChangeBottomNavState());
   }
 
+  List<Products> cartProducts = [];
+  double totalPrice = 0;
+
   void toggleCart(Products product) {
-    if (cartProducts.contains(product)) {
-      cartProducts.remove(product);
+    int index = cartProducts.indexWhere((p) => p.id == product.id);
+    if (index != -1) {
+      cartProducts.removeAt(index);
       saveCart();
       emit(CustomerRemoveFromCartState());
     } else {
@@ -56,11 +60,8 @@ class CustomerCubit extends Cubit<CustomerStates> {
   }
 
   bool isInCart(Products product) {
-    return cartProducts.contains(product);
+    return cartProducts.any((p) => p.id == product.id);
   }
-
-  List<Products> cartProducts = [];
-  double totalPrice = 0;
 
   Future<void> saveCart() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -82,7 +83,7 @@ class CustomerCubit extends Cubit<CustomerStates> {
   }
 
   void minus(Products product) {
-    int index = cartProducts.indexOf(product);
+    int index = cartProducts.indexWhere((p) => p.id == product.id);
     if (index != -1 && cartProducts[index].quantity > 1) {
       cartProducts[index].quantity--;
       updateTotalPrice();
@@ -92,7 +93,7 @@ class CustomerCubit extends Cubit<CustomerStates> {
   }
 
   void plus(Products product) {
-    int index = cartProducts.indexOf(product);
+    int index = cartProducts.indexWhere((p) => p.id == product.id);
     if (index != -1) {
       cartProducts[index].quantity++;
       updateTotalPrice();
@@ -124,18 +125,10 @@ class CustomerCubit extends Cubit<CustomerStates> {
     saveCart();
   }
 
-  // void addToCart(Products product) {
-  //   if (!cartProducts.contains(product)) {
-  //     cartProducts.add(product);
-  //     updateTotalPrice();
-  //     emit(CustomerAddToCartState());
-  //     saveCart();
-  //   }
-  // }
-
   void removeFromCart(Products product) {
-    if (cartProducts.contains(product)) {
-      cartProducts.remove(product);
+    int index = cartProducts.indexWhere((p) => p.id == product.id);
+    if (index != -1) {
+      cartProducts.removeAt(index);
       updateTotalPrice();
       emit(CustomerRemoveFromCartState());
       saveCart();
@@ -149,7 +142,7 @@ class CustomerCubit extends Cubit<CustomerStates> {
     saveCart();
   }
 
-  int selectedPageNumber=1;
+  int selectedPageNumber = 1;
   ProductsModel? productsModel;
   void getProducts({int? page}) {
     emit(CustomerGetProductsLoadingState());
@@ -480,8 +473,7 @@ class CustomerCubit extends Cubit<CustomerStates> {
   }
 
   CustomerOrdersModel? customerOrders;
-  void getCustomerOrders(){
-
+  void getCustomerOrders() {
     emit(GetCustomerOrdersLoadingState());
 
     DioHelper.getData(
@@ -499,7 +491,6 @@ class CustomerCubit extends Cubit<CustomerStates> {
 
   OrderDetailsModel? orderDetails;
   void getCustomerOrderDetails({required int? id}) {
-
     emit(GetCustomerOrderDetailsLoadingState());
 
     DioHelper.getData(

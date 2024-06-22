@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:number_pagination/number_pagination.dart';
-import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 
@@ -21,51 +20,7 @@ class _SellerProductsState extends State<SellerProducts> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Categories',
-            style: TextStyles.font20blackbold,
-          ),
-          verticalSpace(10),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  // BuildCategoryItem(text: 'All'),
-                  // SizedBox(
-                  //   width: 10.0,
-                  // ),
-                  // BuildCategoryItem(text: 'Food'),
-                  // SizedBox(
-                  //   width: 10.0,
-                  // ),
-                  // BuildCategoryItem(text: 'Drink'),
-                  // SizedBox(
-                  //   width: 10.0,
-                  // ),
-                  // BuildCategoryItem(text: 'Soup'),
-                  // SizedBox(
-                  //   width: 10.0,
-                  // ),
-                  // BuildCategoryItem(text: 'Pizza'),
-                  // SizedBox(
-                  //   width: 10.0,
-                  // ),
-                  // BuildCategoryItem(text: 'Burger'),
-                  // SizedBox(
-                  //   width: 10.0,
-                  // ),
-                  // BuildCategoryItem(text: 'Soda'),
-                  // SizedBox(
-                  //   width: 10.0,
-                  // ),
-                ],
-              ),
-            ),
-          ),
-          verticalSpace(20),
-          Text(
-            'All Products $selectedPageNumber',
+            'All Products',
             style: TextStyles.font20blackbold,
           ),
           // NumberPagination(

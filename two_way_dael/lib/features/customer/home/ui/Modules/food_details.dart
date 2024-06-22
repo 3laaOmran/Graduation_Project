@@ -159,15 +159,7 @@ class _FoodDetailsState extends State<FoodDetails> {
                           reverse: false,
                           scrollDirection: Axis.horizontal,
                         ),
-                      )
-
-                      // child: Image.network(
-                      //   widget.product.images?.isNotEmpty == true
-                      //       ? widget.product.images![0]
-                      //       : 'assets/images/no_product_image.png',
-                      //   fit: BoxFit.cover,
-                      // ),
-                      ),
+                      )),
                 ),
               ),
               SliverToBoxAdapter(
@@ -176,6 +168,7 @@ class _FoodDetailsState extends State<FoodDetails> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      verticalSpace(10),
                       buildProductHeader(context),
                       verticalSpace(10),
                       buildProductDescription(context),
@@ -250,11 +243,12 @@ class _FoodDetailsState extends State<FoodDetails> {
           },
           child: Column(
             children: [
+              verticalSpace(5),
               CircleAvatar(
-                radius: 40,
+                radius: 30.0,
                 backgroundColor: Colors.white,
                 backgroundImage:
-                    NetworkImage(widget.product.store!.image??''),
+                    NetworkImage(widget.product.store!.image ?? ''),
               ),
               SizedBox(
                 width: 150.0.w,
