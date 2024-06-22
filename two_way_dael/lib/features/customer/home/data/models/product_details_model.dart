@@ -45,7 +45,7 @@ class Product {
   Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    price =  json['price'];
+    price = json['price'];
     discount = json['discount'];
     netPrice = json['net_price'];
     images = json['images']?.cast<String>();
@@ -72,13 +72,27 @@ class Category {
 class Store {
   int? id;
   String? name;
+  String? address;
   String? image;
   String? rate;
+  String? rateWithReviews;
+  String? phone;
+  List<Products>? customersellerProducts;
+
   Store.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+    address = json['address'];
     image = json['image'];
     rate = json['rate'];
+    rateWithReviews = json['rate_with_reviews'];
+    phone = json['phone'];
+    if (json['products'] != null) {
+      customersellerProducts = <Products>[];
+      json['products'].forEach((v) {
+        customersellerProducts!.add(Products.fromJson(v));
+      });
+    }
   }
 }
 

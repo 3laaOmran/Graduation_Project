@@ -269,7 +269,7 @@ class _FoodDetailsState extends State<FoodDetails> {
                     size: 19.0,
                   ),
                   Text(
-                    ' ${widget.product.store!.rate}',
+                    ' ${widget.product.store!.rateWithReviews}',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w100,
                           color: Colors.grey[700],

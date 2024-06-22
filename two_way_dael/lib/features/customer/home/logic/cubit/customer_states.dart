@@ -30,14 +30,30 @@ class ChangeBottomNavState extends CustomerStates {}
 // class CustomerClearCartState extends CustomerStates {}
 // class CustomerAddToCartState extends CustomerStates {}
 // class CustomerCartUpdated extends CustomerStates {}
-
 class CustomerGetProductsLoadingState extends CustomerStates {}
 
 class CustomerGetProductsSuccessState extends CustomerStates {}
 
 class CustomerGetProductsErrorState extends CustomerStates {}
 
+class CustomerGetSellerProductsPaginationLoadingState extends CustomerStates {}
+
+class CustomerGetSellerProductsPaginationSuccessState extends CustomerStates {}
+
+class CustomerGetSellerProductsPaginationErrorState extends CustomerStates {}
+
+class CustomerGetSellerProductsLoadingState extends CustomerStates {}
+
+class CustomerGetSellerProductsSuccessState extends CustomerStates {
+  final ProductsModel productsModel2;
+
+  CustomerGetSellerProductsSuccessState(this.productsModel2);
+}
+
+class CustomerGetSellerProductsErrorState extends CustomerStates {}
+
 final class GetUserDataLoadingState extends CustomerStates {}
+
 
 final class GetUserDataSuccessState extends CustomerStates {
   final UserDataModel userDataModel;

@@ -158,6 +158,34 @@ class CustomerCubit extends Cubit<CustomerStates> {
       emit(CustomerGetProductsErrorState());
     });
   }
+  void sellerProductsPagination({int? page, int? id}) {
+    emit(CustomerGetSellerProductsPaginationLoadingState());
+    DioHelper.getData(
+      url: 'products/seller/$id',
+      query: {'page': page},
+    ).then((value) {
+      productsModel2 = ProductsModel.fromJson(value.data);
+      // print(value.data);
+      emit(CustomerGetSellerProductsPaginationSuccessState());
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(CustomerDecreaseCartItemQuantityErrorState());
+    });
+  }
+  ProductsModel? productsModel2;
+  void getSellerProducts({int? id}) {
+    emit(CustomerGetSellerProductsLoadingState());
+    DioHelper.getData(
+      url: 'products/seller/$id',
+    ).then((value) {
+      productsModel2 = ProductsModel.fromJson(value.data);
+      // print(value.data);
+      emit(CustomerGetSellerProductsSuccessState(productsModel2!));
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(CustomerGetSellerProductsErrorState());
+    });
+  }
 
   UserDataModel? userDataModel;
   void getUserData() {
