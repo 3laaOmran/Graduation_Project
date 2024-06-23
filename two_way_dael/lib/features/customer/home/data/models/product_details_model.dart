@@ -78,7 +78,6 @@ class Store {
   String? rateWithReviews;
   String? phone;
   bool? isInFav;
-  List<Products>? customersellerProducts;
 
   Store.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -89,12 +88,19 @@ class Store {
     isInFav = json['is_favourite'];
     rateWithReviews = json['rate_with_reviews'];
     phone = json['phone'];
-    if (json['products'] != null) {
-      customersellerProducts = <Products>[];
-      json['products'].forEach((v) {
-        customersellerProducts!.add(Products.fromJson(v));
-      });
-    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['address'] = address;
+    data['image'] = image;
+    data['rate'] = rate;
+    data['is_favourite'] = isInFav;
+    data['rate_with_reviews'] = rateWithReviews;
+    data['phone'] = phone;
+    return data;
   }
 }
 

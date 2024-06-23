@@ -33,7 +33,7 @@ class CustomerCubit extends Cubit<CustomerStates> {
   static CustomerCubit get(context) => BlocProvider.of(context);
 
   int currentIndex = 0;
-
+  bool isAboutSelected = true;
   List<Widget> bottomScreens = [
     const CustomerHomeScreen(),
     const CustomerProfileScreen(),

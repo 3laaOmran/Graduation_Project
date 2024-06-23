@@ -74,7 +74,7 @@ class AppRouter {
       case Routes.yourOrdersScreen:
         return MaterialPageRoute(builder: (_) => const YourOrdersScreen());
       case Routes.favoriteSellers:
-        return MaterialPageRoute(builder: (_) => const FvaoriteSellers());
+        return MaterialPageRoute(builder: (_) => const FavoriteSellers());
       case Routes.sellerDeatailsScreen:
         return MaterialPageRoute(builder: (_) => const SellerDetailsScreen());
       case Routes.changePasswordScreen:

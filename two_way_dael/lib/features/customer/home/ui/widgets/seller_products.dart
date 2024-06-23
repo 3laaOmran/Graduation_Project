@@ -7,6 +7,7 @@ import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/features/customer/home/logic/cubit/customer_cubit.dart';
 import 'package:two_way_dael/features/customer/home/logic/cubit/customer_states.dart';
+import 'package:two_way_dael/features/customer/home/ui/Modules/food_details.dart';
 import 'package:two_way_dael/features/customer/home/ui/widgets/build_food_item.dart';
 
 import '../../data/models/products_model.dart';
@@ -26,7 +27,16 @@ class _SellerProductsState extends State<SellerProducts> {
   Widget build(BuildContext context) {
     return BlocConsumer<CustomerCubit, CustomerStates>(
       listener: (context, state) {
-        // Add any necessary state listeners
+        if (state is GetProductDetailsSuccessState) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => FoodDetails(
+                      product: CustomerCubit.get(context)
+                          .productDetails!
+                          .data!
+                          .product!)));
+        }
       },
       builder: (context, state) {
         var cubit = CustomerCubit.get(context);
@@ -34,7 +44,7 @@ class _SellerProductsState extends State<SellerProducts> {
         var productsList = productsModel2?.data?.products;
         var productsCount = productsModel2?.data?.productsCount;
         var lastPage = productsModel2?.data?.pagination?.lastPage;
-        var store = cubit.productDetails!.data!.product!.store;
+        var store = cubit.productDetails?.data?.product?.store;
 
         return Container(
           color: Colors.white,
@@ -85,7 +95,8 @@ class _SellerProductsState extends State<SellerProducts> {
                         colorSub: ColorManager.notificationColor,
                         onPageChanged: (index) {
                           cubit.sellerProductsPagination(
-                            id: store!.id,
+                            id: store!.id ??
+                                cubit.favoritesModel!.data![index].sellerId!,
                             page: index,
                           );
                           setState(() {

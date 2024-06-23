@@ -175,12 +175,16 @@ class _FoodDetailsState extends State<FoodDetails> {
                       verticalSpace(20),
                       AppTextButton(
                         textStyle: TextStyles.font20Whitebold,
-                        buttonText: !cubit.isInCart(productToAdd!)
-                            ? 'Add to cart'
-                            : 'Remove From Cart',
-                        onPressed: () {
-                          cubit.toggleCart(productToAdd!);
-                        },
+                        buttonText: productToAdd != null
+                            ? (!cubit.isInCart(productToAdd)
+                                ? 'Add to cart'
+                                : 'Remove From Cart')
+                            : 'Add to cart.',
+                        onPressed: productToAdd != null
+                            ? () {
+                                cubit.toggleCart(productToAdd!);
+                              }
+                            : () {},
                       ),
                       verticalSpace(20),
                       buildOtherProductsSection(context, cubit),
