@@ -62,7 +62,7 @@ class SellerAbout extends StatelessWidget {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            return const ShowAlertDialog();
+                            return  ShowAlertDialog(storeId: store.id!,);
                           },
                         );
                       },

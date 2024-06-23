@@ -21,6 +21,9 @@ import 'package:two_way_dael/features/customer/home/ui/Modules/search_module.dar
 import 'package:two_way_dael/features/customer/home/ui/Modules/seller_details.dart';
 import 'package:two_way_dael/features/customer/home/ui/Modules/your_orders_screen.dart';
 import 'package:two_way_dael/features/customer/home/ui/widgets/change_password_screen.dart';
+import 'package:two_way_dael/features/seller/auth/login/ui/views/forget_password_otp_screen.dart';
+import 'package:two_way_dael/features/seller/auth/login/ui/views/forget_password_view.dart';
+import 'package:two_way_dael/features/seller/auth/login/ui/views/phone_for_forget_password.dart';
 import 'package:two_way_dael/features/seller/auth/login/ui/views/seller_login_screen.dart';
 import 'package:two_way_dael/features/seller/auth/signup/ui/views/seller_certificates.dart';
 import 'package:two_way_dael/features/seller/auth/signup/ui/views/seller_otp_screen.dart';
@@ -109,6 +112,12 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const NewOrdersScreen());
       case Routes.sellerChangePasswordScreen:
         return MaterialPageRoute(builder: (_) => const SellerChangePasswordScreen());
+      case Routes.sellerPhoneForForgetPasswordScreen:
+        return MaterialPageRoute(builder: (_) => const SellerPhoneForForgetPasswordScreen());
+      case Routes.sellerPhoneForForgetPasswordChangeScreen:
+        return MaterialPageRoute(builder: (_) => const SellerForgetPasswordScreen());
+      case Routes.sellerPhoneForForgetPasswordOtpScreen:
+        return MaterialPageRoute(builder: (_) => const SellerForgetPasswordOtpScreen());
       default:
         return MaterialPageRoute(
             builder: (context) => Scaffold(

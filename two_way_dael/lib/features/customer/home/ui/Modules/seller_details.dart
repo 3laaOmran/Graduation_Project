@@ -7,6 +7,7 @@ import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:animations/animations.dart';
 import 'package:two_way_dael/core/widgets/custom_icon_button.dart';
+import 'package:two_way_dael/core/widgets/show_toast.dart';
 import 'package:two_way_dael/features/customer/home/logic/cubit/customer_cubit.dart';
 import 'package:two_way_dael/features/customer/home/logic/cubit/customer_states.dart';
 import 'package:two_way_dael/features/customer/home/ui/widgets/seller_about.dart';
@@ -35,6 +36,14 @@ class _SellerDetailsScreenState extends State<SellerDetailsScreen> {
               productsList: state.productsModel2.data!.products!,
             );
           });
+        }
+        if (state is AddToFavoritesSuccessState) {
+          showToast(message: 'Added To Favorites', state: TostStates.SUCCESS);
+          CustomerCubit.get(context).getFavoriteSellers();
+        }
+        if (state is RemoveFromFavoritesSuccessState) {
+          showToast(message: 'Removed From Favorites', state: TostStates.SUCCESS);
+          CustomerCubit.get(context).getFavoriteSellers();
         }
       },
       builder: (context, state) {
@@ -78,7 +87,9 @@ class _SellerDetailsScreenState extends State<SellerDetailsScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: CircleAvatar(
                       radius: 20.0,
-                      backgroundColor: ColorManager.gray,
+                      backgroundColor: store!.isInFav!
+                          ? ColorManager.mainOrange
+                          : ColorManager.gray,
                       child: Center(
                         child: customIconButton(
                           padding: const EdgeInsets.only(
@@ -87,7 +98,19 @@ class _SellerDetailsScreenState extends State<SellerDetailsScreen> {
                             top: 3.0,
                             bottom: 2.0,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            setState(() {
+                              if (store.isInFav!) {
+                                store.isInFav = false;
+                                cubit.removeFromFavorites(id: store.id!);
+                                cubit.getFavoriteSellers();
+                              } else {
+                                store.isInFav = true;
+                                cubit.addToFavorites(id: store.id!);
+                                
+                              }
+                            });
+                          },
                           icon: Icons.favorite,
                           color: Colors.white,
                           size: 25.0,
@@ -105,7 +128,7 @@ class _SellerDetailsScreenState extends State<SellerDetailsScreen> {
                 backgroundColor: Colors.white,
                 flexibleSpace: FlexibleSpaceBar(
                   title: Text(
-                    '\t ${store!.name}',
+                    '\t ${store.name}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(

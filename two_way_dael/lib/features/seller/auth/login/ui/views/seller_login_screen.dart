@@ -107,8 +107,8 @@ class SellerLoginScreen extends StatelessWidget {
                                   alignment: AlignmentDirectional.bottomEnd,
                                   child: GestureDetector(
                                     onTap: () {
-                                      // context.pushNamed(
-                                      //     Routes.phoneForForgetPasswordScreen);
+                                      context.pushNamedAndRemoveUntil(Routes
+                                          .sellerPhoneForForgetPasswordScreen,predicate: (route) => false);
                                     },
                                     child: resuableText(
                                         text: "Forget Password?",

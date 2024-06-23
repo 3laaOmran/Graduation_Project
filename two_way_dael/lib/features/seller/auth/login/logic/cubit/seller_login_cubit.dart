@@ -75,7 +75,7 @@ class SellerLoginCubit extends Cubit<SellerLoginStates> {
   }) {
     emit(PhoneForgetPasswordLoadingState());
     DioHelper.postData(
-      url: PASSWORDFORGOT,
+      url: sellerForgetPassword,
       data: {
         'phone': phone,
       },
@@ -85,11 +85,16 @@ class SellerLoginCubit extends Cubit<SellerLoginStates> {
       debugPrint(loginModel!.message);
       emit(PhoneForgetPasswordSuccessState(loginModel!));
     }).catchError((error) {
+      if (error is DioException && error.response?.statusCode == 422) {
+        emit(PhoneForgetPasswordErrorState(
+            error.response!.data['data']['phone'][0]));
+      } else if (error is DioException && error.response?.statusCode == 429) {
+        emit(PhoneForgetPasswordErrorState(error.response!.data['message']));
+      }
       debugPrint(error.toString());
-      emit(PhoneForgetPasswordErrorState(error.toString()));
     });
   }
-
+var otpController = TextEditingController();
   ConfirmPhoneModel? confirmPhoneModel;
   void confirmPhoneNumber({
     required String otp,
@@ -98,7 +103,7 @@ class SellerLoginCubit extends Cubit<SellerLoginStates> {
     emit(ConfirmPhoneNumberLoadingState());
     DioHelper.postData(
       token: token,
-      url: CONFIRMPHONENUMBER,
+      url: sellerForgetPasswordOtp,
       data: {
         'otp': otp,
       },
@@ -107,8 +112,15 @@ class SellerLoginCubit extends Cubit<SellerLoginStates> {
       debugPrint(value.data['message']);
       emit(ConfirmPhoneNumberSuccessState(confirmPhoneModel!));
     }).catchError((error) {
+      if (error is DioException && error.response?.statusCode == 422) {
+        emit(ConfirmPhoneNumberErrorState(
+            error.response!.data['data']['otp'][0]));
+      } else if (error is DioException && error.response?.statusCode == 401) {
+        emit(ConfirmPhoneNumberErrorState(error.response!.data['message']));
+      } else if (error is DioException && error.response?.statusCode == 429) {
+        emit(ConfirmPhoneNumberErrorState(error.response!.data['message']));
+      }
       debugPrint(error.toString());
-      emit(ConfirmPhoneNumberErrorState(error.toString()));
     });
   }
 
@@ -120,7 +132,7 @@ class SellerLoginCubit extends Cubit<SellerLoginStates> {
     emit(ChangePasswordLoadingState());
     DioHelper.postData(
       token: token,
-      url: CHANGEPASSWORD,
+      url: sellerForgetPasswordChange,
       data: {
         'password': password,
         'password_confirmation': passwordConfirmation,
@@ -130,8 +142,13 @@ class SellerLoginCubit extends Cubit<SellerLoginStates> {
       debugPrint(value.data['message']);
       emit(ChangePasswordSuccessState(confirmPhoneModel!));
     }).catchError((error) {
+      if (error is DioException && error.response?.statusCode == 422) {
+        emit(ChangePasswordErrorState(
+            error.response!.data['message']));
+      } else if (error is DioException && error.response?.statusCode == 429) {
+        emit(ChangePasswordErrorState(error.response!.data['message']));
+      }
       debugPrint(error.toString());
-      emit(ChangePasswordErrorState(error.toString()));
     });
   }
 }

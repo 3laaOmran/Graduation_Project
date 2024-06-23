@@ -33,7 +33,8 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     return BlocConsumer<CustomerCubit, CustomerStates>(
       listener: (context, state) {
         if (state is GetProductDetailsSuccessState) {
-          var productDetails = CustomerCubit.get(context).productDetails?.data?.product;
+          var productDetails =
+              CustomerCubit.get(context).productDetails?.data?.product;
           if (productDetails != null) {
             Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => FoodDetails(product: productDetails),
@@ -41,11 +42,13 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
           }
         }
         if (state is GetCategoryDetailsSuccessState) {
-          var categoryDetails = CustomerCubit.get(context).categoryDetails?.data;
+          var categoryDetails =
+              CustomerCubit.get(context).categoryDetails?.data;
           if (categoryDetails != null) {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => CategoriesDetailsScreen(category: categoryDetails),
+                builder: (context) =>
+                    CategoriesDetailsScreen(category: categoryDetails),
               ),
             );
           }
@@ -101,11 +104,13 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                         radius: 25.0.w,
                         backgroundColor: Colors.white,
                         backgroundImage: image != null &&
-                                image != 'http://2waydeal.online/uploads/default.png'
+                                image !=
+                                    'http://2waydeal.online/uploads/default.png'
                             ? NetworkImage(image)
                             : null,
                         child: image == null ||
-                                image == 'http://2waydeal.online/uploads/default.png'
+                                image ==
+                                    'http://2waydeal.online/uploads/default.png'
                             ? const Image(
                                 image: AssetImage(
                                     'assets/images/two_way_deal_icon.png'),
@@ -128,14 +133,22 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                         children: [
                           Text(
                             '$name',
-                            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.bold, fontSize: 15.0),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall
+                                ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15.0),
                           ),
                           verticalSpace(5),
                           Text(
                             'Shopping Time?',
-                            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.bold, fontSize: 10.0),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall
+                                ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 10.0),
                           ),
                         ],
                       ),
@@ -162,8 +175,8 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                               backgroundColor: ColorManager.mainOrange,
                               child: Text(
                                 '${cubit.cartProducts.length}',
-                                style: TextStyles.font12White.copyWith(
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyles.font12White
+                                    .copyWith(fontWeight: FontWeight.bold),
                               ),
                             ),
                         ],
@@ -216,7 +229,8 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                 readOnly: true,
                                 onTap: () {
                                   context.pushNamed(Routes.searchScreen);
-                                  CustomerCubit.get(context).getSearchData(categryId: 200);
+                                  CustomerCubit.get(context)
+                                      .getSearchData(categryId: 200);
                                 },
                                 hintText: 'Search...',
                                 isObsecureText: false,
@@ -227,14 +241,19 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                             verticalSpace(25),
                             Text(
                               'News & Offers',
-                              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                  fontWeight: FontWeight.bold, fontSize: 21.0),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall
+                                  ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 21.0),
                             ),
                             const SizedBox(height: 5.0),
                             Container(
                               decoration: const BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.all(Radius.circular(0.0)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(50.0)),
                               ),
                               clipBehavior: Clip.antiAliasWithSaveLayer,
                               child: CarouselSlider(
@@ -243,18 +262,22 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                     image: NetworkImage(
                                       'https://img.freepik.com/free-psd/japanese-food-restaurant-horizontal-banner-template_23-2149447411.jpg?size=626&ext=jpg&ga=GA1.1.1916073333.1698184272&semt=ais',
                                     ),
+                                    fit: BoxFit.cover,
                                   ),
                                   Image(
                                     image: NetworkImage(
                                         'https://img.freepik.com/free-psd/delicious-food-facebook-template_23-2150056445.jpg?size=626&ext=jpg&ga=GA1.1.1916073333.1698184272&semt=ais'),
+                                    fit: BoxFit.cover,
                                   ),
                                   Image(
                                     image: NetworkImage(
                                         'https://img.freepik.com/free-vector/flat-food-landing-page-template_23-2149046596.jpg?size=626&ext=jpg&ga=GA1.1.1916073333.1698184272&semt=ais'),
+                                    fit: BoxFit.cover,
                                   ),
                                   Image(
                                     image: NetworkImage(
                                         'https://img.freepik.com/free-vector/online-grocery-store-banner-design_23-2150085726.jpg?size=626&ext=jpg&ga=GA1.1.1916073333.1698184272&semt=ais'),
+                                    fit: BoxFit.cover,
                                   ),
                                 ],
                                 options: CarouselOptions(
@@ -266,7 +289,8 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                   autoPlay: true,
                                   autoPlayCurve: Curves.fastEaseInToSlowEaseOut,
                                   autoPlayInterval: const Duration(seconds: 5),
-                                  autoPlayAnimationDuration: const Duration(seconds: 1),
+                                  autoPlayAnimationDuration:
+                                      const Duration(seconds: 1),
                                   reverse: false,
                                   scrollDirection: Axis.horizontal,
                                 ),
@@ -275,8 +299,12 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                             const SizedBox(height: 20.0),
                             Text(
                               'Categories',
-                              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                  fontWeight: FontWeight.bold, fontSize: 21.0),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall
+                                  ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 21.0),
                             ),
                             verticalSpace(5),
                             Padding(
@@ -290,25 +318,35 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                     shrinkWrap: true,
                                     itemBuilder: (context, index) {
                                       final categoriesModel =
-                                          CustomerCubit.get(context).categoriesModel;
+                                          CustomerCubit.get(context)
+                                              .categoriesModel;
                                       if (categoriesModel != null &&
                                           categoriesModel.data != null &&
-                                          categoriesModel.data!.length > index) {
+                                          categoriesModel.data!.length >
+                                              index) {
                                         return InkWell(
                                           onTap: () {
-                                            var categoryId = categoriesModel.data?[index].id;
+                                            var categoryId =
+                                                categoriesModel.data?[index].id;
                                             if (categoryId != null) {
                                               CustomerCubit.get(context)
-                                                  .getCategoryDetails(id: categoryId);
+                                                  .getCategoryDetails(
+                                                      id: categoryId);
                                             }
                                           },
-                                          child: buildCatItem(context, categoriesModel.data![index]),
+                                          child: buildCatItem(context,
+                                              categoriesModel.data![index]),
                                         );
                                       }
                                       return Container();
                                     },
-                                    separatorBuilder: (context, index) => horizontalSpace(10),
-                                    itemCount: CustomerCubit.get(context).categoriesModel?.data?.length ?? 0,
+                                    separatorBuilder: (context, index) =>
+                                        horizontalSpace(10),
+                                    itemCount: CustomerCubit.get(context)
+                                            .categoriesModel
+                                            ?.data
+                                            ?.length ??
+                                        0,
                                   ),
                                 ),
                               ),
@@ -316,8 +354,12 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                             const SizedBox(height: 25.0),
                             Text(
                               'Meals you might like',
-                              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                  fontWeight: FontWeight.bold, fontSize: 21.0),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall
+                                  ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 21.0),
                             ),
                             verticalSpace(15),
                             if (cubit.productsModel != null &&
@@ -331,20 +373,24 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                     GridView.count(
                                       padding: EdgeInsets.only(bottom: 20.0.h),
                                       shrinkWrap: true,
-                                      physics: const NeverScrollableScrollPhysics(),
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
                                       crossAxisCount: 2,
                                       crossAxisSpacing: 10,
                                       mainAxisSpacing: 10,
                                       childAspectRatio: 1 / 1.4,
                                       children: List.generate(
-                                        cubit.productsModel!.data!.products!.length,
+                                        cubit.productsModel!.data!.products!
+                                            .length,
                                         (index) {
-                                          var product = cubit.productsModel!.data!.products![index];
+                                          var product = cubit.productsModel!
+                                              .data!.products![index];
                                           return InkWell(
                                             onTap: () {
                                               var productId = product.id;
                                               if (productId != null) {
-                                                cubit.getProductDetails(id: productId);
+                                                cubit.getProductDetails(
+                                                    id: productId);
                                               }
                                             },
                                             child: buildItem(context, product),
@@ -352,26 +398,31 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                         },
                                       ),
                                     ),
-                                    if (cubit.productsModel!.data!.productsCount! > 20)
+                                    if (cubit.productsModel!.data!
+                                            .productsCount! >
+                                        20)
                                       NumberPagination(
                                         groupSpacing: 5,
                                         threshold: 3,
                                         buttonRadius: 50,
                                         pageInit: cubit.selectedPageNumber,
                                         colorPrimary: ColorManager.mainOrange,
-                                        colorSub: ColorManager.notificationColor,
+                                        colorSub:
+                                            ColorManager.notificationColor,
                                         onPageChanged: (index) {
                                           cubit.getProducts(page: index);
                                           setState(() {
                                             cubit.selectedPageNumber = index;
                                           });
                                         },
-                                        pageTotal: cubit.productsModel!.data!.pagination!.lastPage!,
+                                        pageTotal: cubit.productsModel!.data!
+                                            .pagination!.lastPage!,
                                       ),
                                   ],
                                 ),
                               )
-                            else if (cubit.productsModel?.data?.products != null)
+                            else if (cubit.productsModel?.data?.products !=
+                                null)
                               Shimmer.fromColors(
                                 baseColor: Colors.grey[400]!,
                                 highlightColor: Colors.grey[300]!,

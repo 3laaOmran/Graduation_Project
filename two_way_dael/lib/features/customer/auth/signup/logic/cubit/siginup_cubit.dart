@@ -133,32 +133,6 @@ class SignupCubit extends Cubit<SignupStates> {
       emit(PhotoAndAddressErrorState(error.toString()));
     });
   }
-  //   required int cityId,
-  //   required int governorateId,
-  //   required String token,
-  //   File? image,
-  // }) {
-  //   emit(PhotoAndAddressLoadingState());
-
-  //   Map<String, dynamic> data = {
-  //     'city_id': cityId,
-  //     'governorate_id': governorateId,
-  //   };
-
-  //   DioHelper.postData(
-  //     token: token,
-  //     url: PHOTOANDADDRESS,
-  //     data: data,
-  //     image: image,
-  //   ).then((value) {
-  //     photoAndAddressModel = PhotoAndAddressModel.fromJson(value.data);
-  //     // debugPrint(value.data['message']);
-  //     emit(PhotoAndAddressSuccessState(photoAndAddressModel!));
-  //   }).catchError((error) {
-  //     debugPrint(error.toString());
-  //     emit(PhotoAndAddressErrorState(error.toString()));
-  //   });
-  // }
 
   File? imagePick;
   void pickImage() async {

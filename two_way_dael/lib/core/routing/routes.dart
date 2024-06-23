@@ -33,4 +33,7 @@ class Routes {
   static const String sellerDonationScreen = '/sellerDonationScreen';
   static const String sellerNewOrdersScreen = '/sellerNewOrdersScreen';
   static const String sellerChangePasswordScreen = '/sellerChangePasswordScreen';
+  static const String sellerPhoneForForgetPasswordScreen = '/sellerPhoneForForgetPasswordScreen';
+  static const String sellerPhoneForForgetPasswordOtpScreen = '/sellerPhoneForForgetPasswordOtpScreen';
+  static const String sellerPhoneForForgetPasswordChangeScreen = '/sellerPhoneForForgetPasswordChangeScreen';
 }

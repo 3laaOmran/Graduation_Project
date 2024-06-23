@@ -19,6 +19,9 @@ const customerOrdersUrl = 'me/orders';
 //--------------------------------------
 const sellerLogin = 'auth/login/seller';
 const sellerSignup = 'auth/register/seller';
+const sellerForgetPassword = 'password/forgot/seller';
+const sellerForgetPasswordOtp = 'password/otp/seller';
+const sellerForgetPasswordChange = 'password/change/seller';
 const sellerVerification = 'auth/verify/seller';
 const sellerCertificates = 'auth/seller/certificates';
 const sellerPhotoAndAddress = 'auth/address/seller';

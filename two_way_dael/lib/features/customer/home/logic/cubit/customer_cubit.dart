@@ -12,6 +12,7 @@ import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/features/customer/auth/signup/data/models/get_gov_and_city_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/category_details_model.dart';
+import 'package:two_way_dael/features/customer/home/data/models/favorites_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/get_profile_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/order_details_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/orders_model.dart';
@@ -158,6 +159,7 @@ class CustomerCubit extends Cubit<CustomerStates> {
       emit(CustomerGetProductsErrorState());
     });
   }
+
   void sellerProductsPagination({int? page, int? id}) {
     emit(CustomerGetSellerProductsPaginationLoadingState());
     DioHelper.getData(
@@ -172,6 +174,7 @@ class CustomerCubit extends Cubit<CustomerStates> {
       emit(CustomerDecreaseCartItemQuantityErrorState());
     });
   }
+
   ProductsModel? productsModel2;
   void getSellerProducts({int? id}) {
     emit(CustomerGetSellerProductsLoadingState());
@@ -346,6 +349,7 @@ class CustomerCubit extends Cubit<CustomerStates> {
     emit(GetProductDetailsLoadingState());
     await DioHelper.getData(
       url: 'product/$id',
+      token: token,
     ).then((value) {
       productDetails = ProductDetails.fromJson(value.data);
       emit(GetProductDetailsSuccessState());
@@ -395,6 +399,71 @@ class CustomerCubit extends Cubit<CustomerStates> {
     }).catchError((error) {
       debugPrint(error.toString());
       emit(GetCategoryDetailsErrorState(error.toString()));
+    });
+  }
+
+  void addToFavorites({required int id}) {
+    emit(AddToFavoritesLoadingState());
+    DioHelper.postData(
+      url: 'me/favourites',
+      data: {
+        'seller_id': id,
+      },
+      token: token,
+    ).then((value) {
+      emit(AddToFavoritesSuccessState());
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(AddToFavoritesErrorState(error.toString()));
+    });
+  }
+
+  void removeFromFavorites({required int id}) {
+    emit(RemoveFromFavoritesLoadingState());
+    DioHelper.postData(
+      url: 'me/favourites/$id',
+      data: {},
+      token: token,
+    ).then((value) {
+      emit(RemoveFromFavoritesSuccessState());
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(RemoveFromFavoritesErrorState(error.toString()));
+    });
+  }
+
+  FavoritesModel? favoritesModel;
+  void getFavoriteSellers() {
+    emit(GetFavoriteSellersLoadingState());
+    DioHelper.getData(
+      url: 'me/favourites',
+      token: token,
+    ).then((value) {
+      favoritesModel = FavoritesModel.fromJson(value.data);
+      emit(GetFavoriteSellersSuccessState());
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(GetFavoriteSellersErrorState(error.toString()));
+    });
+  }
+
+  void rateSeller({
+    required int id,
+    required int rate,
+  }) {
+    emit(CustomerRateSellersLoadingState());
+    DioHelper.postData(
+      url: 'me/rate-seller/$id',
+      data: {
+        'value': rate,
+        'store_id': id,
+      },
+      token: token,
+    ).then((value) {
+      emit(CustomerRateSellersSuccessState());
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(CustomerRateSellersErrorState(error.toString()));
     });
   }
 

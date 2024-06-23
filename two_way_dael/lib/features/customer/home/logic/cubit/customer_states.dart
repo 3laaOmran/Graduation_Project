@@ -247,6 +247,42 @@ class GetCustomerOrdersErrorState extends CustomerStates {
 
   GetCustomerOrdersErrorState(this.error);
 }
+class AddToFavoritesLoadingState extends CustomerStates {}
+
+class AddToFavoritesSuccessState extends CustomerStates {}
+
+class AddToFavoritesErrorState extends CustomerStates {
+  final String error;
+
+  AddToFavoritesErrorState(this.error);
+}
+class RemoveFromFavoritesLoadingState extends CustomerStates {}
+
+class RemoveFromFavoritesSuccessState extends CustomerStates {}
+
+class RemoveFromFavoritesErrorState extends CustomerStates {
+  final String error;
+
+  RemoveFromFavoritesErrorState(this.error);
+}
+class GetFavoriteSellersLoadingState extends CustomerStates {}
+
+class GetFavoriteSellersSuccessState extends CustomerStates {}
+
+class GetFavoriteSellersErrorState extends CustomerStates {
+  final String error;
+
+  GetFavoriteSellersErrorState(this.error);
+}
+class CustomerRateSellersLoadingState extends CustomerStates {}
+
+class CustomerRateSellersSuccessState extends CustomerStates {}
+
+class CustomerRateSellersErrorState extends CustomerStates {
+  final String error;
+
+  CustomerRateSellersErrorState(this.error);
+}
 class GetCustomerOrderDetailsLoadingState extends CustomerStates {}
 
 class GetCustomerOrderDetailsSuccessState extends CustomerStates {

@@ -67,6 +67,7 @@ class SellerNotificationsModule extends StatelessWidget {
       builder: (context, state) {
         var cubit = SellerCubit.get(context);
         return Scaffold(
+          backgroundColor: ColorManager.notificationColor,
           appBar: AppBar(
             toolbarHeight: 80,
             leading: customIconButton(
@@ -85,11 +86,16 @@ class SellerNotificationsModule extends StatelessWidget {
           ),
           body: cubit.sellerNotificationsModel?.data?.notifications?.isEmpty ==
                   true
-              ? Center(
-                  child: Text(
-                  'No Notifications Yet',
-                  style: TextStyles.font20blackbold,
-                ))
+              ? Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Center(
+                      child: Text(
+                    'No Notifications For You Yet',
+                    textAlign: TextAlign.center,
+                    style:
+                        TextStyles.font17MainOrangeBold.copyWith(fontSize: 25),
+                  )),
+                )
               : ListView.separated(
                   itemCount: cubit.sellerNotifications.length,
                   itemBuilder: (context, index) {

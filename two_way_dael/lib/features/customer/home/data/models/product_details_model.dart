@@ -77,6 +77,7 @@ class Store {
   String? rate;
   String? rateWithReviews;
   String? phone;
+  bool? isInFav;
   List<Products>? customersellerProducts;
 
   Store.fromJson(Map<String, dynamic> json) {
@@ -85,6 +86,7 @@ class Store {
     address = json['address'];
     image = json['image'];
     rate = json['rate'];
+    isInFav = json['is_favourite'];
     rateWithReviews = json['rate_with_reviews'];
     phone = json['phone'];
     if (json['products'] != null) {
