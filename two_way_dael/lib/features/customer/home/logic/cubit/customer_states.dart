@@ -1,5 +1,6 @@
 import 'package:two_way_dael/features/customer/home/data/models/category_details_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/get_profile_model.dart';
+import 'package:two_way_dael/features/customer/home/data/models/notifications_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/order_details_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/products_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/update_password_model.dart';
@@ -295,4 +296,41 @@ class GetCustomerOrderDetailsErrorState extends CustomerStates {
   final String error;
 
   GetCustomerOrderDetailsErrorState(this.error);
+}
+
+class ContactUsLoadingState extends CustomerStates {}
+
+class ContactUsSuccessState extends CustomerStates {}
+
+class ContactUsErrorState extends CustomerStates {
+  final String error;
+
+  ContactUsErrorState(this.error);
+}
+
+class AboutAppLoadingState extends CustomerStates {}
+
+class AboutAppSuccessState extends CustomerStates {}
+
+class AboutAppErrorState extends CustomerStates {
+  final String error;
+
+  AboutAppErrorState(this.error);
+}
+
+class GetNotificationsLoadingState extends CustomerStates {}
+class GetNotificationsSuccessState extends CustomerStates {}
+class GetNotificationsErrorState extends CustomerStates {
+  final String error;
+  GetNotificationsErrorState(this.error);
+}
+class GetNotificationDetailsLoadingState extends CustomerStates {}
+class GetNotificationDetailsSuccessState extends CustomerStates {
+  final NotifiDetails notifiDetails;
+
+  GetNotificationDetailsSuccessState(this.notifiDetails);
+}
+class GetNotificationDetailsErrorState extends CustomerStates {
+  final String error;
+  GetNotificationDetailsErrorState(this.error);
 }

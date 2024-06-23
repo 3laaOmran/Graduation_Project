@@ -184,7 +184,12 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                     ),
                   ),
                   Stack(
-                    alignment: AlignmentDirectional.topEnd,
+                    alignment:
+                        cubit.notificationsModel?.data?.isNotEmpty == true &&
+                                cubit.notificationsModel!.data!.first.isRead ==
+                                    false
+                            ? AlignmentDirectional.topEnd
+                            : AlignmentDirectional.center,
                     children: [
                       customIconButton(
                         onPressed: () {
@@ -194,16 +199,18 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                         toolTip: 'Notifications',
                         size: 30.0,
                       ),
-                      Container(
-                        padding: const EdgeInsetsDirectional.only(
-                          top: 11.0,
-                          end: 14.0,
+                      if (cubit.notificationsModel?.data?.isNotEmpty == true &&
+                          cubit.notificationsModel!.data!.first.isRead == false)
+                        Container(
+                          padding: const EdgeInsetsDirectional.only(
+                            top: 11.0,
+                            end: 14.0,
+                          ),
+                          child: const CircleAvatar(
+                            radius: 3.5,
+                            backgroundColor: ColorManager.mainOrange,
+                          ),
                         ),
-                        child: const CircleAvatar(
-                          radius: 3.5,
-                          backgroundColor: ColorManager.mainOrange,
-                        ),
-                      ),
                     ],
                   ),
                 ],

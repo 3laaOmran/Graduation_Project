@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:two_way_dael/core/helpers/extensions.dart';
+import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/theming/colors.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
@@ -8,12 +9,67 @@ import 'package:two_way_dael/core/widgets/custom_icon_button.dart';
 import 'package:two_way_dael/features/customer/home/logic/cubit/customer_cubit.dart';
 import 'package:two_way_dael/features/customer/home/logic/cubit/customer_states.dart';
 
-class NotificationsScreen extends StatelessWidget {
+class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
 
   @override
+  State<NotificationsScreen> createState() => _NotificationsScreenState();
+}
+
+class _NotificationsScreenState extends State<NotificationsScreen> {
+  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CustomerCubit, CustomerStates>(
+    return BlocConsumer<CustomerCubit, CustomerStates>(
+      listener: (context, state) {
+        if (state is GetNotificationDetailsSuccessState) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              backgroundColor: Colors.white,
+              title: Center(
+                  child: Text(
+                state.notifiDetails.data!.title!,
+                style: TextStyles.font28MainOrangeBold.copyWith(
+                  fontSize: 20,
+                ),
+              )),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    state.notifiDetails.data!.content!,
+                    style: TextStyles.font15BlackBold,
+                  ),
+                  verticalSpace(15),
+                  Text('Craeted At: ', style: TextStyles.font15BlackBold),
+                  Text(
+                    state.notifiDetails.data!.createdAt!,
+                    style: TextStyles.font15GrayRegular,
+                  ),
+                  verticalSpace(5),
+                  Text('Available For: ', style: TextStyles.font15BlackBold),
+                  Text(
+                    state.notifiDetails.data!.lastUpdated!,
+                    style: TextStyles.font15GrayRegular,
+                  ),
+                ],
+              ),
+              actions: [
+                AppTextButton(
+                  buttonText: 'Close',
+                  textStyle: TextStyles.font12White,
+                  onPressed: () {
+                    context.pop();
+                  },
+                  buttonWidth: 80,
+                  buttonHeight: 15,
+                ),
+              ],
+            ),
+          );
+        }
+      },
       builder: (context, state) {
         var cubit = CustomerCubit.get(context);
         return Scaffold(
@@ -33,131 +89,84 @@ class NotificationsScreen extends StatelessWidget {
               style: TextStyles.font20Whitebold,
             ),
           ),
-          body: ListView.separated(
-              itemCount: cubit.notifications.length,
-              itemBuilder: (context, index) {
-                final notification = cubit.notifications[index];
-                return Dismissible(
-                  background: Container(
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.only(left: 20),
-                    color: Colors.red,
-                    child: const Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                      size: 50,
-                    ),
-                  ),
-                  secondaryBackground: Container(
-                    alignment: Alignment.centerRight,
-                    padding: const EdgeInsets.only(right: 20),
-                    color: Colors.red,
-                    child: const Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                      size: 50,
-                    ),
-                  ),
-                  key: Key(cubit.notifications[index].title),
-                  confirmDismiss: (direction) async {
-                    final result = await showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        backgroundColor: Colors.white,
-                        title: const Center(child: Text('Are you sure ?!')),
-                        content:
-                            const Text('You want to delete this notification'),
-                        actions: [
-                          AppTextButton(
-                            buttonText: 'Yes',
-                            textStyle: TextStyles.font12White,
-                            onPressed: () {
-                              Navigator.of(context).pop(true);
-                            },
-                            buttonWidth: 30,
-                            buttonHeight: 15,
-                          ),
-                          AppTextButton(
-                            buttonText: 'No',
-                            textStyle: TextStyles.font12White,
-                            onPressed: () {
-                              Navigator.of(context).pop(false);
-                            },
-                            buttonWidth: 30,
-                            buttonHeight: 15,
-                          ),
-                        ],
-                      ),
-                    );
-                    return result;
-                  },
-                  onDismissed: (direction) {
-                    cubit.deleteNotificatins(index);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        behavior: SnackBarBehavior.floating,
-                        backgroundColor: Colors.red,
-                        duration: const Duration(milliseconds: 900),
-                        content: Center(
-                          child: Text(
-                            'Notification deleted',
-                            style: TextStyles.font18White,
+          body: cubit.notificationsModel?.data?.isEmpty == true
+              ? Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Center(
+                      child: Text(
+                    'No Notifications For You Yet',
+                    textAlign: TextAlign.center,
+                    style:
+                        TextStyles.font17MainOrangeBold.copyWith(fontSize: 25),
+                  )),
+                )
+              : ListView.separated(
+                  itemCount: cubit.notifications.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        setState(() {
+                          cubit.notificationsModel!.data![index].isRead = true;
+                          cubit.getNotificationDetails(
+                              id: cubit.notificationsModel!.data![index].id!);
+                        });
+                      },
+                      child: Container(
+                        height: 100,
+                        color: !cubit.notificationsModel!.data![index].isRead!
+                            ? ColorManager.notificationColor
+                            : Colors.white,
+                        child: Center(
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              radius: 40,
+                              backgroundColor: !cubit
+                                      .notificationsModel!.data![index].isRead!
+                                  ? ColorManager.notificationColor
+                                  : Colors.white,
+                              child: Image.asset(
+                                cubit.notifications[index].image,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            title: Text(
+                              cubit.notifications[index].title,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyles.font17BlackBold,
+                            ),
+                            subtitle: Text(
+                              cubit.notifications[index].message,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            trailing: customIconButton(
+                              onPressed: () {},
+                              icon: Icons.info,
+                              color: ColorManager.mainOrange,
+                              toolTip: '',
+                            ),
                           ),
                         ),
                       ),
+                      // ),
                     );
                   },
-                  child: Container(
-                    height: 100,
-                    color: notification.isNew
-                        ? ColorManager.notificationColor
-                        : Colors.white,
-                    child: Center(
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          radius: 40,
-                          backgroundImage:
-                              AssetImage(cubit.notifications[index].image),
+                  separatorBuilder: (context, index) {
+                    return Container(
+                      color: !cubit.notificationsModel!.data![index].isRead!
+                          ? Colors.white
+                          : ColorManager.notificationColor,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                        child: Container(
+                          width: double.infinity,
+                          height: 1,
+                          color: Colors.grey,
                         ),
-                        title: Text(
-                          cubit.notifications[index].title,
-                        ),
-                        subtitle: Text(
-                          cubit.notifications[index].message,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        trailing: customIconButton(
-                            onPressed: () {
-                              cubit.showNotificationDetails(
-                                  cubit.notifications[index], context);
-                            },
-                            icon: Icons.info,
-                            toolTip: 'View',
-                            color: notification.isNew
-                                ? ColorManager.mainOrange
-                                : ColorManager.gray),
                       ),
-                    ),
-                  ),
-                );
-              },
-              separatorBuilder: (context, index) {
-                final notification = cubit.notifications[index];
-                return Container(
-                  color: !notification.isNew
-                      ? Colors.white
-                      : ColorManager.notificationColor,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                    child: Container(
-                      width: double.infinity,
-                      height: 1,
-                      color: Colors.grey,
-                    ),
-                  ),
-                );
-              }),
+                    );
+                  }),
         );
       },
     );
@@ -168,9 +177,9 @@ class NotificationItem {
   final String title;
   final String message;
   final String image;
-  bool isNew;
+  // bool isNew;
   NotificationItem({
-    this.isNew = true,
+    // this.isNew = true,
     required this.title,
     required this.message,
     required this.image,

@@ -161,20 +161,21 @@ class _ProfileSellerScreenState extends State<ProfileSellerScreen> {
                           color: Colors.black,
                           size: 30.0,
                         ),
-                        Container(
-                          padding: const EdgeInsetsDirectional.only(
-                            top: 11.0,
-                            end: 12.0,
-                          ),
-                          child: const CircleAvatar(
-                            radius: 4.5,
-                            backgroundColor: Colors.white,
-                            child: CircleAvatar(
+                        if (cubit.sellerNotificationsModel?.data?.isNotEmpty ==
+                                true &&
+                            cubit.sellerNotificationsModel!.data!.first
+                                    .isRead ==
+                                false)
+                          Container(
+                            padding: const EdgeInsetsDirectional.only(
+                              top: 11.0,
+                              end: 14.0,
+                            ),
+                            child: const CircleAvatar(
                               radius: 3.5,
                               backgroundColor: ColorManager.mainOrange,
                             ),
                           ),
-                        ),
                       ],
                     ),
                   ),

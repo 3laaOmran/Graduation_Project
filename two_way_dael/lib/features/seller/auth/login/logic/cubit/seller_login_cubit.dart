@@ -91,6 +91,7 @@ class SellerLoginCubit extends Cubit<SellerLoginStates> {
       } else if (error is DioException && error.response?.statusCode == 429) {
         emit(PhoneForgetPasswordErrorState(error.response!.data['message']));
       }
+      emit(PhoneForgetPasswordErrorState(error.toString()));
       debugPrint(error.toString());
     });
   }

@@ -273,25 +273,8 @@ class SellerCubit extends Cubit<SellerStates> {
     emit(CategorySelectedState(selectedCategoryId!));
   }
 
-  void markNotificationAsRead(int index) {
-    sellerNotifications[index].isNew = false;
-    sortNotifications();
-    emit(SellerNotificationsState());
-  }
-
-  void deleteNotificatins(index) {
-    sellerNotifications.removeAt(index);
-    sortNotifications();
-    emit(SellerDeleteNotificationsState());
-  }
-
-  void sortNotifications() {
-    sellerNotifications
-        .sort((a, b) => (b.isNew ? 1 : 0).compareTo(a.isNew ? 1 : 0));
-  }
-
   NotificationDetails? notificationDetails;
-  Future<void> getNotificationDetails({required int id}) async {
+  Future<void> getNotificationDetails({required String id}) async {
     emit(GetNotificationDetailsLoadingState());
     DioHelper.getData(
       url: 'seller/notification/$id',
@@ -397,8 +380,8 @@ class SellerCubit extends Cubit<SellerStates> {
       token: sellerToken,
     ).then((value) {
       sellerNotificationsModel = NotificationsModel.fromJson(value.data);
-      if (sellerNotificationsModel!.data!.notifications != null) {
-        sellerNotificationsModel!.data!.notifications!.forEach((dataItem) {
+      if (sellerNotificationsModel!.data != null) {
+        sellerNotificationsModel!.data!.forEach((dataItem) {
           sellerNotifications.add(NotificationItem(
             title: dataItem.title!,
             message: dataItem.createdAt!,

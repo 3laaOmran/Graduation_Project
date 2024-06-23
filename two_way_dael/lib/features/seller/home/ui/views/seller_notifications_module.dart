@@ -8,9 +8,15 @@ import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/core/widgets/custom_icon_button.dart';
 import 'package:two_way_dael/features/seller/home/logic/cubit/seller_cubit.dart';
 
-class SellerNotificationsModule extends StatelessWidget {
+class SellerNotificationsModule extends StatefulWidget {
   const SellerNotificationsModule({super.key});
 
+  @override
+  State<SellerNotificationsModule> createState() =>
+      _SellerNotificationsModuleState();
+}
+
+class _SellerNotificationsModuleState extends State<SellerNotificationsModule> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SellerCubit, SellerStates>(
@@ -22,7 +28,7 @@ class SellerNotificationsModule extends StatelessWidget {
               backgroundColor: Colors.white,
               title: Center(
                   child: Text(
-                state.notificationDetails.notificationData!.title!,
+                state.notificationDetails.data!.title!,
                 style: TextStyles.font28MainOrangeBold.copyWith(
                   fontSize: 20,
                 ),
@@ -32,19 +38,19 @@ class SellerNotificationsModule extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    state.notificationDetails.notificationData!.body!,
+                    state.notificationDetails.data!.content!,
                     style: TextStyles.font15BlackBold,
                   ),
                   verticalSpace(15),
                   Text('Craeted At: ', style: TextStyles.font15BlackBold),
                   Text(
-                    state.notificationDetails.notificationData!.createdAt!,
+                    state.notificationDetails.data!.createdAt!,
                     style: TextStyles.font15GrayRegular,
                   ),
                   verticalSpace(5),
                   Text('Available For: ', style: TextStyles.font15BlackBold),
                   Text(
-                    state.notificationDetails.notificationData!.lastUpdated!,
+                    state.notificationDetails.data!.lastUpdated!,
                     style: TextStyles.font15GrayRegular,
                   ),
                 ],
@@ -67,7 +73,6 @@ class SellerNotificationsModule extends StatelessWidget {
       builder: (context, state) {
         var cubit = SellerCubit.get(context);
         return Scaffold(
-          backgroundColor: ColorManager.notificationColor,
           appBar: AppBar(
             toolbarHeight: 80,
             leading: customIconButton(
@@ -84,8 +89,7 @@ class SellerNotificationsModule extends StatelessWidget {
               style: TextStyles.font20Whitebold,
             ),
           ),
-          body: cubit.sellerNotificationsModel?.data?.notifications?.isEmpty ==
-                  true
+          body: cubit.sellerNotificationsModel?.data?.isEmpty == true
               ? Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Center(
@@ -99,23 +103,28 @@ class SellerNotificationsModule extends StatelessWidget {
               : ListView.separated(
                   itemCount: cubit.sellerNotifications.length,
                   itemBuilder: (context, index) {
-                    final notification = cubit.sellerNotifications[index];
                     return InkWell(
                       onTap: () {
-                        cubit.getNotificationDetails(
-                            id: cubit.sellerNotificationsModel!.data!
-                                .notifications![index].id!);
+                        setState(() {
+                          cubit.sellerNotificationsModel!.data![index].isRead =
+                              true;
+                          cubit.getNotificationDetails(
+                              id: cubit
+                                  .sellerNotificationsModel!.data![index].id!);
+                        });
                       },
                       child: Container(
                         height: 100,
-                        color: notification.isNew
+                        color: !cubit
+                                .sellerNotificationsModel!.data![index].isRead!
                             ? ColorManager.notificationColor
                             : Colors.white,
                         child: Center(
                           child: ListTile(
                             leading: CircleAvatar(
                               radius: 40,
-                              backgroundColor: notification.isNew
+                              backgroundColor: !cubit.sellerNotificationsModel!
+                                      .data![index].isRead!
                                   ? ColorManager.notificationColor
                                   : Colors.white,
                               child: Image.asset(
@@ -125,11 +134,13 @@ class SellerNotificationsModule extends StatelessWidget {
                             ),
                             title: Text(
                               cubit.sellerNotifications[index].title,
-                              style: TextStyles.font20blackbold,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyles.font17BlackBold,
                             ),
                             subtitle: Text(
                               cubit.sellerNotifications[index].message,
-                              maxLines: 2,
+                              maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
                             trailing: customIconButton(
@@ -145,11 +156,11 @@ class SellerNotificationsModule extends StatelessWidget {
                     );
                   },
                   separatorBuilder: (context, index) {
-                    final notification = cubit.sellerNotifications[index];
                     return Container(
-                      color: !notification.isNew
-                          ? Colors.white
-                          : ColorManager.notificationColor,
+                      color:
+                          cubit.sellerNotificationsModel!.data![index].isRead!
+                              ? Colors.white
+                              : ColorManager.notificationColor,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30.0),
                         child: Container(
@@ -170,9 +181,7 @@ class NotificationItem {
   final String title;
   final String message;
   final String image;
-  bool isNew;
   NotificationItem({
-    this.isNew = true,
     required this.title,
     required this.message,
     required this.image,

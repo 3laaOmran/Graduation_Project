@@ -7,13 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:two_way_dael/core/constants/constants.dart';
-import 'package:two_way_dael/core/helpers/extensions.dart';
-import 'package:two_way_dael/core/theming/styles.dart';
-import 'package:two_way_dael/core/widgets/custom_button.dart';
 import 'package:two_way_dael/features/customer/auth/signup/data/models/get_gov_and_city_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/category_details_model.dart';
+import 'package:two_way_dael/features/customer/home/data/models/contact_us_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/favorites_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/get_profile_model.dart';
+import 'package:two_way_dael/features/customer/home/data/models/notifications_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/order_details_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/orders_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/product_details_model.dart';
@@ -467,6 +466,55 @@ class CustomerCubit extends Cubit<CustomerStates> {
     });
   }
 
+  AboutAppModel? aboutAppModel;
+  void getAboutApp() async {
+    emit(AboutAppLoadingState());
+    await DioHelper.getData(
+      url: ABOUTAPP,
+    ).then((value) {
+      aboutAppModel = AboutAppModel.fromJson(value.data);
+      emit(AboutAppSuccessState());
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(AboutAppErrorState(error.toString()));
+    });
+  }
+
+  final titleController = TextEditingController();
+  final messageController = TextEditingController();
+  final emailFormKey = GlobalKey<FormState>();
+
+  ContactUsModel? contactUsModel;
+  void contactUs({
+    required String subject,
+    required String message,
+  }) {
+    emit(ContactUsLoadingState());
+    try {
+      DioHelper.postData(
+        url: CONTACTUS,
+        token: token,
+        data: {
+          'subject': subject,
+          'message': message,
+        },
+      ).then((value) {
+        contactUsModel = ContactUsModel.fromJson(value.data);
+        emit(ContactUsSuccessState());
+      }).catchError((error) {
+        if (error is DioException && error.response != null) {
+          final errorMessage =
+              'Error ${error.response?.statusCode}: ${error.response?.data['message']}';
+          emit(ContactUsErrorState(errorMessage));
+        } else {
+          emit(ContactUsErrorState('An unexpected error occurred: $error'));
+        }
+      });
+    } catch (error) {
+      emit(ContactUsErrorState('An unexpected error occurred: $error'));
+    }
+  }
+
   List<SelectedListItem> selectedCities = [];
   CityModel? cityModel;
   void getCities(governorateid) {
@@ -529,46 +577,6 @@ class CustomerCubit extends Cubit<CustomerStates> {
     emit(GetUserDataChaneIconVisibilityState());
   }
 
-  void markNotificationAsRead(int index) {
-    notifications[index].isNew = false;
-    sortNotifications();
-    emit(NotificationsState());
-  }
-
-  void deleteNotificatins(index) {
-    notifications.removeAt(index);
-    sortNotifications();
-    emit(DeleteNotificationsState());
-  }
-
-  void sortNotifications() {
-    notifications.sort((a, b) => (b.isNew ? 1 : 0).compareTo(a.isNew ? 1 : 0));
-  }
-
-  void showNotificationDetails(NotificationItem notification, context) {
-    markNotificationAsRead(notifications.indexOf(notification));
-    emit(NotificationsState());
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
-        title: Center(child: Text(notification.title)),
-        content: Text(notification.message),
-        actions: [
-          AppTextButton(
-            buttonText: 'Close',
-            textStyle: TextStyles.font12White,
-            onPressed: () {
-              context.pop();
-            },
-            buttonWidth: 80,
-            buttonHeight: 15,
-          ),
-        ],
-      ),
-    );
-  }
-
   CustomerOrdersModel? customerOrders;
   void getCustomerOrders() {
     emit(GetCustomerOrdersLoadingState());
@@ -603,40 +611,49 @@ class CustomerCubit extends Cubit<CustomerStates> {
     });
   }
 
-  List<NotificationItem> notifications = [
-    NotificationItem(
-      title: '3laa',
-      message: 'Alaa Meawd Omran',
-      image: 'assets/images/default_profile.png',
-    ),
-    NotificationItem(
-      title: '3laaOmran',
-      message:
-          'Alaa Meawd OmranAlaa Meawd OmranAlaa Meawd OmranAlaa Meawd OmranAlaa Meawd Omran',
-      image: 'assets/images/default_profile.png',
-    ),
-    NotificationItem(
-      title: 'Two',
-      message: 'Alaa Meawd Omran',
-      image: 'assets/images/default_profile.png',
-    ),
-    NotificationItem(
-      title: 'Way',
-      message: 'Alaa Meawd Omran',
-      image: 'assets/images/default_profile.png',
-    ),
-    NotificationItem(
-      title: 'Deal',
-      message: 'Alaa Meawd Omran',
-      image: 'assets/images/default_profile.png',
-    ),
-    NotificationItem(
-      title: 'twoWayDeal',
-      message:
-          ' Alaa Meawd OmranAlaa Meawd OmranAlaa Meawd OmranAlaa Meawd OmranAlaa Meawd Omran',
-      image: 'assets/images/default_profile.png',
-    ),
-  ];
+ List<NotificationItem> notifications = [];
+  NotificationsModel? notificationsModel;
+  void getNotifiCations() {
+    emit(GetNotificationsLoadingState());
+    DioHelper.getData(
+      url: 'me/notifications',
+      token: token,
+    ).then((value) {
+      notificationsModel = NotificationsModel.fromJson(value.data);
+      if (notificationsModel!.data != null) {
+        notificationsModel!.data!.forEach((dataItem) {
+          notifications.add(NotificationItem(
+            title: dataItem.title!,
+            message: dataItem.createdAt!,
+            image: 'assets/images/two_way_deal_icon.png',
+          ));
+        });
+      } else {
+        print("No data available.");
+      }
+      emit(GetNotificationsSuccessState());
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(GetNotificationsErrorState(error.toString()));
+    });
+  }
+  
+  NotifiDetails? notifiDetails;
+  Future<void> getNotificationDetails({required String id}) async {
+    emit(GetNotificationDetailsLoadingState());
+    DioHelper.getData(
+      url: 'me/notification/$id',
+      token: token,
+    ).then((value) {
+      notifiDetails = NotifiDetails.fromJson(value.data);
+      emit(GetNotificationDetailsSuccessState(notifiDetails!));
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(GetNotificationDetailsErrorState(error.toString()));
+    });
+  }
+
+
   List<DropdownMenuItem<String>>? categoriesList = [];
   CategoriesModel? categoriesModel;
   void getCategories() {

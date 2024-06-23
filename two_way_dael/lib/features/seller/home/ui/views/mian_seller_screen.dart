@@ -167,20 +167,22 @@ class HomeScreen extends StatelessWidget {
                             toolTip: 'Notifications',
                             size: 30.0,
                           ),
-                          Container(
-                            padding: EdgeInsetsDirectional.only(
-                              top: 12.0.h,
-                              end: 12.0.w,
-                            ),
-                            child: const CircleAvatar(
-                              radius: 4.5,
-                              backgroundColor: Colors.white,
-                              child: CircleAvatar(
+                          if (cubit.sellerNotificationsModel?.data
+                                      ?.isNotEmpty ==
+                                  true &&
+                              cubit.sellerNotificationsModel!.data!.first
+                                      .isRead ==
+                                  false)
+                            Container(
+                              padding: const EdgeInsetsDirectional.only(
+                                top: 11.0,
+                                end: 14.0,
+                              ),
+                              child: const CircleAvatar(
                                 radius: 3.5,
                                 backgroundColor: ColorManager.mainOrange,
                               ),
                             ),
-                          ),
                         ],
                       ),
                     ],

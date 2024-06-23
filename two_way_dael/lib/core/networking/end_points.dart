@@ -29,3 +29,6 @@ const sellerdata = 'seller';
 const sellerProducsEndPoint = 'seller/products';
 const sellersNotifications = 'seller/notifications';
 const sellerUpdatePasswordPoint = 'seller/update-password';
+
+const ABOUTAPP = 'about-us';
+const CONTACTUS = 'me/contact-us';
