@@ -12,9 +12,11 @@ import 'package:two_way_dael/features/customer/home/logic/cubit/customer_cubit.d
 import 'package:two_way_dael/features/customer/home/logic/cubit/customer_states.dart';
 import 'package:two_way_dael/features/customer/home/ui/Modules/categories_details_screen.dart';
 import 'package:two_way_dael/features/customer/home/ui/Modules/food_details.dart';
+import 'package:two_way_dael/features/customer/home/ui/widgets/best_sale_screen.dart';
 import 'package:two_way_dael/features/customer/home/ui/widgets/build_category_item.dart';
 import 'package:two_way_dael/features/customer/home/ui/widgets/build_food_item.dart';
 import 'package:two_way_dael/features/customer/home/ui/widgets/home_skelton_loading.dart';
+import 'package:two_way_dael/features/customer/home/ui/widgets/top_deals.dart';
 
 import '../../../../../core/helpers/spacing.dart';
 import '../../../../../core/theming/colors.dart';
@@ -32,6 +34,24 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<CustomerCubit, CustomerStates>(
       listener: (context, state) {
+        if (state is GetBestSalesSuccessState) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => BestSaleScreen(
+                bestsaleModel: state.bestSalesModel!,
+              ),
+            ),
+          );
+        }
+        if (state is GetTopDealsSuccessState) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => TopDeals(
+                bestsaleModel2: state.bestSalesModel2!,
+              ),
+            ),
+          );
+        }
         if (state is GetProductDetailsSuccessState) {
           var productDetails =
               CustomerCubit.get(context).productDetails?.data?.product;
@@ -260,31 +280,38 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                               decoration: const BoxDecoration(
                                 color: Colors.white,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(50.0)),
+                                    BorderRadius.all(Radius.circular(25.0)),
                               ),
                               clipBehavior: Clip.antiAliasWithSaveLayer,
                               child: CarouselSlider(
-                                items: const [
-                                  Image(
-                                    image: NetworkImage(
-                                      'https://img.freepik.com/free-psd/japanese-food-restaurant-horizontal-banner-template_23-2149447411.jpg?size=626&ext=jpg&ga=GA1.1.1916073333.1698184272&semt=ais',
+                                items: [
+                                  InkWell(
+                                    onTap: () {
+                                      cubit.getBestSale(
+                                          id: cubit.deals?.data?.bestsale?.id ??
+                                              0);
+                                    },
+                                    child: Image(
+                                      image: NetworkImage(
+                                        cubit.deals?.data?.bestsale?.image ??
+                                            'https://img.freepik.com/free-psd/japanese-food-restaurant-horizontal-banner-template_23-2149447411.jpg?size=626&ext=jpg&ga=GA1.1.1916073333.1698184272&semt=ais',
+                                      ),
+                                      fit: BoxFit.fill,
                                     ),
-                                    fit: BoxFit.cover,
                                   ),
-                                  Image(
-                                    image: NetworkImage(
-                                        'https://img.freepik.com/free-psd/delicious-food-facebook-template_23-2150056445.jpg?size=626&ext=jpg&ga=GA1.1.1916073333.1698184272&semt=ais'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  Image(
-                                    image: NetworkImage(
-                                        'https://img.freepik.com/free-vector/flat-food-landing-page-template_23-2149046596.jpg?size=626&ext=jpg&ga=GA1.1.1916073333.1698184272&semt=ais'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  Image(
-                                    image: NetworkImage(
-                                        'https://img.freepik.com/free-vector/online-grocery-store-banner-design_23-2150085726.jpg?size=626&ext=jpg&ga=GA1.1.1916073333.1698184272&semt=ais'),
-                                    fit: BoxFit.cover,
+                                  InkWell(
+                                    onTap: () {
+                                      cubit.getTopDeals(
+                                          id: cubit.deals?.data?.topdeals?.id ??
+                                              0);
+                                    },
+                                    child: Image(
+                                      image: NetworkImage(
+                                        cubit.deals?.data?.topdeals?.image ??
+                                            'https://img.freepik.com/free-psd/japanese-food-restaurant-horizontal-banner-template_23-2149447411.jpg?size=626&ext=jpg&ga=GA1.1.1916073333.1698184272&semt=ais',
+                                      ),
+                                      fit: BoxFit.fill,
+                                    ),
                                   ),
                                 ],
                                 options: CarouselOptions(

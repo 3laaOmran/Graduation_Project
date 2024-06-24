@@ -10,6 +10,7 @@ import 'package:two_way_dael/core/constants/constants.dart';
 import 'package:two_way_dael/features/customer/auth/signup/data/models/get_gov_and_city_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/category_details_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/contact_us_model.dart';
+import 'package:two_way_dael/features/customer/home/data/models/deals_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/favorites_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/get_profile_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/notifications_model.dart';
@@ -611,7 +612,7 @@ class CustomerCubit extends Cubit<CustomerStates> {
     });
   }
 
- List<NotificationItem> notifications = [];
+  List<NotificationItem> notifications = [];
   NotificationsModel? notificationsModel;
   void getNotifiCations() {
     emit(GetNotificationsLoadingState());
@@ -637,7 +638,7 @@ class CustomerCubit extends Cubit<CustomerStates> {
       emit(GetNotificationsErrorState(error.toString()));
     });
   }
-  
+
   NotifiDetails? notifiDetails;
   Future<void> getNotificationDetails({required String id}) async {
     emit(GetNotificationDetailsLoadingState());
@@ -652,7 +653,6 @@ class CustomerCubit extends Cubit<CustomerStates> {
       emit(GetNotificationDetailsErrorState(error.toString()));
     });
   }
-
 
   List<DropdownMenuItem<String>>? categoriesList = [];
   CategoriesModel? categoriesModel;
@@ -673,6 +673,44 @@ class CustomerCubit extends Cubit<CustomerStates> {
       emit(GetCategoriesSuccessState());
     }).catchError((error) {
       emit(GetCategoriesErrorState(error.toString()));
+    });
+  }
+
+  Deals? deals;
+  void getHotDealsAndOffers() {
+    emit(GetHotDealsAndOffersLoadingState());
+    DioHelper.getData(
+      url: 'deals',
+    ).then((value) {
+      deals = Deals.fromJson(value.data);
+      emit(GetHotDealsAndOffersSuccessState());
+    }).catchError((error) {
+      emit(GetHotDealsAndOffersErrorState(error.toString()));
+    });
+  }
+
+  BestsaleModel? bestsaleModel;
+  void getBestSale({required int id}) {
+    emit(GetBestSalesLoadingState());
+    DioHelper.getData(
+      url: 'deals/$id',
+    ).then((value) {
+      bestsaleModel = BestsaleModel.fromJson(value.data);
+      emit(GetBestSalesSuccessState(bestsaleModel!));
+    }).catchError((error) {
+      emit(GetBestSalesErrorState(error.toString()));
+    });
+  }
+  BestsaleModel? bestsaleModel2;
+  void getTopDeals({required int id}) {
+    emit(GetTopDealsLoadingState());
+    DioHelper.getData(
+      url: 'deals/$id',
+    ).then((value) {
+      bestsaleModel2 = BestsaleModel.fromJson(value.data);
+      emit(GetTopDealsSuccessState(bestsaleModel2!));
+    }).catchError((error) {
+      emit(GetTopDealsErrorState(error.toString()));
     });
   }
 }

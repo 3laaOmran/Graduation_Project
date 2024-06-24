@@ -1,4 +1,5 @@
 import 'package:two_way_dael/features/customer/home/data/models/category_details_model.dart';
+import 'package:two_way_dael/features/customer/home/data/models/deals_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/get_profile_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/notifications_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/order_details_model.dart';
@@ -333,4 +334,29 @@ class GetNotificationDetailsSuccessState extends CustomerStates {
 class GetNotificationDetailsErrorState extends CustomerStates {
   final String error;
   GetNotificationDetailsErrorState(this.error);
+}
+class GetHotDealsAndOffersLoadingState extends CustomerStates {}
+class GetHotDealsAndOffersSuccessState extends CustomerStates {
+}
+class GetHotDealsAndOffersErrorState extends CustomerStates {
+  final String error;
+  GetHotDealsAndOffersErrorState(this.error);
+}
+class GetBestSalesLoadingState extends CustomerStates {}
+class GetBestSalesSuccessState extends CustomerStates {
+  final BestsaleModel? bestSalesModel;
+  GetBestSalesSuccessState(this.bestSalesModel);
+}
+class GetBestSalesErrorState extends CustomerStates {
+  final String error;
+  GetBestSalesErrorState(this.error);
+}
+class GetTopDealsLoadingState extends CustomerStates {}
+class GetTopDealsSuccessState extends CustomerStates {
+  final BestsaleModel? bestSalesModel2;
+  GetTopDealsSuccessState(this.bestSalesModel2);
+}
+class GetTopDealsErrorState extends CustomerStates {
+  final String error;
+  GetTopDealsErrorState(this.error);
 }
