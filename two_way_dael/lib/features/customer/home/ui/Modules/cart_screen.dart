@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:two_way_dael/core/helpers/spacing.dart';
 import 'package:two_way_dael/core/theming/styles.dart';
 import 'package:two_way_dael/core/widgets/custom_button.dart';
+import 'package:two_way_dael/core/widgets/custom_text_form_field.dart';
+import 'package:two_way_dael/core/widgets/show_toast.dart';
+import 'package:two_way_dael/features/customer/home/ui/Modules/payment_Screen.dart';
 import '../../../../../core/theming/colors.dart';
 import '../../logic/cubit/customer_cubit.dart';
 import '../../logic/cubit/customer_states.dart';
@@ -14,9 +18,19 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CustomerCubit, CustomerStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is CheckoutErrorState) {
+          showToast(message: 'Order Created', state: TostStates.SUCCESS);
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => PaymentScreen(
+                    // checkoutModel: state.checkoutModel!,
+                  )));
+        }
+      },
       builder: (context, state) {
         final cubit = CustomerCubit.get(context);
+        var formKey = GlobalKey<FormState>();
+        var addressController = TextEditingController();
         return Scaffold(
           appBar: AppBar(
             scrolledUnderElevation: 0.0,
@@ -71,7 +85,7 @@ class CartScreen extends StatelessWidget {
                     ),
                     Container(
                       width: double.infinity,
-                      height: 170.0.h,
+                      height: 220.0.h,
                       color: Colors.white,
                       child: Padding(
                         padding: const EdgeInsets.all(20.0),
@@ -104,10 +118,48 @@ class CartScreen extends StatelessWidget {
                                 ],
                               ),
                             ),
+                            verticalSpace(10),
+                            Form(
+                              key: formKey,
+                              child: CustomTextFormField(
+                                isObsecureText: false,
+                                hintText: 'Address',
+                                controller: addressController,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Please enter your address';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            verticalSpace(10),
                             AppTextButton(
                               textStyle: TextStyles.font17WhiteBold,
                               buttonText: 'Check Out',
-                              onPressed: () {},
+                              onPressed: () {
+                                if (formKey.currentState!.validate()) {
+                                  final products = {
+                                    for (var product in cubit.cartProducts)
+                                      product.id: {
+                                        'id': product.id,
+                                        'name': product.name,
+                                        'quantity': product.quantity,
+                                        'price': product.netPrice,
+                                        'image': product.images!.isNotEmpty
+                                            ? product.images![0]
+                                            : null,
+                                      }
+                                  };
+
+                                  cubit.checkout(
+                                    shipping: false,
+                                    address: addressController.text,
+                                    totalPrice: cubit.getTotalPrice(),
+                                    products: products,
+                                  );
+                                }
+                              },
                             ),
                           ],
                         ),

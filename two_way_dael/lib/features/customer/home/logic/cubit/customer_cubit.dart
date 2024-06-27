@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:two_way_dael/core/constants/constants.dart';
 import 'package:two_way_dael/features/customer/auth/signup/data/models/get_gov_and_city_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/category_details_model.dart';
+import 'package:two_way_dael/features/customer/home/data/models/check_out_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/contact_us_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/deals_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/favorites_model.dart';
@@ -494,14 +495,14 @@ class CustomerCubit extends Cubit<CustomerStates> {
     try {
       DioHelper.postData(
         url: CONTACTUS,
-        token: token,
+        token: token ?? sellerToken,
         data: {
           'subject': subject,
           'message': message,
         },
       ).then((value) {
         contactUsModel = ContactUsModel.fromJson(value.data);
-        emit(ContactUsSuccessState());
+        emit(ContactUsSuccessState(contactUsModel!));
       }).catchError((error) {
         if (error is DioException && error.response != null) {
           final errorMessage =
@@ -701,6 +702,7 @@ class CustomerCubit extends Cubit<CustomerStates> {
       emit(GetBestSalesErrorState(error.toString()));
     });
   }
+
   BestsaleModel? bestsaleModel2;
   void getTopDeals({required int id}) {
     emit(GetTopDealsLoadingState());
@@ -711,6 +713,55 @@ class CustomerCubit extends Cubit<CustomerStates> {
       emit(GetTopDealsSuccessState(bestsaleModel2!));
     }).catchError((error) {
       emit(GetTopDealsErrorState(error.toString()));
+    });
+  }
+CheckoutModel? checkoutModel;
+  void checkout({
+    required String address,
+    required double totalPrice,
+    required Map products,
+    required bool shipping,
+  }) {
+    emit(CheckoutLoadingState());
+    DioHelper.postData(
+      url: 'me/checkout',
+      data: {
+        "shipping": shipping,
+        "address": address,
+        "total_price": totalPrice,
+        "products": products
+      },
+      token: token,
+    ).then((value) {
+      checkoutModel = CheckoutModel.fromJson(value.data);
+      emit(CheckoutSuccessState(checkoutModel!));
+    }).catchError((error) {
+      debugPrint(error.toString());
+      emit(CheckoutErrorState(error.toString()));
+    });
+  }
+  void payment({
+    required String expiry,
+    required int cardNumber,
+    required  String cvv,
+    required int invoiceId,
+    required int orderId,
+  }) {
+    emit(PaymentLoadingState());
+    DioHelper.postData(
+      url: 'me/pay',
+      data: {
+        "order_id": 23,
+        "invoice_id": 1,
+        "card_number": 4111111111211111,
+        "card_expiry" : "04/22",
+        "card_cvv" : "123"
+      },
+      token: token,
+    ).then((value) {
+      emit(PaymentSuccessState());
+    }).catchError((error) {
+      emit(PaymentErrorState(error.toString()));
     });
   }
 }

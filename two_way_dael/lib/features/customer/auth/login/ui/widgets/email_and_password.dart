@@ -49,7 +49,7 @@ class EmailAndPassword extends StatelessWidget {
                 suffixOnPressed: () {
                   cubit.changePasswordVisibility();
                 },
-                validator: passwordValidation,
+                // validator: passwordValidation,
               ),
               verticalSpace(20),
             ],

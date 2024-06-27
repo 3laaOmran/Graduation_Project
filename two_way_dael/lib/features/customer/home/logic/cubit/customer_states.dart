@@ -1,4 +1,6 @@
 import 'package:two_way_dael/features/customer/home/data/models/category_details_model.dart';
+import 'package:two_way_dael/features/customer/home/data/models/check_out_model.dart';
+import 'package:two_way_dael/features/customer/home/data/models/contact_us_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/deals_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/get_profile_model.dart';
 import 'package:two_way_dael/features/customer/home/data/models/notifications_model.dart';
@@ -301,7 +303,10 @@ class GetCustomerOrderDetailsErrorState extends CustomerStates {
 
 class ContactUsLoadingState extends CustomerStates {}
 
-class ContactUsSuccessState extends CustomerStates {}
+class ContactUsSuccessState extends CustomerStates {
+  final ContactUsModel contactUsModel;
+  ContactUsSuccessState(this.contactUsModel);
+}
 
 class ContactUsErrorState extends CustomerStates {
   final String error;
@@ -359,4 +364,20 @@ class GetTopDealsSuccessState extends CustomerStates {
 class GetTopDealsErrorState extends CustomerStates {
   final String error;
   GetTopDealsErrorState(this.error);
+}
+class CheckoutLoadingState extends CustomerStates {}
+class   CheckoutSuccessState extends CustomerStates {
+  final CheckoutModel? checkoutModel;
+  CheckoutSuccessState(this.checkoutModel);
+}
+class CheckoutErrorState extends CustomerStates {
+  final String error;
+  CheckoutErrorState(this.error);
+}
+class PaymentLoadingState extends CustomerStates {}
+class   PaymentSuccessState extends CustomerStates {
+}
+class PaymentErrorState extends CustomerStates {
+  final String error;
+  PaymentErrorState(this.error);
 }

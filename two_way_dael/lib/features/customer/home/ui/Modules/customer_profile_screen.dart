@@ -144,7 +144,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                           top: 10,
                           child: Stack(
                             alignment:
-                                cubit.notificationsModel!.data!.first.isRead ==
+                                cubit.notificationsModel?.data?.first.isRead ==
                                         false
                                     ? AlignmentDirectional.topEnd
                                     : AlignmentDirectional.center,

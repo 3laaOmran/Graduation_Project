@@ -281,16 +281,36 @@ class HomeScreen extends StatelessWidget {
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
                                                 children: [
-                                                  Image.asset(
-                                                    'assets/images/bank_ahly.png',
-                                                    height: 50,
+                                                  Container(
                                                     width: 50,
+                                                    height: 50,
+                                                    child: Text('VISA'),
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                        color:
+                                                            ColorManager.gray,
+                                                        width: 1.5,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
                                                   ),
                                                   horizontalSpace(15),
-                                                  Image.asset(
-                                                    'assets/images/MisrElkhair.png',
-                                                    height: 50,
+                                                  Container(
                                                     width: 50,
+                                                    height: 50,
+                                                    child: Text('Cash'),
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                        color:
+                                                            ColorManager.gray,
+                                                        width: 1.5,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -306,6 +326,19 @@ class HomeScreen extends StatelessWidget {
                                                 keyboardType:
                                                     TextInputType.number,
                                                 hintText: 'Enter amount',
+                                              ),
+                                              verticalSpace(20),
+                                              Text(
+                                                'Enter Number',
+                                                style:
+                                                    TextStyles.font14BlackBold,
+                                              ),
+                                              verticalSpace(15),
+                                              const CustomTextFormField(
+                                                isObsecureText: false,
+                                                keyboardType:
+                                                    TextInputType.number,
+                                                hintText: 'Enter  Number',
                                               ),
                                               verticalSpace(20),
                                             ],
@@ -324,6 +357,7 @@ class HomeScreen extends StatelessWidget {
                                               buttonText: 'Send',
                                               textStyle: TextStyles.font12White,
                                               onPressed: () {
+                                                context.pop();
                                                 showToast(
                                                     message:
                                                         'Request Sent Successfully',
